@@ -7,6 +7,8 @@ import { AuthProvider } from '@/contexts/auth-context';
 export const metadata: Metadata = {
   title: 'YUNI - Your Online Marketplace',
   description: 'Your one-stop shop for everything you need.',
+  manifest: '/manifest.json',
+  themeColor: '#FBBF24',
 };
 
 export default function RootLayout({
