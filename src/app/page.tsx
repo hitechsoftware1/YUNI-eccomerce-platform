@@ -11,6 +11,7 @@ import { Footer } from '@/components/layout/footer';
 import { BottomNav } from '@/components/layout/bottom-nav';
 import { InstallPwaBanner } from '@/components/install-pwa-banner';
 import type { Product } from '@/lib/types';
+import { PromoBanner } from '@/components/promo-banner';
 
 const topSellingProducts: Product[] = [
   { id: '1', name: 'Premium Wireless Headphones', price: 149.99, originalPrice: 199.99, rating: 4.8, reviewCount: 2450, imageUrl: 'https://placehold.co/300x300.png', dataAiHint: 'headphones music' },
@@ -40,6 +41,7 @@ export default function Home() {
         <div className="container mx-auto space-y-12 px-4 py-8 sm:px-6 lg:px-8">
           <CategoryGrid />
           <FlashSales />
+          <PromoBanner />
           <ProductSection title="Top Selling Items" products={topSellingProducts} />
           <ProductSection title="New Arrivals" products={newArrivals} />
           <LatestProducts />
