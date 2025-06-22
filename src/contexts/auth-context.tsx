@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -8,24 +9,29 @@ import {
   signInWithEmailAndPassword,
   signOut,
   type User,
+  updateProfile,
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 
-// Define schemas to match the auth modal
-const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
+// Define and export schemas for reuse
+export const loginSchema = z.object({
+  email: z.string().email({ message: 'Invalid email address.' }),
+  password: z
+    .string()
+    .min(6, { message: 'Password must be at least 6 characters.' }),
 });
-type LoginInput = z.infer<typeof loginSchema>;
+export type LoginInput = z.infer<typeof loginSchema>;
 
-const registerSchema = z.object({
-  name: z.string(),
-  email: z.string().email(),
-  password: z.string(),
+export const registerSchema = z.object({
+  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
+  email: z.string().email({ message: 'Invalid email address.' }),
+  password: z
+    .string()
+    .min(6, { message: 'Password must be at least 6 characters.' }),
 });
-type RegisterInput = z.infer<typeof registerSchema>;
+export type RegisterInput = z.infer<typeof registerSchema>;
 
 
 interface AuthContextType {
@@ -70,9 +76,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signUp = async ({ email, password }: RegisterInput) => {
+  const signUp = async ({ name, email, password }: RegisterInput) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+       if (userCredential.user) {
+        await updateProfile(userCredential.user, {
+          displayName: name,
+        });
+      }
        toast({
         title: "Registration Successful",
         description: "Your account has been created.",
