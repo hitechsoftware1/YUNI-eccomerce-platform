@@ -25,7 +25,7 @@ export function HelpButton() {
     <>
       <Button
         size="icon"
-        className="fixed bottom-24 right-4 z-50 h-14 w-14 rounded-full shadow-lg md:bottom-4"
+        className="fixed bottom-20 right-4 z-50 h-14 w-14 rounded-full shadow-lg md:bottom-4"
         aria-label="Open help menu"
         onClick={() => setIsOpen(true)}
       >
