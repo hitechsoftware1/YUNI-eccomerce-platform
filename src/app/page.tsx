@@ -5,7 +5,7 @@ import { CategoryGrid } from '@/components/category-grid';
 import { FlashSales } from '@/components/flash-sales';
 import { ProductSection } from '@/components/product-section';
 import { LatestProducts } from '@/components/latest-products';
-import { PromoGrid } from '@/components/promo-grid';
+import { ExploreMore } from '@/components/promo-grid';
 import { ProductRecommendations } from '@/components/product-recommendations';
 import { Footer } from '@/components/layout/footer';
 import { BottomNav } from '@/components/layout/bottom-nav';
@@ -43,7 +43,7 @@ export default function Home() {
           <ProductSection title="Top Selling Items" products={topSellingProducts} />
           <ProductSection title="New Arrivals" products={newArrivals} />
           <LatestProducts />
-          <PromoGrid />
+          <ExploreMore />
           <ProductRecommendations />
         </div>
       </main>
