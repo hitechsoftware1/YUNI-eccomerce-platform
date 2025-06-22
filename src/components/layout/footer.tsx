@@ -61,7 +61,7 @@ export function Footer() {
           <div>
             <h3 className="font-headline font-semibold">Contact Us</h3>
             <div className="mt-4 space-y-2 text-sm text-muted-foreground">
-              <p>123 Yuni Avenue, Commerce City, 12345</p>
+              <p>Kira, Kyaliwajala, Kampala City,256</p>
               <p>Email: support@yuni.com</p>
               <p>Phone: +256740522738</p>
               <div className="flex space-x-4 mt-4">
