@@ -31,7 +31,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Card className="h-full w-full overflow-hidden transition-all duration-300 hover:shadow-lg group">
-      <Link href="#" className="flex flex-col h-full">
+      <Link href={`/products/${product.id}`} className="flex flex-col h-full">
         <CardContent className="p-0 flex flex-col h-full">
           <div className="relative aspect-square w-full">
             <Image

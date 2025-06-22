@@ -3,17 +3,8 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { ProductCard } from "./product-card";
-import type { Product } from "@/lib/types";
 import { useCountdown } from "@/hooks/use-countdown";
-
-const flashSaleProducts: Product[] = [
-    { id: 'fs1', name: 'Smart Air Fryer Pro', price: 342000, originalPrice: 494000, rating: 4.7, reviewCount: 1500, imageUrl: 'https://placehold.co/300x300.png', dataAiHint: 'air fryer' },
-    { id: 'fs2', name: 'Noise-Cancelling Earbuds', price: 228000, originalPrice: 380000, rating: 4.5, reviewCount: 2300, imageUrl: 'https://placehold.co/300x300.png', dataAiHint: 'earbuds audio' },
-    { id: 'fs3', name: 'Robotic Vacuum Cleaner', price: 760000, originalPrice: 1140000, rating: 4.8, reviewCount: 890, imageUrl: 'https://placehold.co/300x300.png', dataAiHint: 'vacuum robot' },
-    { id: 'fs4', name: 'Portable Power Bank 20000mAh', price: 114000, originalPrice: 190000, rating: 4.6, reviewCount: 5400, imageUrl: 'https://placehold.co/300x300.png', dataAiHint: 'power bank' },
-    { id: 'fs5', name: 'Electric Standing Desk', price: 950000, originalPrice: 1330000, rating: 4.9, reviewCount: 650, imageUrl: 'https://placehold.co/300x300.png', dataAiHint: 'standing desk' },
-    { id: 'fs6', name: 'Yoga Mat and Block Set', price: 133000, originalPrice: 228000, rating: 4.7, reviewCount: 1200, imageUrl: 'https://placehold.co/300x300.png', dataAiHint: 'yoga mat' },
-];
+import { flashSaleProducts } from "@/lib/products";
 
 const CountdownTimer = ({ targetDate }: { targetDate: number }) => {
   const { hours, minutes, seconds } = useCountdown(targetDate);

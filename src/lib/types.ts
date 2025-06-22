@@ -10,6 +10,7 @@ export interface Product {
   imageUrl: string;
   dataAiHint: string;
   isNew?: boolean;
+  description: string;
 }
 
 export interface Category {
