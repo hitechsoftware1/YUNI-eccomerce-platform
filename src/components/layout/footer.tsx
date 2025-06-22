@@ -63,7 +63,7 @@ export function Footer() {
             <div className="mt-4 space-y-2 text-sm text-muted-foreground">
               <p>123 Yuni Avenue, Commerce City, 12345</p>
               <p>Email: support@yuni.com</p>
-              <p>Phone: (123) 456-7890</p>
+              <p>Phone: +256740522738</p>
               <div className="flex space-x-4 mt-4">
                 <Link href="#" className="text-muted-foreground hover:text-primary">
                   <Twitter className="h-5 w-5" />

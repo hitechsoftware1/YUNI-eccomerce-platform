@@ -68,7 +68,7 @@ export function HelpButton() {
              <div className="space-y-3">
                 <div className="flex items-center gap-3">
                     <Phone className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm text-foreground">(123) 456-7890</span>
+                    <span className="text-sm text-foreground">+256740522738</span>
                 </div>
                 <div className="flex items-center gap-3">
                     <Mail className="h-5 w-5 text-muted-foreground" />
