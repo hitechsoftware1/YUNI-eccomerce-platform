@@ -110,8 +110,8 @@ export default function CartPage() {
                   <p>UGX {(cartTotal + 5000).toLocaleString()}</p>
                 </div>
               </div>
-              <Button className="mt-6 w-full" size="lg">
-                Checkout
+              <Button asChild className="mt-6 w-full" size="lg">
+                <Link href="/checkout">Checkout</Link>
               </Button>
             </section>
           </div>
