@@ -31,7 +31,7 @@ export function Header() {
             </Link>
           </div>
 
-          <div className="hidden flex-1 justify-center px-8 lg:flex">
+          <div className="hidden flex-1 justify-center px-8 md:flex">
             <div className="relative w-full max-w-lg">
               <Input
                 type="search"
