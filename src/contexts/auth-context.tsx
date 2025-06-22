@@ -10,6 +10,8 @@ import {
   signOut,
   type User,
   updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
@@ -40,6 +42,7 @@ interface AuthContextType {
   logIn: (input: LoginInput) => Promise<void>;
   signUp: (input: RegisterInput) => Promise<void>;
   logOut: () => Promise<void>;
+  logInWithGoogle: () => Promise<void>;
 }
 
 const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
@@ -83,6 +86,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await updateProfile(userCredential.user, {
           displayName: name,
         });
+        // This is to ensure the profile update is reflected immediately
+        await userCredential.user.reload();
+        setCurrentUser(auth.currentUser);
       }
        toast({
         title: "Registration Successful",
@@ -92,6 +98,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error('Sign up error:', error);
       toast({
         title: 'Registration Failed',
+        description: error.message || 'An unexpected error occurred.',
+        variant: 'destructive',
+      });
+      throw error;
+    }
+  };
+
+  const logInWithGoogle = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      toast({
+        title: 'Login Successful',
+        description: 'Welcome!',
+      });
+    } catch (error: any) {
+      console.error('Google login error:', error);
+      toast({
+        title: 'Google Login Failed',
         description: error.message || 'An unexpected error occurred.',
         variant: 'destructive',
       });
@@ -123,6 +148,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     logIn,
     signUp,
     logOut,
+    logInWithGoogle,
   };
 
   return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;

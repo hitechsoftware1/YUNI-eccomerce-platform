@@ -24,6 +24,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useAuth, loginSchema, registerSchema } from "@/contexts/auth-context";
+import { Separator } from "@/components/ui/separator";
+import { GoogleIcon } from "@/components/icons/google-icon";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -31,8 +33,9 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
-  const { logIn, signUp } = useAuth();
+  const { logIn, signUp, logInWithGoogle } = useAuth();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isGoogleSubmitting, setIsGoogleSubmitting] = React.useState(false);
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -76,6 +79,20 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
       setIsSubmitting(false);
     }
   }
+  
+  async function onGoogleSignIn() {
+    setIsGoogleSubmitting(true);
+    try {
+      await logInWithGoogle();
+      onOpenChange(false);
+    } catch (error) {
+      // Toast is handled in auth-context
+    } finally {
+        setIsGoogleSubmitting(false);
+    }
+  }
+
+  const allSubmitting = isSubmitting || isGoogleSubmitting;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -95,7 +112,7 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
             <Form {...loginForm}>
               <form
                 onSubmit={loginForm.handleSubmit(onLoginSubmit)}
-                className="space-y-4 py-4"
+                className="space-y-4 pt-4"
               >
                 <FormField
                   control={loginForm.control}
@@ -107,7 +124,7 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
                         <Input
                           placeholder="you@example.com"
                           {...field}
-                          disabled={isSubmitting}
+                          disabled={allSubmitting}
                         />
                       </FormControl>
                       <FormMessage />
@@ -125,18 +142,27 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
                           type="password"
                           placeholder="••••••••"
                           {...field}
-                          disabled={isSubmitting}
+                          disabled={allSubmitting}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                <Button type="submit" className="w-full" disabled={allSubmitting}>
                   {isSubmitting ? "Logging in..." : "Login"}
                 </Button>
               </form>
             </Form>
+            <div className="relative my-4">
+              <Separator />
+              <span className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs uppercase text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+            <Button variant="outline" className="w-full" onClick={onGoogleSignIn} disabled={allSubmitting}>
+                {isGoogleSubmitting ? "Signing in..." : <> <GoogleIcon className="mr-2" /> Google </>}
+            </Button>
           </TabsContent>
           <TabsContent value="register">
             <DialogHeader>
@@ -148,7 +174,7 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
             <Form {...registerForm}>
               <form
                 onSubmit={registerForm.handleSubmit(onRegisterSubmit)}
-                className="space-y-4 py-4"
+                className="space-y-4 pt-4"
               >
                 <FormField
                   control={registerForm.control}
@@ -160,7 +186,7 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
                         <Input
                           placeholder="John Doe"
                           {...field}
-                          disabled={isSubmitting}
+                          disabled={allSubmitting}
                         />
                       </FormControl>
                       <FormMessage />
@@ -177,7 +203,7 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
                         <Input
                           placeholder="you@example.com"
                           {...field}
-                          disabled={isSubmitting}
+                          disabled={allSubmitting}
                         />
                       </FormControl>
                       <FormMessage />
@@ -195,18 +221,27 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
                           type="password"
                           placeholder="••••••••"
                           {...field}
-                          disabled={isSubmitting}
+                          disabled={allSubmitting}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                <Button type="submit" className="w-full" disabled={allSubmitting}>
                   {isSubmitting ? "Creating Account..." : "Create Account"}
                 </Button>
               </form>
             </Form>
+             <div className="relative my-4">
+              <Separator />
+              <span className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs uppercase text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+            <Button variant="outline" className="w-full" onClick={onGoogleSignIn} disabled={allSubmitting}>
+                {isGoogleSubmitting ? "Signing up..." : <> <GoogleIcon className="mr-2" /> Google </>}
+            </Button>
           </TabsContent>
         </Tabs>
       </DialogContent>
