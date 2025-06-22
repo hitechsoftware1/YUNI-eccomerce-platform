@@ -69,7 +69,9 @@ export function HelpButton() {
              <div className="space-y-3">
                 <div className="flex items-center gap-3">
                     <Phone className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm text-foreground">+256740522738</span>
+                    <a href="https://wa.me/256740522738" target="_blank" rel="noopener noreferrer" className="text-sm text-foreground hover:underline">
+                        +256740522738
+                    </a>
                 </div>
                 <div className="flex items-center gap-3">
                     <Mail className="h-5 w-5 text-muted-foreground" />
