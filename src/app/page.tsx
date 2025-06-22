@@ -13,7 +13,7 @@ import { InstallPwaBanner } from '@/components/install-pwa-banner';
 import { PromoBanner } from '@/components/promo-banner';
 import { SecondaryPromoGrid } from '@/components/secondary-promo-grid';
 import { HelpButton } from '@/components/help-button';
-import { newArrivals, topSellingProducts } from '@/lib/products';
+import { newArrivals, topSellingProducts, groceryProducts, beverageProducts } from '@/lib/products';
 
 export default function Home() {
   return (
@@ -28,6 +28,8 @@ export default function Home() {
           <PromoBanner />
           <ProductSection title="Top Selling Items" products={topSellingProducts} />
           <ProductSection title="New Arrivals" products={newArrivals} />
+          <ProductSection title="Groceries" products={groceryProducts} />
+          <ProductSection title="Beverages" products={beverageProducts} />
           <LatestProducts />
           <ExploreMore />
           <SecondaryPromoGrid />

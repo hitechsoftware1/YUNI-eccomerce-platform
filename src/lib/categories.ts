@@ -10,6 +10,7 @@ import {
   UtensilsCrossed,
   Sparkles,
   BookOpen,
+  Briefcase,
 } from "lucide-react";
 import type { Category } from "@/lib/types";
 
@@ -25,6 +26,7 @@ export const categories: Category[] = [
   { id: "groceries", name: "Groceries", icon: UtensilsCrossed },
   { id: "beauty", name: "Beauty", icon: Sparkles },
   { id: "books", name: "Books", icon: BookOpen },
+  { id: "beverages", name: "Beverages", icon: Briefcase },
 ];
 
 export function getCategoryBySlug(slug: string): Category | undefined {
