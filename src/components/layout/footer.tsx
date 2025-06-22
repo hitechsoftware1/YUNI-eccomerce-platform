@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ShoppingBag, Twitter, Facebook, Instagram } from "lucide-react";
+import { WhatsappIcon } from "@/components/icons/whatsapp-icon";
 
 export function Footer() {
   return (
@@ -73,6 +74,9 @@ export function Footer() {
                 </Link>
                 <Link href="#" className="text-muted-foreground hover:text-primary">
                   <Instagram className="h-5 w-5" />
+                </Link>
+                <Link href="#" className="text-muted-foreground hover:text-primary">
+                  <WhatsappIcon className="h-5 w-5" />
                 </Link>
               </div>
             </div>

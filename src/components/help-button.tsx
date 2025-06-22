@@ -16,6 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { WhatsappIcon } from "@/components/icons/whatsapp-icon";
 
 export function HelpButton() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -73,6 +74,12 @@ export function HelpButton() {
                 <div className="flex items-center gap-3">
                     <Mail className="h-5 w-5 text-muted-foreground" />
                     <span className="text-sm text-foreground">support@yuni.com</span>
+                </div>
+                 <div className="flex items-center gap-3">
+                    <WhatsappIcon className="h-5 w-5 text-muted-foreground" />
+                    <a href="https://wa.me/256740522738" target="_blank" rel="noopener noreferrer" className="text-sm text-foreground hover:underline">
+                        +256740522738
+                    </a>
                 </div>
              </div>
           </div>
