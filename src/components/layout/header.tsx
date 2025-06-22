@@ -1,7 +1,9 @@
+
 "use client";
 
 import * as React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Menu,
   Search,
@@ -23,8 +25,19 @@ import { Badge } from "@/components/ui/badge";
 export function Header() {
   const [isAuthModalOpen, setIsAuthModalOpen] = React.useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState("");
   const { itemCount } = useCart();
   const { currentUser } = useAuth();
+  const router = useRouter();
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      if (isMobileSearchOpen) {
+        setIsMobileSearchOpen(false);
+      }
+    }
+  };
 
   const AccountButton = () => {
     if (currentUser) {
@@ -108,6 +121,9 @@ export function Header() {
                 type="search"
                 placeholder="Search products, brands and categories"
                 className="h-10 w-full rounded-full border-primary/50 bg-transparent pl-10 pr-4 focus:border-primary focus:ring-primary"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearch}
               />
               <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
             </div>
@@ -179,6 +195,9 @@ export function Header() {
                 type="search"
                 placeholder="Search..."
                 className="h-10 w-full rounded-full border-primary/50 bg-transparent pl-10 pr-4 focus:border-primary focus:ring-primary"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearch}
               />
               <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
             </div>
