@@ -1,40 +1,19 @@
 import Link from "next/link";
-import {
-  Shirt,
-  Smartphone,
-  Laptop,
-  HeartPulse,
-  Home,
-  Baby,
-  Gamepad2,
-  Tv,
-  UtensilsCrossed,
-  Sparkles,
-} from "lucide-react";
-import type { Category } from "@/lib/types";
+import { categories } from "@/lib/categories";
 import { Card, CardContent } from "@/components/ui/card";
-
-const categories: Category[] = [
-  { id: "fashion", name: "Fashion", icon: Shirt },
-  { id: "electronics", name: "Electronics", icon: Smartphone },
-  { id: "computing", name: "Computing", icon: Laptop },
-  { id: "health", name: "Health", icon: HeartPulse },
-  { id: "home-office", name: "Home & Office", icon: Home },
-  { id: "baby", name: "Baby Products", icon: Baby },
-  { id: "gaming", name: "Gaming", icon: Gamepad2 },
-  { id: "tv-audio", name: "TV & Audio", icon: Tv },
-  { id: "groceries", name: "Groceries", icon: UtensilsCrossed },
-  { id: "beauty", name: "Beauty", icon: Sparkles },
-];
 
 export function CategoryGrid() {
   return (
     <section>
       <Card>
         <CardContent className="p-4 md:p-6">
-          <div className="grid grid-cols-4 gap-2 sm:grid-cols-5 md:grid-cols-10">
+          <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 lg:grid-cols-11">
             {categories.map((category) => (
-              <Link href="#" key={category.id} className="group">
+              <Link
+                href={`/category/${category.id}`}
+                key={category.id}
+                className="group"
+              >
                 <div className="flex flex-col items-center gap-2">
                   <div className="flex h-14 w-14 items-center justify-center rounded-full bg-secondary transition-colors group-hover:bg-primary/20 md:h-20 md:w-20">
                     <category.icon className="h-6 w-6 text-muted-foreground transition-colors group-hover:text-primary md:h-10 md:w-10" />

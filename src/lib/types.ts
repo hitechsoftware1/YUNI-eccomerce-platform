@@ -11,6 +11,7 @@ export interface Product {
   dataAiHint: string;
   isNew?: boolean;
   description: string;
+  category: string;
 }
 
 export interface Category {
