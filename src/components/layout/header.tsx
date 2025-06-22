@@ -33,7 +33,7 @@ export function Header() {
             </Link>
           </div>
 
-          <div className="hidden flex-1 justify-center px-8 md:flex">
+          <div className="hidden flex-1 justify-center px-8 sm:flex">
             <div className="relative w-full max-w-lg">
               <Input
                 type="search"
@@ -44,7 +44,7 @@ export function Header() {
             </div>
           </div>
 
-          <div className="hidden items-center gap-4 md:flex">
+          <div className="hidden items-center gap-4 sm:flex">
             <Button
               variant="ghost"
               size="sm"
@@ -60,7 +60,7 @@ export function Header() {
             </Button>
           </div>
 
-          <div className="flex items-center gap-1 md:hidden">
+          <div className="flex items-center gap-1 sm:hidden">
             <Button variant="ghost" size="icon" onClick={() => setIsMobileSearchOpen(true)}>
               <Search className="h-6 w-6" />
               <span className="sr-only">Toggle Search</span>
@@ -104,7 +104,7 @@ export function Header() {
         </div>
         
         {/* Mobile search overlay */}
-        <div className={`absolute inset-0 bg-background transition-opacity duration-300 md:hidden ${isMobileSearchOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className={`absolute inset-0 bg-background transition-opacity duration-300 sm:hidden ${isMobileSearchOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
           <div className="container mx-auto flex h-full items-center gap-2 px-4">
             <div className="relative w-full">
               <Input
