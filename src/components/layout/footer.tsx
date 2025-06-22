@@ -66,17 +66,17 @@ export function Footer() {
               <p>Email: support@yuni.com</p>
               <p>Phone: +256740522738</p>
               <div className="flex space-x-4 mt-4">
-                <Link href="#" className="text-muted-foreground hover:text-primary">
-                  <Twitter className="h-5 w-5" />
+                <Link href="#">
+                  <Twitter className="h-5 w-5 text-[#1DA1F2] transition-opacity hover:opacity-80" />
                 </Link>
-                <Link href="#" className="text-muted-foreground hover:text-primary">
-                  <Facebook className="h-5 w-5" />
+                <Link href="#">
+                  <Facebook className="h-5 w-5 text-[#1877F2] transition-opacity hover:opacity-80" />
                 </Link>
-                <Link href="#" className="text-muted-foreground hover:text-primary">
-                  <Instagram className="h-5 w-5" />
+                <Link href="#">
+                  <Instagram className="h-5 w-5 text-[#E4405F] transition-opacity hover:opacity-80" />
                 </Link>
-                <Link href="#" className="text-muted-foreground hover:text-primary">
-                  <WhatsappIcon className="h-5 w-5" />
+                <Link href="#">
+                  <WhatsappIcon className="h-5 w-5 text-[#25D366] transition-opacity hover:opacity-80" />
                 </Link>
               </div>
             </div>

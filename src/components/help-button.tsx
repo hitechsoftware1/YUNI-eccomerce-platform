@@ -76,7 +76,7 @@ export function HelpButton() {
                     <span className="text-sm text-foreground">support@yuni.com</span>
                 </div>
                  <div className="flex items-center gap-3">
-                    <WhatsappIcon className="h-5 w-5 text-muted-foreground" />
+                    <WhatsappIcon className="h-5 w-5 text-[#25D366]" />
                     <a href="https://wa.me/256740522738" target="_blank" rel="noopener noreferrer" className="text-sm text-foreground hover:underline">
                         +256740522738
                     </a>
