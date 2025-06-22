@@ -1,3 +1,6 @@
+'use client';
+
+import * as React from 'react';
 import { getProductById, allProducts } from '@/lib/products';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -7,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Star, ShoppingCart, Minus, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { ProductSection } from '@/components/product-section';
+import { useCart } from '@/contexts/cart-context';
 
 const StarRating = ({ rating, reviewCount }: { rating: number; reviewCount?: number }) => {
   return (
@@ -29,6 +33,8 @@ const StarRating = ({ rating, reviewCount }: { rating: number; reviewCount?: num
 
 export default function ProductDetailPage({ params }: { params: { id: string } }) {
   const product = getProductById(params.id);
+  const { addToCart } = useCart();
+  const [quantity, setQuantity] = React.useState(1);
 
   if (!product) {
     notFound();
@@ -39,6 +45,12 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     : 0;
 
   const relatedProducts = allProducts.filter(p => p.id !== product.id).slice(0, 5);
+  
+  const handleAddToCart = () => {
+    if (product) {
+      addToCart(product, quantity);
+    }
+  };
 
   return (
     <div className="bg-background text-foreground">
@@ -96,18 +108,18 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               <div className="flex items-center gap-4">
                 <h3 className="text-lg font-semibold">Quantity:</h3>
                 <div className="flex items-center border rounded-md">
-                    <Button variant="ghost" size="icon" className="h-9 w-9">
+                    <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setQuantity(q => Math.max(1, q - 1))}>
                         <Minus className="h-4 w-4"/>
                     </Button>
-                    <span className="px-4 font-bold">1</span>
-                    <Button variant="ghost" size="icon" className="h-9 w-9">
+                    <span className="px-4 font-bold">{quantity}</span>
+                    <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setQuantity(q => q + 1)}>
                         <Plus className="h-4 w-4"/>
                     </Button>
                 </div>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                  <Button size="lg" className="flex-1">
+                  <Button size="lg" className="flex-1" onClick={handleAddToCart}>
                       <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
                   </Button>
                   <Button size="lg" variant="outline" className="flex-1">

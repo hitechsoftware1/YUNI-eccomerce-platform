@@ -15,10 +15,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { AuthModal } from "@/components/auth-modal";
+import { useCart } from "@/contexts/cart-context";
+import { Badge } from "@/components/ui/badge";
 
 export function Header() {
   const [isAuthModalOpen, setIsAuthModalOpen] = React.useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = React.useState(false);
+  const { itemCount } = useCart();
 
   return (
     <>
@@ -54,9 +57,14 @@ export function Header() {
               <User className="h-5 w-5" />
               Account
             </Button>
-            <Button variant="ghost" size="sm" className="flex items-center gap-2">
-              <ShoppingCart className="h-5 w-5" />
-              Cart
+            <Button asChild variant="ghost" size="sm" className="flex items-center gap-2 relative">
+              <Link href="/cart">
+                <ShoppingCart className="h-5 w-5" />
+                Cart
+                {itemCount > 0 && (
+                   <Badge variant="destructive" className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0">{itemCount}</Badge>
+                )}
+              </Link>
             </Button>
           </div>
 
@@ -92,9 +100,14 @@ export function Header() {
                       <User className="h-5 w-5" />
                       Account
                     </Button>
-                    <Button variant="ghost" className="flex items-center justify-start gap-2">
-                      <ShoppingCart className="h-5 w-5" />
-                      Cart
+                    <Button asChild variant="ghost" className="flex items-center justify-start gap-2 relative">
+                       <Link href="/cart">
+                          <ShoppingCart className="h-5 w-5" />
+                          Cart
+                           {itemCount > 0 && (
+                            <Badge variant="destructive" className="absolute top-0 left-8 h-5 w-5 flex items-center justify-center p-0">{itemCount}</Badge>
+                          )}
+                       </Link>
                     </Button>
                   </nav>
                 </div>

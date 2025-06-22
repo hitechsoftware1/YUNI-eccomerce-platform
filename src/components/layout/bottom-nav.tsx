@@ -5,9 +5,12 @@ import Link from "next/link";
 import { Home, LayoutGrid, ShoppingCart, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AuthModal } from "@/components/auth-modal";
+import { useCart } from "@/contexts/cart-context";
+import { Badge } from "@/components/ui/badge";
 
 export function BottomNav() {
   const [isAuthModalOpen, setIsAuthModalOpen] = React.useState(false);
+  const { itemCount } = useCart();
 
   return (
     <>
@@ -31,11 +34,17 @@ export function BottomNav() {
             <span className="text-xs font-medium">Categories</span>
           </Button>
           <Button
+            asChild
             variant="ghost"
-            className="inline-flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            className="inline-flex relative flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-accent-foreground"
           >
-            <ShoppingCart className="h-6 w-6 mb-1" />
-            <span className="text-xs font-medium">Cart</span>
+            <Link href="/cart">
+              <ShoppingCart className="h-6 w-6 mb-1" />
+              <span className="text-xs font-medium">Cart</span>
+              {itemCount > 0 && (
+                <Badge variant="destructive" className="absolute top-0 right-4 h-5 w-5 flex items-center justify-center p-0">{itemCount}</Badge>
+              )}
+            </Link>
           </Button>
           <Button
             variant="ghost"
