@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,7 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/auth-context";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -44,7 +45,8 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
-  const { toast } = useToast();
+  const { logIn, signUp } = useAuth();
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -63,22 +65,30 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
     },
   });
 
-  function onLoginSubmit(values: z.infer<typeof loginSchema>) {
-    console.log(values);
-    toast({
-      title: "Login Successful",
-      description: "Welcome back!",
-    });
-    onOpenChange(false);
+  async function onLoginSubmit(values: z.infer<typeof loginSchema>) {
+    setIsSubmitting(true);
+    try {
+      await logIn(values);
+      onOpenChange(false);
+      loginForm.reset();
+    } catch (error) {
+      // Toast is handled in auth-context
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
-  function onRegisterSubmit(values: z.infer<typeof registerSchema>) {
-    console.log(values);
-    toast({
-      title: "Registration Successful",
-      description: "Your account has been created.",
-    });
-    onOpenChange(false);
+  async function onRegisterSubmit(values: z.infer<typeof registerSchema>) {
+    setIsSubmitting(true);
+    try {
+      await signUp(values);
+      onOpenChange(false);
+      registerForm.reset();
+    } catch (error) {
+      // Toast is handled in auth-context
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -108,7 +118,11 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="you@example.com" {...field} />
+                        <Input
+                          placeholder="you@example.com"
+                          {...field}
+                          disabled={isSubmitting}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -121,14 +135,19 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
+                        <Input
+                          type="password"
+                          placeholder="••••••••"
+                          {...field}
+                          disabled={isSubmitting}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">
-                  Login
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? "Logging in..." : "Login"}
                 </Button>
               </form>
             </Form>
@@ -152,7 +171,11 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
                     <FormItem>
                       <FormLabel>Full Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="John Doe" {...field} />
+                        <Input
+                          placeholder="John Doe"
+                          {...field}
+                          disabled={isSubmitting}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -165,7 +188,11 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="you@example.com" {...field} />
+                        <Input
+                          placeholder="you@example.com"
+                          {...field}
+                          disabled={isSubmitting}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -178,14 +205,19 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
+                        <Input
+                          type="password"
+                          placeholder="••••••••"
+                          {...field}
+                          disabled={isSubmitting}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">
-                  Create Account
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? "Creating Account..." : "Create Account"}
                 </Button>
               </form>
             </Form>

@@ -2,15 +2,44 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Home, LayoutGrid, ShoppingCart, User } from "lucide-react";
+import { Home, LayoutGrid, ShoppingCart, User, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AuthModal } from "@/components/auth-modal";
 import { useCart } from "@/contexts/cart-context";
+import { useAuth } from "@/contexts/auth-context";
 import { Badge } from "@/components/ui/badge";
 
 export function BottomNav() {
   const [isAuthModalOpen, setIsAuthModalOpen] = React.useState(false);
   const { itemCount } = useCart();
+  const { currentUser } = useAuth();
+
+  const AccountButton = () => {
+    if (currentUser) {
+      return (
+        <Button
+          asChild
+          variant="ghost"
+          className="inline-flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+        >
+          <Link href="/account">
+            <LayoutDashboard className="h-6 w-6 mb-1" />
+            <span className="text-xs font-medium">Account</span>
+          </Link>
+        </Button>
+      );
+    }
+    return (
+      <Button
+        variant="ghost"
+        onClick={() => setIsAuthModalOpen(true)}
+        className="inline-flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+      >
+        <User className="h-6 w-6 mb-1" />
+        <span className="text-xs font-medium">Account</span>
+      </Button>
+    );
+  };
 
   return (
     <>
@@ -46,14 +75,7 @@ export function BottomNav() {
               )}
             </Link>
           </Button>
-          <Button
-            variant="ghost"
-            onClick={() => setIsAuthModalOpen(true)}
-            className="inline-flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-          >
-            <User className="h-6 w-6 mb-1" />
-            <span className="text-xs font-medium">Account</span>
-          </Button>
+          <AccountButton />
         </div>
       </nav>
       <AuthModal isOpen={isAuthModalOpen} onOpenChange={setIsAuthModalOpen} />

@@ -9,6 +9,7 @@ import {
   User,
   ShoppingBag,
   X,
+  LayoutDashboard,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -16,12 +17,77 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { AuthModal } from "@/components/auth-modal";
 import { useCart } from "@/contexts/cart-context";
+import { useAuth } from "@/contexts/auth-context";
 import { Badge } from "@/components/ui/badge";
 
 export function Header() {
   const [isAuthModalOpen, setIsAuthModalOpen] = React.useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = React.useState(false);
   const { itemCount } = useCart();
+  const { currentUser } = useAuth();
+
+  const AccountButton = () => {
+    if (currentUser) {
+      return (
+        <Button
+          asChild
+          variant="ghost"
+          size="sm"
+          className="flex items-center gap-2"
+        >
+          <Link href="/account">
+            <LayoutDashboard className="h-5 w-5" />
+            Account
+          </Link>
+        </Button>
+      );
+    }
+    return (
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => setIsAuthModalOpen(true)}
+        className="flex items-center gap-2"
+      >
+        <User className="h-5 w-5" />
+        Account
+      </Button>
+    );
+  };
+
+  const MobileAccountButton = ({ closeSheet }: { closeSheet?: () => void }) => {
+    const handleClick = () => {
+      if (!currentUser) {
+        setIsAuthModalOpen(true);
+      }
+      if (closeSheet) closeSheet();
+    };
+
+    if (currentUser) {
+      return (
+        <Button
+          asChild
+          variant="ghost"
+          className="flex items-center justify-start gap-2"
+        >
+          <Link href="/account" onClick={handleClick}>
+            <LayoutDashboard className="h-5 w-5" />
+            Account
+          </Link>
+        </Button>
+      );
+    }
+    return (
+      <Button
+        variant="ghost"
+        onClick={handleClick}
+        className="flex items-center justify-start gap-2"
+      >
+        <User className="h-5 w-5" />
+        Account
+      </Button>
+    );
+  };
 
   return (
     <>
@@ -48,15 +114,7 @@ export function Header() {
           </div>
 
           <div className="hidden items-center gap-4 sm:flex">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsAuthModalOpen(true)}
-              className="flex items-center gap-2"
-            >
-              <User className="h-5 w-5" />
-              Account
-            </Button>
+            <AccountButton />
             <Button asChild variant="ghost" size="sm" className="flex items-center gap-2 relative">
               <Link href="/cart">
                 <ShoppingCart className="h-5 w-5" />
@@ -81,36 +139,32 @@ export function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left">
-                <div className="flex flex-col gap-6 p-6">
-                  <Link
-                    href="/"
-                    className="flex items-center gap-2 text-lg font-bold"
-                  >
-                    <ShoppingBag className="h-6 w-6 text-primary" />
-                    <span className="text-xl font-bold font-headline text-primary">
-                      YUNI
-                    </span>
-                  </Link>
-                  <nav className="flex flex-col gap-4 mt-8">
-                    <Button
-                      variant="ghost"
-                      onClick={() => setIsAuthModalOpen(true)}
-                      className="flex items-center justify-start gap-2"
+                {( {close} ) => (
+                    <div className="flex flex-col gap-6 p-6">
+                    <Link
+                        href="/"
+                        className="flex items-center gap-2 text-lg font-bold"
+                        onClick={close}
                     >
-                      <User className="h-5 w-5" />
-                      Account
-                    </Button>
-                    <Button asChild variant="ghost" className="flex items-center justify-start gap-2 relative">
-                       <Link href="/cart">
-                          <ShoppingCart className="h-5 w-5" />
-                          Cart
-                           {itemCount > 0 && (
-                            <Badge variant="destructive" className="absolute top-0 left-8 h-5 w-5 flex items-center justify-center p-0">{itemCount}</Badge>
-                          )}
-                       </Link>
-                    </Button>
-                  </nav>
-                </div>
+                        <ShoppingBag className="h-6 w-6 text-primary" />
+                        <span className="text-xl font-bold font-headline text-primary">
+                        YUNI
+                        </span>
+                    </Link>
+                    <nav className="flex flex-col gap-4 mt-8">
+                        <MobileAccountButton closeSheet={close} />
+                        <Button asChild variant="ghost" className="flex items-center justify-start gap-2 relative">
+                        <Link href="/cart" onClick={close}>
+                            <ShoppingCart className="h-5 w-5" />
+                            Cart
+                            {itemCount > 0 && (
+                                <Badge variant="destructive" className="absolute top-0 left-8 h-5 w-5 flex items-center justify-center p-0">{itemCount}</Badge>
+                            )}
+                        </Link>
+                        </Button>
+                    </nav>
+                    </div>
+                )}
               </SheetContent>
             </Sheet>
           </div>
