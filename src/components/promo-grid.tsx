@@ -26,7 +26,7 @@ export function PromoGrid() {
   return (
     <section>
       <h2 className="text-2xl font-bold font-headline mb-6 text-center">Inspiration Hub</h2>
-      <div className="flex justify-center gap-2 mb-6">
+      <div className="flex flex-wrap justify-center gap-2 mb-6">
         <Button variant={filter === "all" ? "default" : "outline"} onClick={() => setFilter("all")}>All</Button>
         <Button variant={filter === "fashion" ? "default" : "outline"} onClick={() => setFilter("fashion")}>Fashion</Button>
         <Button variant={filter === "tech" ? "default" : "outline"} onClick={() => setFilter("tech")}>Tech</Button>
