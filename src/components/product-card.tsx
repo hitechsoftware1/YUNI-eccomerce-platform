@@ -64,11 +64,11 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
             <div className="mt-2">
               <p className="text-lg font-bold text-primary">
-                ${product.price.toFixed(2)}
+                UGX {product.price.toLocaleString()}
               </p>
               {product.originalPrice && (
                 <p className="text-sm text-muted-foreground line-through">
-                  ${product.originalPrice.toFixed(2)}
+                  UGX {product.originalPrice.toLocaleString()}
                 </p>
               )}
             </div>
