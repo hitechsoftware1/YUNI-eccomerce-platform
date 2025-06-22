@@ -12,6 +12,7 @@ import { BottomNav } from '@/components/layout/bottom-nav';
 import { InstallPwaBanner } from '@/components/install-pwa-banner';
 import type { Product } from '@/lib/types';
 import { PromoBanner } from '@/components/promo-banner';
+import { SecondaryPromoGrid } from '@/components/secondary-promo-grid';
 
 const topSellingProducts: Product[] = [
   { id: '1', name: 'Premium Wireless Headphones', price: 149.99, originalPrice: 199.99, rating: 4.8, reviewCount: 2450, imageUrl: 'https://placehold.co/300x300.png', dataAiHint: 'headphones music' },
@@ -46,6 +47,7 @@ export default function Home() {
           <ProductSection title="New Arrivals" products={newArrivals} />
           <LatestProducts />
           <ExploreMore />
+          <SecondaryPromoGrid />
           <ProductRecommendations />
         </div>
       </main>
