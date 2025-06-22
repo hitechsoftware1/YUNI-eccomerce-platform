@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -12,6 +13,7 @@ const slides = [
     dataAiHint: "sale fashion",
     title: "Mega Fashion Sale",
     subtitle: "Up to 70% off on all brands",
+    link: "/category/fashion",
   },
   {
     id: 2,
@@ -19,6 +21,7 @@ const slides = [
     dataAiHint: "new electronics",
     title: "Latest Gadgets Arrived",
     subtitle: "Discover cutting-edge technology",
+    link: "/category/electronics",
   },
   {
     id: 3,
@@ -26,6 +29,7 @@ const slides = [
     dataAiHint: "home decor",
     title: "Transform Your Home",
     subtitle: "Find the perfect decor for your space",
+    link: "/category/home-office",
   },
 ];
 
@@ -70,7 +74,9 @@ export function HeroSlider() {
             <p className="mt-4 max-w-2xl text-lg md:text-xl">
               {slide.subtitle}
             </p>
-            <Button className="mt-8 bg-primary hover:bg-primary/90 text-primary-foreground">Shop Now</Button>
+            <Button asChild className="mt-8 bg-primary hover:bg-primary/90 text-primary-foreground">
+              <Link href={slide.link}>Shop Now</Link>
+            </Button>
           </div>
         </div>
       ))}
