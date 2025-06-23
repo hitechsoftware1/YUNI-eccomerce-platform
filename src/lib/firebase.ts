@@ -5,12 +5,12 @@ import { getAuth } from "firebase/auth";
 // TODO: Add your own Firebase configuration from your Firebase project settings
 // https://firebase.google.com/docs/web/setup#available-libraries
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDLlMVxX6x8TZMI-4ABj9AUc4fnxVxxZUI",
+  authDomain: "yuni-ab6g7.firebaseapp.com",
+  projectId: "yuni-ab6g7",
+  storageBucket: "yuni-ab6g7.appspot.com",
+  messagingSenderId: "910343501592",
+  appId: "1:910343501592:web:2a867812149590b061906d"
 };
 
 // Initialize Firebase
