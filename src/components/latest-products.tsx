@@ -1,9 +1,10 @@
 import { ProductCard } from "./product-card";
 import { Button } from "./ui/button";
-import { latestProducts } from "@/lib/products";
+import { getLatestProducts } from "@/lib/products";
 
 
 export function LatestProducts() {
+  const latestProducts = getLatestProducts();
   return (
     <section>
       <h2 className="text-2xl font-bold font-headline mb-6 text-center">Latest Products & Listings</h2>

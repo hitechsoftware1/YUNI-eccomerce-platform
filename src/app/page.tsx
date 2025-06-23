@@ -13,11 +13,16 @@ import { InstallPwaBanner } from '@/components/install-pwa-banner';
 import { PromoBanner } from '@/components/promo-banner';
 import { SecondaryPromoGrid } from '@/components/secondary-promo-grid';
 import { HelpButton } from '@/components/help-button';
-import { newArrivals, topSellingProducts, groceryProducts, beverageProducts } from '@/lib/products';
+import { getNewArrivals, getTopSellingProducts, getGroceryProducts, getBeverageProducts } from '@/lib/products';
 
 export const dynamic = 'force-dynamic';
 
 export default function Home() {
+  const topSellingProducts = getTopSellingProducts();
+  const newArrivals = getNewArrivals();
+  const groceryProducts = getGroceryProducts();
+  const beverageProducts = getBeverageProducts();
+
   return (
     <div className="bg-background text-foreground">
       <Header />

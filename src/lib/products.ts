@@ -40,12 +40,12 @@ export let allProducts: Product[] = [
   { id: 'b5', name: 'Mirinda Fruity (500ml)', price: 2500, rating: 4.6, reviewCount: 900, imageUrl: 'https://placehold.co/300x300.png', dataAiHint: 'mirinda soda', description: 'A burst of fruity flavor in a bottle.', category: 'beverages' },
 ];
 
-export const topSellingProducts: Product[] = allProducts.slice(0, 6);
-export const newArrivals: Product[] = allProducts.slice(6, 12);
-export const flashSaleProducts: Product[] = allProducts.slice(12, 18);
-export const latestProducts: Product[] = allProducts.slice(18, 26);
-export const groceryProducts: Product[] = allProducts.filter(p => p.category === 'groceries').slice(0, 6);
-export const beverageProducts: Product[] = allProducts.filter(p => p.category === 'beverages').slice(0, 6);
+export const getTopSellingProducts = () => allProducts.slice(0, 6);
+export const getNewArrivals = () => allProducts.filter(p => p.isNew).slice(0, 6);
+export const getFlashSaleProducts = () => allProducts.filter(p => p.originalPrice).slice(0, 6);
+export const getLatestProducts = () => allProducts.slice(0, 8);
+export const getGroceryProducts = () => allProducts.filter(p => p.category === 'groceries').slice(0, 6);
+export const getBeverageProducts = () => allProducts.filter(p => p.category === 'beverages').slice(0, 6);
 
 
 export function getProductById(id: string): Product | undefined {
