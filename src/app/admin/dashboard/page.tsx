@@ -1,6 +1,11 @@
 
 'use client';
 
+import * as React from 'react';
+import { addDays, format } from "date-fns"
+import type { DateRange } from "react-day-picker"
+import { Calendar as CalendarIcon } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -15,6 +20,21 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { cn } from "@/lib/utils"
 import { OverviewChart } from "@/components/admin/overview-chart"
 import { RecentSales } from "@/components/admin/recent-sales"
 import { DollarSign, Package, CreditCard, Users, Bell, ShoppingBag, UserPlus } from 'lucide-react';
@@ -31,6 +51,17 @@ const recentSalesData: AdminSale[] = [
 ];
 
 export default function DashboardPage() {
+  const [date, setDate] = React.useState<DateRange | undefined>({
+    from: addDays(new Date(), -20),
+    to: new Date(),
+  });
+  const [generatedReport, setGeneratedReport] = React.useState<AdminSale[] | null>(null);
+
+  const handleGenerateReport = () => {
+    // In a real app, you'd fetch data from your backend based on the date range.
+    // For this demo, we'll just use the existing recent sales data as a mock report.
+    setGeneratedReport(recentSalesData);
+  };
 
   const handleDownload = () => {
     const headers = 'Name,Email,Amount (UGX)\n';
@@ -236,14 +267,71 @@ export default function DashboardPage() {
                <div className="space-y-2">
                 <h3 className="font-semibold">Generate a New Report</h3>
                 <div className="flex flex-col sm:flex-row items-center gap-2">
-                  <Input type="text" placeholder="Start Date: YYYY-MM-DD" className="w-full sm:w-auto" disabled />
-                  <Input type="text" placeholder="End Date: YYYY-MM-DD" className="w-full sm:w-auto" disabled />
-                  <Button disabled className="w-full sm:w-auto">Generate</Button>
+                   <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        id="date"
+                        variant={"outline"}
+                        className={cn(
+                          "w-full sm:w-[300px] justify-start text-left font-normal",
+                          !date && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {date?.from ? (
+                          date.to ? (
+                            <>
+                              {format(date.from, "LLL dd, y")} -{" "}
+                              {format(date.to, "LLL dd, y")}
+                            </>
+                          ) : (
+                            format(date.from, "LLL dd, y")
+                          )
+                        ) : (
+                          <span>Pick a date range</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        initialFocus
+                        mode="range"
+                        defaultMonth={date?.from}
+                        selected={date}
+                        onSelect={setDate}
+                        numberOfMonths={2}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <Button onClick={handleGenerateReport} className="w-full sm:w-auto">Generate</Button>
                 </div>
               </div>
-              <div className="border rounded-lg p-8 text-center">
-                  <p className="text-muted-foreground">Your generated reports will appear here.</p>
-              </div>
+               {generatedReport ? (
+                <div className="border rounded-lg">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Customer</TableHead>
+                                <TableHead>Email</TableHead>
+                                <TableHead className="text-right">Amount</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {generatedReport.map((sale, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>{sale.name}</TableCell>
+                                    <TableCell>{sale.email}</TableCell>
+                                    <TableCell className="text-right">{sale.amount}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+              ) : (
+                <div className="border rounded-lg p-8 text-center">
+                    <p className="text-muted-foreground">Select a date range and click "Generate" to view a report.</p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
