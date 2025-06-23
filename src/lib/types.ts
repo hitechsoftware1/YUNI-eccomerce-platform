@@ -26,3 +26,14 @@ export interface AdminSale {
   amount: string;
   fallback: string;
 }
+
+export interface Order {
+  id: string;
+  customer: {
+    name: string;
+    email: string;
+  };
+  date: string;
+  status: 'Pending' | 'Fulfilled' | 'Cancelled';
+  total: number;
+}

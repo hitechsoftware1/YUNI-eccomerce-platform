@@ -79,7 +79,7 @@ export default function AdminLayout({
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton disabled>
+              <SidebarMenuButton href="/admin/orders" isActive={pathname.startsWith('/admin/orders')}>
                 <ShoppingBag />
                 Orders
               </SidebarMenuButton>
