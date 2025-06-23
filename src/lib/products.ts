@@ -1,4 +1,5 @@
 import type { Product } from '@/lib/types';
+import type { ProductFormValues } from '@/app/admin/products/components/product-form';
 
 export let allProducts: Product[] = [
   { id: '1', name: 'Premium Wireless Headphones', price: 570000, originalPrice: 760000, rating: 4.8, reviewCount: 2450, imageUrl: 'https://placehold.co/300x300.png', dataAiHint: 'headphones music', description: 'Experience immersive sound with these noise-cancelling wireless headphones. Long-lasting battery and crystal-clear audio for music and calls.', category: 'electronics' },
@@ -56,11 +57,40 @@ export function getProductsByCategory(category: string): Product[] {
   return allProducts.filter((product) => product.category === category);
 }
 
-export function addProduct(productData: Omit<Product, 'id'>) {
+export function addProduct(productData: ProductFormValues) {
   const newProduct: Product = {
     id: `prod-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
     ...productData,
+    price: Number(productData.price),
+    imageUrl: productData.imageUrl || 'https://placehold.co/300x300.png',
+    dataAiHint: productData.dataAiHint || productData.name.toLowerCase().split(' ').slice(0, 2).join(' '),
+    rating: 0,
+    reviewCount: 0,
+    isNew: true,
   };
   allProducts.unshift(newProduct);
   return newProduct;
+}
+
+export function updateProduct(id: string, productData: ProductFormValues): Product | undefined {
+    const productIndex = allProducts.findIndex((p) => p.id === id);
+    if (productIndex === -1) {
+        return undefined;
+    }
+
+    const existingProduct = allProducts[productIndex];
+    const updatedProduct: Product = {
+        ...existingProduct,
+        ...productData,
+        price: Number(productData.price),
+        imageUrl: productData.imageUrl || 'https://placehold.co/300x300.png',
+        dataAiHint: productData.dataAiHint || productData.name.toLowerCase().split(' ').slice(0, 2).join(' '),
+    };
+
+    allProducts[productIndex] = updatedProduct;
+    return updatedProduct;
+}
+
+export function deleteProduct(id: string): void {
+    allProducts = allProducts.filter((p) => p.id !== id);
 }

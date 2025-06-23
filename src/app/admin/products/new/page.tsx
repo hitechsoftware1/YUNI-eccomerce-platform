@@ -7,7 +7,6 @@ import { addProduct } from '@/lib/products';
 import { ProductForm, type ProductFormValues } from '../components/product-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import type { Product } from '@/lib/types';
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -21,19 +20,7 @@ export default function NewProductPage() {
       // For this prototype, we'll just simulate it.
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const newProduct: Omit<Product, 'id'> = {
-        name: data.name,
-        description: data.description,
-        price: data.price,
-        category: data.category,
-        imageUrl: data.imageUrl || 'https://placehold.co/300x300.png',
-        dataAiHint: data.dataAiHint || 'new product',
-        rating: 0,
-        reviewCount: 0,
-        isNew: true,
-      };
-
-      addProduct(newProduct);
+      addProduct(data);
       
       toast({
         title: 'Product Created',

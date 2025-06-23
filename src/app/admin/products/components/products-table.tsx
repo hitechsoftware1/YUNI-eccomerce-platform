@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import {
   Table,
   TableBody,
@@ -23,9 +24,12 @@ import { MoreHorizontal } from 'lucide-react';
 
 interface ProductsTableProps {
   products: Product[];
+  onDeleteClick: (product: Product) => void;
 }
 
-export function ProductsTable({ products }: ProductsTableProps) {
+export function ProductsTable({ products, onDeleteClick }: ProductsTableProps) {
+  const router = useRouter();
+  
   return (
     <Table>
       <TableHeader>
@@ -71,8 +75,15 @@ export function ProductsTable({ products }: ProductsTableProps) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                  <DropdownMenuItem>Edit</DropdownMenuItem>
-                  <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push(`/admin/products/edit/${product.id}`)}>
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="text-destructive focus:text-destructive focus:bg-destructive/10"
+                    onClick={() => onDeleteClick(product)}
+                  >
+                    Delete
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </TableCell>
