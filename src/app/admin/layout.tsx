@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
 import {
   SidebarProvider,
@@ -13,14 +13,8 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarInset,
 } from '@/components/ui/sidebar';
-import { LayoutDashboard, ShoppingBag, Package, Users, LogOut } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Package, Users, LogOut, Package2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Toaster } from '@/components/ui/toaster';
 
@@ -31,6 +25,7 @@ export default function AdminLayout({
 }) {
   const { currentUser, loading, logOut } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   React.useEffect(() => {
     if (!loading && !currentUser) {
@@ -51,31 +46,45 @@ export default function AdminLayout({
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   }
 
+  const getPageTitle = () => {
+    if (pathname === '/admin/dashboard') return 'Dashboard';
+    if (pathname.startsWith('/admin/products')) return 'Products';
+    if (pathname.startsWith('/admin/orders')) return 'Orders';
+    if (pathname.startsWith('/admin/customers')) return 'Customers';
+    return 'Admin';
+  }
+
   return (
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
           <div className="flex items-center gap-2">
-            <ShoppingBag className="h-6 w-6 text-primary" />
+            <Package2 className="h-6 w-6 text-primary" />
             <h1 className="text-xl font-semibold text-primary">YUNI Admin</h1>
           </div>
         </SidebarHeader>
         <SidebarContent className="p-2">
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton href="/admin/dashboard" isActive>
+              <SidebarMenuButton href="/admin/dashboard" isActive={pathname === '/admin/dashboard'}>
                 <LayoutDashboard />
                 Dashboard
               </SidebarMenuButton>
             </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
+             <SidebarMenuItem>
+              <SidebarMenuButton href="/admin/products" isActive={pathname.startsWith('/admin/products')}>
                 <Package />
                 Products
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton>
+              <SidebarMenuButton disabled>
+                <ShoppingBag />
+                Orders
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton disabled>
                 <Users />
                 Customers
               </SidebarMenuButton>
@@ -103,9 +112,9 @@ export default function AdminLayout({
       <SidebarInset>
         <header className="sticky top-0 bg-background/80 backdrop-blur-sm p-2 flex items-center gap-2 border-b">
            <SidebarTrigger className="md:hidden" />
-           <h2 className="font-semibold">Dashboard</h2>
+           <h2 className="font-semibold">{getPageTitle()}</h2>
         </header>
-        <main className="flex-1 p-4">{children}</main>
+        <main className="flex-1 p-4 md:p-6">{children}</main>
         <Toaster />
       </SidebarInset>
     </SidebarProvider>
