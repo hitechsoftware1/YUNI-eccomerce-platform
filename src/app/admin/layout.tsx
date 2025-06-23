@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth-context';
 import {
@@ -67,21 +68,27 @@ export default function AdminLayout({
         <SidebarContent className="p-2">
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton href="/admin/dashboard" isActive={pathname === '/admin/dashboard'}>
-                <LayoutDashboard />
-                Dashboard
+              <SidebarMenuButton asChild isActive={pathname === '/admin/dashboard'}>
+                <Link href="/admin/dashboard">
+                  <LayoutDashboard />
+                  Dashboard
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
              <SidebarMenuItem>
-              <SidebarMenuButton href="/admin/products" isActive={pathname.startsWith('/admin/products')}>
-                <Package />
-                Products
+              <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/products')}>
+                <Link href="/admin/products">
+                  <Package />
+                  Products
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton href="/admin/orders" isActive={pathname.startsWith('/admin/orders')}>
-                <ShoppingBag />
-                Orders
+              <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/orders')}>
+                <Link href="/admin/orders">
+                  <ShoppingBag />
+                  Orders
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
