@@ -8,20 +8,20 @@ import { Card } from "@/components/ui/card";
 import { Sparkles } from "lucide-react";
 
 const exploreItems = [
-    { id: 1, category: "electronics", title: "Explore Gadgets", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "gadgets iphone" },
-    { id: 2, category: "beauty", title: "Beauty Deals", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "beauty product" },
-    { id: 3, category: "mobiles", title: "Smartphone Ad", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "smartphone ad" },
-    { id: 4, category: "grocery", title: "Visit Grocery", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "grocery juice" },
-    { id: 5, category: "events", title: "Watch Event Promo", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "event promo" },
-    { id: 6, category: "beverages", title: "Beverage Offers", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "beverages juice" },
-    { id: 7, category: "fashion", title: "Fashion Spotlight", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "fashion models" },
-    { id: 8, category: "new-arrivals", title: "New Arrivals Ad", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "new arrival" },
-    { id: 9, category: "tools", title: "Tech & Tools", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "tech tools" },
-    { id: 10, category: "deals", title: "Deals of the Day", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "office chair" },
-    { id: 11, category: "showcase", title: "Promo Showcase", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "promo showcase" },
-    { id: 12, category: "furniture", title: "Office Furniture", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "office furniture" },
-    { id: 13, category: "new-arrivals", title: "Branding Ad", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "branding ad" },
-    { id: 14, category: "services", title: "Services", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "delivery service" },
+    { id: 1, category: "electronics", title: "Explore Gadgets", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "gadgets iphone", href: "/category/electronics" },
+    { id: 2, category: "beauty", title: "Beauty Deals", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "beauty product", href: "/category/beauty" },
+    { id: 3, category: "mobiles", title: "Smartphone Ad", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "smartphone ad", href: "/search?q=mobiles" },
+    { id: 4, category: "grocery", title: "Visit Grocery", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "grocery juice", href: "/category/groceries" },
+    { id: 5, category: "events", title: "Watch Event Promo", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "event promo", href: "/search?q=events" },
+    { id: 6, category: "beverages", title: "Beverage Offers", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "beverages juice", href: "/category/beverages" },
+    { id: 7, category: "fashion", title: "Fashion Spotlight", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "fashion models", href: "/category/fashion" },
+    { id: 8, category: "new-arrivals", title: "New Arrivals Ad", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "new arrival", href: "/search?q=new arrivals" },
+    { id: 9, category: "tools", title: "Tech & Tools", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "tech tools", href: "/search?q=tools" },
+    { id: 10, category: "deals", title: "Deals of the Day", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "office chair", href: "/search?q=deals" },
+    { id: 11, category: "showcase", title: "Promo Showcase", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "promo showcase", href: "/search?q=showcase" },
+    { id: 12, category: "furniture", title: "Office Furniture", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "office furniture", href: "/category/home-office" },
+    { id: 13, category: "new-arrivals", title: "Branding Ad", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "branding ad", href: "/search?q=branding" },
+    { id: 14, category: "services", title: "Services", imageUrl: "https://placehold.co/400x500.png", dataAiHint: "delivery service", href: "/search?q=services" },
   ];
 
 const filters = [
@@ -34,12 +34,6 @@ const filters = [
     { label: "Beverages", value: "beverages" },
     { label: "Fashion", value: "fashion" },
     { label: "New Arrivals", value: "new-arrivals" },
-    { label: "Tools", value: "tools" },
-    { label: "Deals", value: "deals" },
-    { label: "Showcase", value: "showcase" },
-    { label: "Furniture", value: "furniture" },
-    { label: "Services", value: "services" },
-    { label: "Save", value: "save" },
 ];
 
 
@@ -75,7 +69,7 @@ export function ExploreMore() {
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {filteredPromos.map((promo) => (
-          <Link href="#" key={promo.id}>
+          <Link href={promo.href} key={promo.id}>
             <Card className="group overflow-hidden transition-all duration-300 hover:shadow-lg h-full">
                 <div className="relative aspect-square w-full">
                     <Image
