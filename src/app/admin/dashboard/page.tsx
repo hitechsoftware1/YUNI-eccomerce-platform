@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/components/ui/button"
@@ -16,7 +17,7 @@ import {
 } from "@/components/ui/tabs"
 import { OverviewChart } from "@/components/admin/overview-chart"
 import { RecentSales } from "@/components/admin/recent-sales"
-import { DollarSign, Package, CreditCard, Users } from 'lucide-react';
+import { DollarSign, Package, CreditCard, Users, Bell, ShoppingBag, UserPlus } from 'lucide-react';
 import type { AdminSale } from '@/lib/types';
 import { Input } from "@/components/ui/input";
 
@@ -251,11 +252,47 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle>Notifications</CardTitle>
               <CardDescription>
-                Manage your notifications and alerts.
+                Recent events and alerts from your store.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p>Coming Soon!</p>
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                    <ShoppingBag className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium">New Order #YUNI-8142</p>
+                    <p className="text-sm text-muted-foreground">From Olivia Martin for UGX 1,999,990.</p>
+                    <p className="text-xs text-muted-foreground mt-1">5 minutes ago</p>
+                  </div>
+                </div>
+
+                 <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/10">
+                    <UserPlus className="h-5 w-5 text-green-600" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium">New Customer Joined</p>
+                    <p className="text-sm text-muted-foreground">Jackson Lee (jackson.lee@email.com) just signed up.</p>
+                    <p className="text-xs text-muted-foreground mt-1">2 hours ago</p>
+                  </div>
+                </div>
+
+                 <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/10">
+                    <Bell className="h-5 w-5 text-yellow-600" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium">Low Stock Warning</p>
+                    <p className="text-sm text-muted-foreground">"Smart Fitness Tracker Watch" has only 8 units left.</p>
+                    <p className="text-xs text-muted-foreground mt-1">Yesterday</p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6 flex justify-end">
+                  <Button variant="outline">Clear All</Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
