@@ -62,7 +62,7 @@ export default function DashboardPage() {
                   Total Sales
                 </CardTitle>
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
+              </Header>
               <CardContent>
                 <div className="text-2xl font-bold">+12,234</div>
                 <p className="text-xs text-muted-foreground">
@@ -88,7 +88,7 @@ export default function DashboardPage() {
                   Products in Stock
                 </CardTitle>
                 <Package className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
+              </Header>
               <CardContent>
                 <div className="text-2xl font-bold">+2350</div>
                 <p className="text-xs text-muted-foreground">
