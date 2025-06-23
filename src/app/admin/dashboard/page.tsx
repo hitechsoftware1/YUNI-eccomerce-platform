@@ -30,13 +30,13 @@ export default function DashboardPage() {
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="analytics" disabled>
+          <TabsTrigger value="analytics">
             Analytics
           </TabsTrigger>
-          <TabsTrigger value="reports" disabled>
+          <TabsTrigger value="reports">
             Reports
           </TabsTrigger>
-          <TabsTrigger value="notifications" disabled>
+          <TabsTrigger value="notifications">
             Notifications
           </TabsTrigger>
         </TabsList>
@@ -48,7 +48,7 @@ export default function DashboardPage() {
                   Total Revenue
                 </CardTitle>
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
+              </Header>
               <CardContent>
                 <div className="text-2xl font-bold">UGX 45,231,890</div>
                 <p className="text-xs text-muted-foreground">
@@ -118,6 +118,45 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+        <TabsContent value="analytics">
+          <Card>
+            <CardHeader>
+              <CardTitle>Analytics</CardTitle>
+              <CardDescription>
+                Detailed analytics for your store will be available here soon.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Coming Soon!</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="reports">
+           <Card>
+            <CardHeader>
+              <CardTitle>Reports</CardTitle>
+              <CardDescription>
+                Generate and view sales reports here.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Coming Soon!</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="notifications">
+           <Card>
+            <CardHeader>
+              <CardTitle>Notifications</CardTitle>
+              <CardDescription>
+                Manage your notifications and alerts.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Coming Soon!</p>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </>
