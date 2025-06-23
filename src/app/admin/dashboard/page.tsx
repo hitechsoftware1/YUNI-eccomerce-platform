@@ -74,7 +74,7 @@ export default function DashboardPage() {
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">New Customers</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
+              </Header>
               <CardContent>
                 <div className="text-2xl font-bold">+573</div>
                 <p className="text-xs text-muted-foreground">
@@ -112,7 +112,7 @@ export default function DashboardPage() {
                 <CardDescription>
                   You made 265 sales this month.
                 </CardDescription>
-              </CardHeader>
+              </Header>
               <CardContent>
                 <RecentSales />
               </CardContent>
@@ -139,7 +139,7 @@ export default function DashboardPage() {
               <CardDescription>
                 Generate and view sales reports here.
               </CardDescription>
-            </CardHeader>
+            </Header>
             <CardContent>
               <p>Coming Soon!</p>
             </CardContent>
@@ -152,7 +152,7 @@ export default function DashboardPage() {
               <CardDescription>
                 Manage your notifications and alerts.
               </CardDescription>
-            </CardHeader>
+            </Header>
             <CardContent>
               <p>Coming Soon!</p>
             </CardContent>
