@@ -48,7 +48,7 @@ export default function DashboardPage() {
                   Total Revenue
                 </CardTitle>
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
-              </Header>
+              </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">UGX 45,231,890</div>
                 <p className="text-xs text-muted-foreground">
@@ -62,7 +62,7 @@ export default function DashboardPage() {
                   Total Sales
                 </CardTitle>
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
-              </Header>
+              </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">+12,234</div>
                 <p className="text-xs text-muted-foreground">
@@ -74,7 +74,7 @@ export default function DashboardPage() {
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">New Customers</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
-              </Header>
+              </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">+573</div>
                 <p className="text-xs text-muted-foreground">
@@ -88,7 +88,7 @@ export default function DashboardPage() {
                   Products in Stock
                 </CardTitle>
                 <Package className="h-4 w-4 text-muted-foreground" />
-              </Header>
+              </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">+2350</div>
                 <p className="text-xs text-muted-foreground">
@@ -112,7 +112,7 @@ export default function DashboardPage() {
                 <CardDescription>
                   You made 265 sales this month.
                 </CardDescription>
-              </Header>
+              </CardHeader>
               <CardContent>
                 <RecentSales />
               </CardContent>
@@ -139,7 +139,7 @@ export default function DashboardPage() {
               <CardDescription>
                 Generate and view sales reports here.
               </CardDescription>
-            </Header>
+            </CardHeader>
             <CardContent>
               <p>Coming Soon!</p>
             </CardContent>
@@ -152,7 +152,7 @@ export default function DashboardPage() {
               <CardDescription>
                 Manage your notifications and alerts.
               </CardDescription>
-            </Header>
+            </CardHeader>
             <CardContent>
               <p>Coming Soon!</p>
             </CardContent>
