@@ -1,6 +1,6 @@
 import type { Product } from '@/lib/types';
 
-export const allProducts: Product[] = [
+export let allProducts: Product[] = [
   { id: '1', name: 'Premium Wireless Headphones', price: 570000, originalPrice: 760000, rating: 4.8, reviewCount: 2450, imageUrl: 'https://placehold.co/300x300.png', dataAiHint: 'headphones music', description: 'Experience immersive sound with these noise-cancelling wireless headphones. Long-lasting battery and crystal-clear audio for music and calls.', category: 'electronics' },
   { id: '2', name: 'Smart Fitness Tracker Watch', price: 342000, rating: 4.6, reviewCount: 1890, imageUrl: 'https://placehold.co/300x300.png', dataAiHint: 'smartwatch fitness', description: 'Track your fitness goals with this sleek and stylish smartwatch. Monitors heart rate, steps, and sleep patterns, all on your wrist.', category: 'electronics' },
   { id: '3', name: 'Professional DSLR Camera', price: 3416000, rating: 4.9, reviewCount: 980, imageUrl: 'https://placehold.co/300x300.png', dataAiHint: 'camera photography', description: 'Capture stunning, high-resolution photos with this professional-grade DSLR camera. Perfect for both hobbyists and seasoned photographers.', category: 'electronics' },
@@ -54,4 +54,13 @@ export function getProductById(id: string): Product | undefined {
 
 export function getProductsByCategory(category: string): Product[] {
   return allProducts.filter((product) => product.category === category);
+}
+
+export function addProduct(productData: Omit<Product, 'id'>) {
+  const newProduct: Product = {
+    id: `prod-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+    ...productData,
+  };
+  allProducts.unshift(newProduct);
+  return newProduct;
 }
