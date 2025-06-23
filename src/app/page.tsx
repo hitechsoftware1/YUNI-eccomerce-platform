@@ -15,6 +15,8 @@ import { SecondaryPromoGrid } from '@/components/secondary-promo-grid';
 import { HelpButton } from '@/components/help-button';
 import { newArrivals, topSellingProducts, groceryProducts, beverageProducts } from '@/lib/products';
 
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
   return (
     <div className="bg-background text-foreground">

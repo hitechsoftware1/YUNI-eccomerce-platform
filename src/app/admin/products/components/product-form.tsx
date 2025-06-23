@@ -16,6 +16,8 @@ const productFormSchema = z.object({
   description: z.string().min(10, { message: 'Description must be at least 10 characters.' }),
   price: z.coerce.number().positive({ message: 'Price must be a positive number.' }),
   category: z.string({ required_error: 'Please select a category.' }),
+  imageUrl: z.string().url({ message: 'Please enter a valid URL.' }).optional().or(z.literal('')),
+  dataAiHint: z.string().max(40, { message: 'Hint cannot be longer than two words.' }).optional(),
 });
 
 export type ProductFormValues = z.infer<typeof productFormSchema>;
@@ -34,6 +36,8 @@ export function ProductForm({ initialData, onSave, isSaving }: ProductFormProps)
       description: '',
       price: 0,
       category: '',
+      imageUrl: '',
+      dataAiHint: '',
     },
   });
 
@@ -105,6 +109,38 @@ export function ProductForm({ initialData, onSave, isSaving }: ProductFormProps)
             )}
             />
         </div>
+        <FormField
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+                <FormItem>
+                <FormLabel>Image URL</FormLabel>
+                <FormControl>
+                    <Input placeholder="https://your-image-url.com/image.png" {...field} value={field.value ?? ''} disabled={isSaving} />
+                </FormControl>
+                <FormDescription>
+                    Enter the URL for the product image. Leave blank for a placeholder.
+                </FormDescription>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
+        <FormField
+            control={form.control}
+            name="dataAiHint"
+            render={({ field }) => (
+                <FormItem>
+                <FormLabel>Image AI Hint</FormLabel>
+                <FormControl>
+                    <Input placeholder="e.g., 'blue shoe'" {...field} value={field.value ?? ''} disabled={isSaving} />
+                </FormControl>
+                <FormDescription>
+                    One or two keywords to help our AI find a better image later.
+                </FormDescription>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
         <Button type="submit" disabled={isSaving}>
           {isSaving ? 'Saving...' : 'Save Product'}
         </Button>
