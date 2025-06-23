@@ -18,6 +18,7 @@ import { OverviewChart } from "@/components/admin/overview-chart"
 import { RecentSales } from "@/components/admin/recent-sales"
 import { DollarSign, Package, CreditCard, Users } from 'lucide-react';
 import type { AdminSale } from '@/lib/types';
+import { Input } from "@/components/ui/input";
 
 
 const recentSalesData: AdminSale[] = [
@@ -227,11 +228,21 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle>Reports</CardTitle>
               <CardDescription>
-                Generate and view sales reports here.
+                Generate and view detailed sales and user reports.
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <p>Coming Soon!</p>
+            <CardContent className="space-y-6">
+               <div className="space-y-2">
+                <h3 className="font-semibold">Generate a New Report</h3>
+                <div className="flex flex-col sm:flex-row items-center gap-2">
+                  <Input type="text" placeholder="Start Date: YYYY-MM-DD" className="w-full sm:w-auto" disabled />
+                  <Input type="text" placeholder="End Date: YYYY-MM-DD" className="w-full sm:w-auto" disabled />
+                  <Button disabled className="w-full sm:w-auto">Generate</Button>
+                </div>
+              </div>
+              <div className="border rounded-lg p-8 text-center">
+                  <p className="text-muted-foreground">Your generated reports will appear here.</p>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
