@@ -19,3 +19,10 @@ export interface Category {
   name: string;
   icon: LucideIcon;
 }
+
+export interface AdminSale {
+  name: string;
+  email: string;
+  amount: string;
+  fallback: string;
+}

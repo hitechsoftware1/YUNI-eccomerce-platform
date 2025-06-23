@@ -1,3 +1,4 @@
+'use client';
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,15 +17,50 @@ import {
 import { OverviewChart } from "@/components/admin/overview-chart"
 import { RecentSales } from "@/components/admin/recent-sales"
 import { DollarSign, Package, CreditCard, Users } from 'lucide-react';
+import type { AdminSale } from '@/lib/types';
 
+
+const recentSalesData: AdminSale[] = [
+  { name: 'Olivia Martin', email: 'olivia.martin@email.com', amount: '+UGX 1,999,990', fallback: 'OM' },
+  { name: 'Jackson Lee', email: 'jackson.lee@email.com', amount: '+UGX 390,000', fallback: 'JL' },
+  { name: 'Isabella Nguyen', email: 'isabella.nguyen@email.com', amount: '+UGX 299,000', fallback: 'IN' },
+  { name: 'William Kim', email: 'will@email.com', amount: '+UGX 990,000', fallback: 'WK' },
+  { name: 'Sofia Davis', email: 'sofia.davis@email.com', amount: '+UGX 390,000', fallback: 'SD' },
+];
 
 export default function DashboardPage() {
+
+  const handleDownload = () => {
+    const headers = 'Name,Email,Amount (UGX)\n';
+    const csvContent = recentSalesData
+      .map(sale => {
+        // Remove currency symbols and commas for clean CSV data
+        const amount = sale.amount.replace(/[+UGX\s,]/g, '');
+        return `"${sale.name}","${sale.email}","${amount}"`;
+      })
+      .join('\n');
+  
+    const csv = headers + csvContent;
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'sales-report.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+
   return (
     <>
       <div className="flex items-center justify-between space-y-2 mb-4">
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
         <div className="flex items-center space-x-2">
-          <Button>Download</Button>
+          <Button onClick={handleDownload}>Download</Button>
         </div>
       </div>
       <Tabs defaultValue="overview" className="space-y-4">
@@ -114,7 +150,7 @@ export default function DashboardPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <RecentSales />
+                <RecentSales sales={recentSalesData} />
               </CardContent>
             </Card>
           </div>
