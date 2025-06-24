@@ -14,6 +14,7 @@ import {
   BreadcrumbPage, 
   BreadcrumbSeparator 
 } from '@/components/ui/breadcrumb';
+import Image from 'next/image';
 
 export default function CategoryPage({ params }: { params: { slug: string } }) {
   const category = getCategoryBySlug(params.slug);
@@ -42,7 +43,16 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
             </Breadcrumb>
             
             <div className="flex items-center gap-4 mb-6">
-                <category.icon className="h-8 w-8 text-primary" />
+                <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/20">
+                    <Image
+                        src={category.imageUrl}
+                        alt={category.name}
+                        fill
+                        className="object-cover"
+                        data-ai-hint={category.dataAiHint}
+                        sizes="48px"
+                    />
+                </div>
                 <h1 className="text-3xl lg:text-4xl font-bold font-headline">{category.name}</h1>
             </div>
 

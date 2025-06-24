@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { categories } from "@/lib/categories";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -15,8 +16,15 @@ export function CategoryGrid() {
                 className="group"
               >
                 <div className="flex flex-col items-center gap-2">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-secondary transition-colors group-hover:bg-primary/20 md:h-20 md:w-20">
-                    <category.icon className="h-6 w-6 text-muted-foreground transition-colors group-hover:text-primary md:h-10 md:w-10" />
+                  <div className="relative h-14 w-14 overflow-hidden rounded-full transition-all group-hover:ring-2 group-hover:ring-primary/80 md:h-20 md:w-20">
+                    <Image
+                      src={category.imageUrl}
+                      alt={category.name}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-110"
+                      data-ai-hint={category.dataAiHint}
+                      sizes="(max-width: 768px) 14vw, 80px"
+                    />
                   </div>
                   <p className="text-center text-xs font-medium transition-colors group-hover:text-primary md:text-sm">
                     {category.name}

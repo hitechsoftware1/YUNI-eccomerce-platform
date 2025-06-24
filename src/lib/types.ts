@@ -17,7 +17,8 @@ export interface Product {
 export interface Category {
   id: string;
   name: string;
-  icon: LucideIcon;
+  imageUrl: string;
+  dataAiHint: string;
 }
 
 export interface AdminSale {
