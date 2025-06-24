@@ -52,8 +52,8 @@ export function ExploreMore() {
             <h2 className="text-2xl font-bold font-headline">Explore More</h2>
         </div>
       
-      <div className="product-carousel -mx-4 mb-6">
-        <div className="flex gap-2 px-4 whitespace-nowrap">
+      <div className="mb-6">
+        <div className="flex flex-wrap gap-2">
             {filters.map((f) => (
                 <Button 
                     key={f.value}
