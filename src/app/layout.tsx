@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import { CartProvider } from '@/contexts/cart-context';
 import { AuthProvider } from '@/contexts/auth-context';
+import { InstallPwaBanner } from '@/components/install-pwa-banner';
 
 export const metadata: Metadata = {
   title: 'YUNI - Your Online Marketplace',
@@ -31,6 +32,7 @@ export default function RootLayout({
                 {children}
               </div>
               <Toaster />
+              <InstallPwaBanner />
           </CartProvider>
         </AuthProvider>
       </body>

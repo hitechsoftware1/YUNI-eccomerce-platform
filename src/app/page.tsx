@@ -9,7 +9,6 @@ import { ExploreMore } from '@/components/promo-grid';
 import { ProductRecommendations } from '@/components/product-recommendations';
 import { Footer } from '@/components/layout/footer';
 import { BottomNav } from '@/components/layout/bottom-nav';
-import { InstallPwaBanner } from '@/components/install-pwa-banner';
 import { PromoBanner } from '@/components/promo-banner';
 import { SecondaryPromoGrid } from '@/components/secondary-promo-grid';
 import { HelpButton } from '@/components/help-button';
@@ -46,7 +45,6 @@ export default function Home() {
       <Footer />
       <BottomNav />
       <HelpButton />
-      <InstallPwaBanner />
     </div>
   );
 }
