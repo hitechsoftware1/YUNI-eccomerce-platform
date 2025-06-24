@@ -1,6 +1,7 @@
 
 'use client';
 
+import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -10,6 +11,11 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { categories } from '@/lib/categories';
+import { useToast } from '@/hooks/use-toast';
+import { generateProductImage } from '@/ai/flows/generate-product-image-flow';
+import { Wand2 } from 'lucide-react';
+import Image from 'next/image';
+
 
 const productFormSchema = z.object({
   name: z.string().min(3, { message: 'Product name must be at least 3 characters.' }),
@@ -40,6 +46,43 @@ export function ProductForm({ initialData, onSave, isSaving }: ProductFormProps)
       dataAiHint: '',
     },
   });
+  const { toast } = useToast();
+  const [isGenerating, setIsGenerating] = React.useState(false);
+  const allDisabled = isSaving || isGenerating;
+  
+  const imageUrl = form.watch('imageUrl');
+
+  const handleGenerateImage = async () => {
+    const hint = form.getValues('dataAiHint');
+    if (!hint) {
+        toast({
+            title: "Hint required",
+            description: "Please provide an AI hint to generate an image.",
+            variant: "destructive",
+        });
+        return;
+    }
+
+    setIsGenerating(true);
+    try {
+        const result = await generateProductImage({ prompt: hint });
+        form.setValue('imageUrl', result.imageUrl, { shouldValidate: true });
+        toast({
+            title: "Image Generated",
+            description: "The product image has been successfully generated.",
+        });
+    } catch (error) {
+        console.error("Failed to generate image:", error);
+        toast({
+            title: "Error",
+            description: "Failed to generate image. Please try again.",
+            variant: "destructive",
+        });
+    } finally {
+        setIsGenerating(false);
+    }
+  };
+
 
   return (
     <Form {...form}>
@@ -51,7 +94,7 @@ export function ProductForm({ initialData, onSave, isSaving }: ProductFormProps)
             <FormItem>
               <FormLabel>Product Name</FormLabel>
               <FormControl>
-                <Input placeholder="e.g., Wireless Headphones" {...field} disabled={isSaving} />
+                <Input placeholder="e.g., Wireless Headphones" {...field} disabled={allDisabled} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -64,7 +107,7 @@ export function ProductForm({ initialData, onSave, isSaving }: ProductFormProps)
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Describe the product..." {...field} disabled={isSaving} rows={5} />
+                <Textarea placeholder="Describe the product..." {...field} disabled={allDisabled} rows={5} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -78,7 +121,7 @@ export function ProductForm({ initialData, onSave, isSaving }: ProductFormProps)
                 <FormItem>
                 <FormLabel>Price (UGX)</FormLabel>
                 <FormControl>
-                    <Input type="number" placeholder="e.g., 570000" {...field} disabled={isSaving} />
+                    <Input type="number" placeholder="e.g., 570000" {...field} disabled={allDisabled} />
                 </FormControl>
                 <FormMessage />
                 </FormItem>
@@ -90,7 +133,7 @@ export function ProductForm({ initialData, onSave, isSaving }: ProductFormProps)
             render={({ field }) => (
                 <FormItem>
                     <FormLabel>Category</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isSaving}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={allDisabled}>
                         <FormControl>
                         <SelectTrigger>
                             <SelectValue placeholder="Select a category" />
@@ -116,33 +159,46 @@ export function ProductForm({ initialData, onSave, isSaving }: ProductFormProps)
                 <FormItem>
                 <FormLabel>Image URL</FormLabel>
                 <FormControl>
-                    <Input placeholder="https://your-image-url.com/image.png" {...field} value={field.value ?? ''} disabled={isSaving} />
+                    <Input placeholder="https://your-image-url.com/image.png or generate with AI" {...field} value={field.value ?? ''} disabled={allDisabled} />
                 </FormControl>
                 <FormDescription>
-                    Enter the URL for the product image. Leave blank for a placeholder.
+                    Enter a URL or generate an image with the AI hint below.
                 </FormDescription>
                 <FormMessage />
                 </FormItem>
             )}
-            />
+        />
+
+        {imageUrl && (
+            <div className="relative aspect-square w-48 overflow-hidden rounded-md border bg-secondary">
+                <Image src={imageUrl} alt="Product preview" fill className="object-cover" />
+            </div>
+        )}
+
         <FormField
             control={form.control}
             name="dataAiHint"
             render={({ field }) => (
                 <FormItem>
                 <FormLabel>Image AI Hint</FormLabel>
-                <FormControl>
-                    <Input placeholder="e.g., 'blue shoe'" {...field} value={field.value ?? ''} disabled={isSaving} />
-                </FormControl>
+                <div className="flex gap-2">
+                    <FormControl>
+                        <Input placeholder="e.g., 'blue shoe'" {...field} value={field.value ?? ''} disabled={allDisabled} />
+                    </FormControl>
+                    <Button type="button" onClick={handleGenerateImage} disabled={allDisabled}>
+                        <Wand2 className="mr-2 h-4 w-4" />
+                        {isGenerating ? 'Generating...' : 'Generate'}
+                    </Button>
+                </div>
                 <FormDescription>
-                    One or two keywords to help our AI find a better image later.
+                    One or two keywords to help our AI generate a product image.
                 </FormDescription>
                 <FormMessage />
                 </FormItem>
             )}
             />
-        <Button type="submit" disabled={isSaving}>
-          {isSaving ? 'Saving...' : 'Save Product'}
+        <Button type="submit" disabled={allDisabled}>
+          {isSaving ? 'Saving...' : (isGenerating ? 'Waiting for image...' : 'Save Product')}
         </Button>
       </form>
     </Form>
