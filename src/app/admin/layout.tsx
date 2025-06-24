@@ -16,7 +16,7 @@ import {
   SidebarMenuButton,
   SidebarInset,
 } from '@/components/ui/sidebar';
-import { LayoutDashboard, ShoppingBag, Package, Users, LogOut, Package2 } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Package, Users, LogOut, Package2, Home } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Toaster } from '@/components/ui/toaster';
 
@@ -60,9 +60,16 @@ export default function AdminLayout({
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
-          <div className="flex items-center gap-2">
-            <Package2 className="h-6 w-6 text-primary" />
-            <h1 className="text-xl font-semibold text-primary">YUNI Admin</h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Package2 className="h-6 w-6 text-primary" />
+              <h1 className="text-xl font-semibold text-primary">YUNI Admin</h1>
+            </div>
+            <SidebarMenuButton asChild variant="ghost" size="icon" tooltip="View Site">
+              <Link href="/" target="_blank" rel="noopener noreferrer">
+                <Home />
+              </Link>
+            </SidebarMenuButton>
           </div>
         </SidebarHeader>
         <SidebarContent className="p-2">
