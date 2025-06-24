@@ -2,10 +2,6 @@
 'use client';
 
 import * as React from 'react';
-import { addDays, format } from "date-fns"
-import type { DateRange } from "react-day-picker"
-import { Calendar as CalendarIcon } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -15,18 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { Calendar } from "@/components/ui/calendar"
-import {
   Table,
   TableBody,
   TableCell,
@@ -34,13 +18,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
 import { OverviewChart } from "@/components/admin/overview-chart"
 import { RecentSales } from "@/components/admin/recent-sales"
-import { DollarSign, Package, CreditCard, Users, Bell, ShoppingBag, UserPlus } from 'lucide-react';
+import { DollarSign, Package, CreditCard, Users, ArrowUpRight } from 'lucide-react';
 import type { AdminSale } from '@/lib/types';
-import { Input } from "@/components/ui/input";
-
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
+import type { Order } from '@/lib/types';
 
 const recentSalesData: AdminSale[] = [
   { name: 'Olivia Martin', email: 'olivia.martin@email.com', amount: '+UGX 1,999,990', fallback: 'OM' },
@@ -50,341 +35,149 @@ const recentSalesData: AdminSale[] = [
   { name: 'Sofia Davis', email: 'sofia.davis@email.com', amount: '+UGX 390,000', fallback: 'SD' },
 ];
 
+const recentOrders: Order[] = [
+    { id: 'ORD001', customer: { name: 'Olivia Martin', email: 'olivia.martin@email.com' }, date: '2023-11-23', status: 'Fulfilled', total: 250000 },
+    { id: 'ORD002', customer: { name: 'Jackson Lee', email: 'jackson.lee@email.com' }, date: '2023-11-23', status: 'Pending', total: 150000 },
+    { id: 'ORD003', customer: { name: 'Isabella Nguyen', email: 'isabella.nguyen@email.com' }, date: '2023-11-22', status: 'Cancelled', total: 350000 },
+    { id: 'ORD004', customer: { name: 'William Kim', email: 'will@email.com' }, date: '2023-11-21', status: 'Fulfilled', total: 550000 },
+    { id: 'ORD005', customer: { name: 'Sofia Davis', email: 'sofia.davis@email.com' }, date: '2023-11-20', status: 'Fulfilled', total: 75000 },
+];
+
 export default function DashboardPage() {
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: addDays(new Date(), -20),
-    to: new Date(),
-  });
-  const [generatedReport, setGeneratedReport] = React.useState<AdminSale[] | null>(null);
-
-  const handleGenerateReport = () => {
-    // In a real app, you'd fetch data from your backend based on the date range.
-    // For this demo, we'll just use the existing recent sales data as a mock report.
-    setGeneratedReport(recentSalesData);
-  };
-
-  const handleDownload = () => {
-    const headers = 'Name,Email,Amount (UGX)\n';
-    const csvContent = recentSalesData
-      .map(sale => {
-        // Remove currency symbols and commas for clean CSV data
-        const amount = sale.amount.replace(/[+UGX\s,]/g, '');
-        return `"${sale.name}","${sale.email}","${amount}"`;
-      })
-      .join('\n');
-  
-    const csv = headers + csvContent;
-
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', 'sales-report.csv');
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
-
   return (
-    <>
-      <div className="flex items-center justify-between space-y-2 mb-4">
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <div className="flex items-center space-x-2">
-          <Button onClick={handleDownload}>Download</Button>
-        </div>
-      </div>
-      <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="analytics">
-            Analytics
-          </TabsTrigger>
-          <TabsTrigger value="reports">
-            Reports
-          </TabsTrigger>
-          <TabsTrigger value="notifications">
-            Notifications
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="flex flex-col gap-6">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Total Revenue
+                Total Revenue
                 </CardTitle>
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">UGX 45,231,890</div>
-                <p className="text-xs text-muted-foreground">
-                  +20.1% from last month
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Total Sales
-                </CardTitle>
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">+12,234</div>
-                <p className="text-xs text-muted-foreground">
-                  +19% from last month
-                </p>
-              </CardContent>
-            </Card>
-             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">New Customers</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">+573</div>
-                <p className="text-xs text-muted-foreground">
-                  +180.1% from last month
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Products in Stock
-                </CardTitle>
-                <Package className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">+2350</div>
-                <p className="text-xs text-muted-foreground">
-                  50 new products added this month
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="col-span-4">
-              <CardHeader>
-                <CardTitle>Overview</CardTitle>
-              </CardHeader>
-              <CardContent className="pl-2">
-                <OverviewChart />
-              </CardContent>
-            </Card>
-            <Card className="col-span-4 md:col-span-3">
-              <CardHeader>
-                <CardTitle>Recent Sales</CardTitle>
-                <CardDescription>
-                  You made 265 sales this month.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <RecentSales sales={recentSalesData} />
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-        <TabsContent value="analytics" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  User Traffic
-                </CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">12,543</div>
-                <p className="text-xs text-muted-foreground">
-                  +15.2% from last month
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Conversion Rate
-                </CardTitle>
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">3.5%</div>
-                <p className="text-xs text-muted-foreground">
-                  +0.5% from last month
-                </p>
-              </CardContent>
-            </Card>
-             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Average Order Value</CardTitle>
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">UGX 125,500</div>
-                <p className="text-xs text-muted-foreground">
-                  +5% from last month
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Top Referrer
-                </CardTitle>
-                <Package className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">Google</div>
-                <p className="text-xs text-muted-foreground">
-                  45% of traffic
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-          <Card>
-            <CardHeader>
-                <CardTitle>Traffic Sources</CardTitle>
-                <CardDescription>A breakdown of where your visitors are coming from.</CardDescription>
-            </CardHeader>
-            <CardContent className="pl-2">
-                <OverviewChart />
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="reports">
-           <Card>
-            <CardHeader>
-              <CardTitle>Reports</CardTitle>
-              <CardDescription>
-                Generate and view detailed sales and user reports.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-               <div className="space-y-2">
-                <h3 className="font-semibold">Generate a New Report</h3>
-                <div className="flex flex-col sm:flex-row items-center gap-2">
-                   <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        id="date"
-                        variant={"outline"}
-                        className={cn(
-                          "w-full sm:w-[300px] justify-start text-left font-normal",
-                          !date && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date?.from ? (
-                          date.to ? (
-                            <>
-                              {format(date.from, "LLL dd, y")} -{" "}
-                              {format(date.to, "LLL dd, y")}
-                            </>
-                          ) : (
-                            format(date.from, "LLL dd, y")
-                          )
-                        ) : (
-                          <span>Pick a date range</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        initialFocus
-                        mode="range"
-                        defaultMonth={date?.from}
-                        selected={date}
-                        onSelect={setDate}
-                        numberOfMonths={2}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <Button onClick={handleGenerateReport} className="w-full sm:w-auto">Generate</Button>
-                </div>
-              </div>
-               {generatedReport ? (
-                <div className="border rounded-lg">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Customer</TableHead>
-                                <TableHead>Email</TableHead>
-                                <TableHead className="text-right">Amount</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {generatedReport.map((sale, index) => (
-                                <TableRow key={index}>
-                                    <TableCell>{sale.name}</TableCell>
-                                    <TableCell>{sale.email}</TableCell>
-                                    <TableCell className="text-right">{sale.amount}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
-              ) : (
-                <div className="border rounded-lg p-8 text-center">
-                    <p className="text-muted-foreground">Select a date range and click "Generate" to view a report.</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="notifications">
-           <Card>
-            <CardHeader>
-              <CardTitle>Notifications</CardTitle>
-              <CardDescription>
-                Recent events and alerts from your store.
-              </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                    <ShoppingBag className="h-5 w-5 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium">New Order #YUNI-8142</p>
-                    <p className="text-sm text-muted-foreground">From Olivia Martin for UGX 1,999,990.</p>
-                    <p className="text-xs text-muted-foreground mt-1">5 minutes ago</p>
-                  </div>
-                </div>
-
-                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/10">
-                    <UserPlus className="h-5 w-5 text-green-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium">New Customer Joined</p>
-                    <p className="text-sm text-muted-foreground">Jackson Lee (jackson.lee@email.com) just signed up.</p>
-                    <p className="text-xs text-muted-foreground mt-1">2 hours ago</p>
-                  </div>
-                </div>
-
-                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/10">
-                    <Bell className="h-5 w-5 text-yellow-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium">Low Stock Warning</p>
-                    <p className="text-sm text-muted-foreground">"Smart Fitness Tracker Watch" has only 8 units left.</p>
-                    <p className="text-xs text-muted-foreground mt-1">Yesterday</p>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-6 flex justify-end">
-                  <Button variant="outline">Clear All</Button>
-              </div>
+                <div className="text-2xl font-bold">UGX 45,231,890</div>
+                <p className="text-xs text-muted-foreground">
+                +20.1% from last month
+                </p>
             </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </>
+            </Card>
+            <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                Total Sales
+                </CardTitle>
+                <CreditCard className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+                <div className="text-2xl font-bold">+12,234</div>
+                <p className="text-xs text-muted-foreground">
+                +19% from last month
+                </p>
+            </CardContent>
+            </Card>
+            <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">New Customers</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+                <div className="text-2xl font-bold">+573</div>
+                <p className="text-xs text-muted-foreground">
+                +180.1% from last month
+                </p>
+            </CardContent>
+            </Card>
+            <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                Products in Stock
+                </CardTitle>
+                <Package className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+                <div className="text-2xl font-bold">+2350</div>
+                <p className="text-xs text-muted-foreground">
+                50 new products added
+                </p>
+            </CardContent>
+            </Card>
+        </div>
+        <div className="grid gap-4 lg:grid-cols-7">
+            <Card className="col-span-1 lg:col-span-4">
+                <CardHeader>
+                    <CardTitle>Sales Overview</CardTitle>
+                </CardHeader>
+                <CardContent className="pl-2">
+                    <OverviewChart />
+                </CardContent>
+            </Card>
+            <Card className="col-span-1 lg:col-span-3">
+            <CardHeader>
+                <CardTitle>Recent Sales</CardTitle>
+                <CardDescription>
+                You made 265 sales this month.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <RecentSales sales={recentSalesData} />
+            </CardContent>
+            </Card>
+        </div>
+        <Card>
+            <CardHeader className="flex flex-row items-center">
+                <div className="grid gap-2">
+                    <CardTitle>Recent Orders</CardTitle>
+                    <CardDescription>
+                        A list of the most recent orders from your store.
+                    </CardDescription>
+                </div>
+                <Button asChild size="sm" className="ml-auto gap-1">
+                    <Link href="/admin/orders">
+                        View All
+                        <ArrowUpRight className="h-4 w-4" />
+                    </Link>
+                </Button>
+            </CardHeader>
+            <CardContent>
+                 <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Customer</TableHead>
+                            <TableHead className="hidden sm:table-cell">Status</TableHead>
+                            <TableHead className="hidden sm:table-cell">Date</TableHead>
+                            <TableHead className="text-right">Amount</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {recentOrders.map((order) => (
+                            <TableRow key={order.id}>
+                                <TableCell>
+                                    <div className="font-medium">{order.customer.name}</div>
+                                    <div className="hidden text-sm text-muted-foreground md:inline">
+                                        {order.customer.email}
+                                    </div>
+                                </TableCell>
+                                <TableCell className="hidden sm:table-cell">
+                                     <Badge
+                                        variant={order.status === 'Cancelled' ? 'destructive' : 'secondary'}
+                                        className={cn('capitalize',
+                                            order.status === 'Fulfilled' && 'bg-green-600 text-primary-foreground hover:bg-green-600/80',
+                                            order.status === 'Pending' && 'bg-yellow-500 text-primary-foreground hover:bg-yellow-500/80'
+                                        )}
+                                    >
+                                        {order.status}
+                                    </Badge>
+                                </TableCell>
+                                <TableCell className="hidden sm:table-cell">
+                                    {new Date(order.date).toLocaleDateString()}
+                                </TableCell>
+                                <TableCell className="text-right">UGX {order.total.toLocaleString()}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+    </div>
   )
 }
