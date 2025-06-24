@@ -45,7 +45,14 @@ export default function ProductDetailPage() {
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
 
-  const relatedProducts = allProducts.filter(p => p.id !== product.id).slice(0, 5);
+  const sameCategoryProducts = allProducts.filter(
+    (p) => p.category === product.category && p.id !== product.id
+  );
+  const otherCategoryProducts = allProducts.filter(
+    (p) => p.category !== product.category
+  );
+
+  const relatedProducts = [...sameCategoryProducts, ...otherCategoryProducts].slice(0, 5);
   
   const handleAddToCart = () => {
     if (product) {
