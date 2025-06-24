@@ -79,7 +79,7 @@ export function InstallPwaBanner() {
   }
 
   // iOS-specific banner
-  if (isIos && !deferredPrompt) {
+  if (isIos) {
      return (
       <div
         className="fixed bottom-16 left-0 right-0 z-50 bg-gray-900 text-white shadow-lg md:bottom-4 md:left-1/2 md:-translate-x-1/2 md:max-w-md md:rounded-lg animate-in slide-in-from-bottom-5"
