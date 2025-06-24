@@ -75,7 +75,7 @@ export function Footer() {
                 <Link href="#">
                   <Instagram className="h-5 w-5 text-[#E4405F] transition-opacity hover:opacity-80" />
                 </Link>
-                <Link href="#">
+                <Link href="https://wa.me/256740522738" target="_blank" rel="noopener noreferrer">
                   <WhatsappIcon className="h-5 w-5 text-[#25D366] transition-opacity hover:opacity-80" />
                 </Link>
               </div>
