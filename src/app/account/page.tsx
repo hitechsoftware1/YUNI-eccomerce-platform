@@ -27,7 +27,7 @@ export default function AccountPage() {
       <div className="bg-background text-foreground">
         <Header />
         <main className="pt-16 md:pt-20">
-            <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <div className="container mx-auto px-2 py-6 sm:px-4 md:py-8 md:px-6">
                 <div className="flex items-center space-x-4">
                     <Skeleton className="h-24 w-24 rounded-full" />
                     <div className="space-y-2">
@@ -52,7 +52,7 @@ export default function AccountPage() {
     <div className="bg-background text-foreground">
       <Header />
       <main className="pt-16 md:pt-20">
-        <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-2 py-6 sm:px-4 md:py-8 md:px-6">
             <Card>
             <CardHeader>
                 <div className="flex items-center gap-6">

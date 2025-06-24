@@ -34,7 +34,7 @@ export default function SearchPage() {
     <div className="bg-background text-foreground">
       <Header />
       <main className="pt-16 md:pt-20">
-        <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8 min-h-[calc(100vh-400px)]">
+        <div className="container mx-auto min-h-[calc(100vh-400px)] px-2 py-6 sm:px-4 md:py-8 md:px-6">
             {query ? (
             <>
                 <h1 className="text-3xl font-bold font-headline tracking-tight">

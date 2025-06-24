@@ -57,7 +57,7 @@ export default function ProductDetailPage() {
     <div className="bg-background text-foreground">
       <Header />
       <main className="pt-16 md:pt-20">
-        <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-2 py-6 sm:px-4 md:py-8 md:px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
             {/* Product Image Gallery */}
             <div className="relative">

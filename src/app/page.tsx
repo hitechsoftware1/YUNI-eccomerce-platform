@@ -28,7 +28,7 @@ export default function Home() {
       <main className="pt-16 md:pt-20">
         <HeroSlider />
         <AnimatedBanner />
-        <div className="container mx-auto space-y-12 px-4 py-8 sm:px-6 lg:px-8">
+        <div className="container mx-auto space-y-10 px-2 py-6 sm:px-4 md:space-y-12 md:py-8 md:px-6">
           <CategoryGrid />
           <FlashSales />
           <PromoBanner />

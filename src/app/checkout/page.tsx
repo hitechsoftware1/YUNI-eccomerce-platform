@@ -90,7 +90,7 @@ export default function CheckoutPage() {
         <div className="bg-background text-foreground">
             <Header />
             <main className="pt-16 md:pt-20">
-                <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+                <div className="container mx-auto px-2 py-6 sm:px-4 md:py-8 md:px-6">
                     <div className="flex justify-center items-center h-64">
                         <Skeleton className="w-1/2 h-10" />
                     </div>
@@ -105,7 +105,7 @@ export default function CheckoutPage() {
     <div className="bg-background text-foreground">
       <Header />
       <main className="pt-16 md:pt-20">
-        <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-2 py-6 sm:px-4 md:py-8 md:px-6">
             <h1 className="text-3xl font-bold font-headline tracking-tight mb-8">Checkout</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">

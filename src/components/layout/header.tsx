@@ -105,7 +105,7 @@ export function Header() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-sm shadow-sm">
-        <div className={`container mx-auto flex h-16 items-center justify-between px-4 transition-opacity duration-300 md:h-20 md:px-6 ${isMobileSearchOpen ? 'opacity-0' : 'opacity-100'}`}>
+        <div className={`container mx-auto flex h-16 items-center justify-between px-2 sm:px-4 md:h-20 md:px-6 transition-opacity duration-300 ${isMobileSearchOpen ? 'opacity-0' : 'opacity-100'}`}>
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-2">
               <ShoppingBag className="h-7 w-7 text-primary" />
@@ -188,7 +188,7 @@ export function Header() {
         
         {/* Mobile search overlay */}
         <div className={`absolute inset-0 bg-background transition-opacity duration-300 sm:hidden ${isMobileSearchOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-          <div className="container mx-auto flex h-full items-center gap-2 px-4">
+          <div className="container mx-auto flex h-full items-center gap-2 px-2 sm:px-4">
             <div className="relative w-full">
               <Input
                 autoFocus
