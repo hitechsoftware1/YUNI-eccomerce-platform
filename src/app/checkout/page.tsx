@@ -89,9 +89,11 @@ export default function CheckoutPage() {
     return (
         <div className="bg-background text-foreground">
             <Header />
-            <main className="container mx-auto px-4 py-24 sm:px-6 lg:px-8">
-                <div className="flex justify-center items-center h-64">
-                    <Skeleton className="w-1/2 h-10" />
+            <main className="pt-16 md:pt-20">
+                <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+                    <div className="flex justify-center items-center h-64">
+                        <Skeleton className="w-1/2 h-10" />
+                    </div>
                 </div>
             </main>
             <Footer />
@@ -102,128 +104,130 @@ export default function CheckoutPage() {
   return (
     <div className="bg-background text-foreground">
       <Header />
-      <main className="container mx-auto px-4 py-24 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold font-headline tracking-tight mb-8">Checkout</h1>
+      <main className="pt-16 md:pt-20">
+        <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <h1 className="text-3xl font-bold font-headline tracking-tight mb-8">Checkout</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Shipping Information</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <FormField
-                      control={form.control}
-                      name="fullName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="John Doe" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="address"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Street Address</FormLabel>
-                          <FormControl>
-                            <Input placeholder="123 Shopping Lane" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div>
+                <Card>
+                <CardHeader>
+                    <CardTitle>Shipping Information</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                         <FormField
                         control={form.control}
-                        name="city"
+                        name="fullName"
                         render={({ field }) => (
                             <FormItem>
-                            <FormLabel>City</FormLabel>
+                            <FormLabel>Full Name</FormLabel>
                             <FormControl>
-                                <Input placeholder="Kampala" {...field} />
+                                <Input placeholder="John Doe" {...field} />
                             </FormControl>
                             <FormMessage />
                             </FormItem>
                         )}
                         />
-                         <FormField
+                        <FormField
                         control={form.control}
-                        name="postalCode"
+                        name="address"
                         render={({ field }) => (
                             <FormItem>
-                            <FormLabel>Postal Code</FormLabel>
+                            <FormLabel>Street Address</FormLabel>
                             <FormControl>
-                                <Input placeholder="10101" {...field} />
+                                <Input placeholder="123 Shopping Lane" {...field} />
                             </FormControl>
                             <FormMessage />
                             </FormItem>
                         )}
                         />
-                    </div>
-                     <FormField
-                      control={form.control}
-                      name="country"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Country</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Uganda" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                     <Button type="submit" className="w-full" size="lg" disabled={isPlacingOrder}>
-                        {isPlacingOrder ? "Placing Order..." : `Place Order (UGX ${(cartTotal + 5000).toLocaleString()})`}
-                    </Button>
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
-          </div>
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-            <Card className="bg-secondary">
-              <CardContent className="p-6 space-y-4">
-                 {cartItems.map(item => (
-                    <div key={item.id} className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <div className="relative h-16 w-16 rounded-md overflow-hidden border">
-                                <Image src={item.imageUrl} alt={item.name} fill className="object-cover" data-ai-hint={item.dataAiHint}/>
-                            </div>
-                            <div>
-                                <p className="font-semibold">{item.name}</p>
-                                <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
-                            </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <FormField
+                            control={form.control}
+                            name="city"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>City</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Kampala" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                            <FormField
+                            control={form.control}
+                            name="postalCode"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Postal Code</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="10101" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
                         </div>
-                        <p className="font-medium">UGX {(item.price * item.quantity).toLocaleString()}</p>
+                        <FormField
+                        control={form.control}
+                        name="country"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Country</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Uganda" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                        <Button type="submit" className="w-full" size="lg" disabled={isPlacingOrder}>
+                            {isPlacingOrder ? "Placing Order..." : `Place Order (UGX ${(cartTotal + 5000).toLocaleString()})`}
+                        </Button>
+                    </form>
+                    </Form>
+                </CardContent>
+                </Card>
+            </div>
+            <div>
+                <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+                <Card className="bg-secondary">
+                <CardContent className="p-6 space-y-4">
+                    {cartItems.map(item => (
+                        <div key={item.id} className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className="relative h-16 w-16 rounded-md overflow-hidden border">
+                                    <Image src={item.imageUrl} alt={item.name} fill className="object-cover" data-ai-hint={item.dataAiHint}/>
+                                </div>
+                                <div>
+                                    <p className="font-semibold">{item.name}</p>
+                                    <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                                </div>
+                            </div>
+                            <p className="font-medium">UGX {(item.price * item.quantity).toLocaleString()}</p>
+                        </div>
+                    ))}
+                    <Separator />
+                    <div className="flex items-center justify-between">
+                    <p className="text-muted-foreground">Subtotal</p>
+                    <p className="font-medium">UGX {cartTotal.toLocaleString()}</p>
                     </div>
-                 ))}
-                 <Separator />
-                <div className="flex items-center justify-between">
-                  <p className="text-muted-foreground">Subtotal</p>
-                  <p className="font-medium">UGX {cartTotal.toLocaleString()}</p>
-                </div>
-                <div className="flex items-center justify-between">
-                  <p className="text-muted-foreground">Shipping</p>
-                  <p className="font-medium">UGX 5,000</p>
-                </div>
-                <Separator />
-                <div className="flex items-center justify-between text-lg font-bold">
-                  <p>Total</p>
-                  <p>UGX {(cartTotal + 5000).toLocaleString()}</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                    <div className="flex items-center justify-between">
+                    <p className="text-muted-foreground">Shipping</p>
+                    <p className="font-medium">UGX 5,000</p>
+                    </div>
+                    <Separator />
+                    <div className="flex items-center justify-between text-lg font-bold">
+                    <p>Total</p>
+                    <p>UGX {(cartTotal + 5000).toLocaleString()}</p>
+                    </div>
+                </CardContent>
+                </Card>
+            </div>
+            </div>
         </div>
       </main>
       <Footer />
