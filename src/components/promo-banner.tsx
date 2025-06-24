@@ -13,8 +13,8 @@ export function PromoBanner() {
         className="object-cover transition-transform duration-300 hover:scale-105"
         data-ai-hint="electronics sale"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent p-6 sm:p-8 md:p-12 flex flex-col justify-center items-start">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white font-headline">
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent p-4 sm:p-8 md:p-12 flex flex-col justify-center items-start">
+        <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white font-headline">
           The Future of Sound
         </h2>
         <p className="mt-2 text-sm md:text-lg text-white/90 max-w-md">

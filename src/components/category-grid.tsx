@@ -8,7 +8,7 @@ export function CategoryGrid() {
     <section>
       <Card>
         <CardContent className="p-4 md:p-6">
-          <div className="grid grid-cols-4 gap-2 sm:grid-cols-6 lg:grid-cols-11">
+          <div className="grid grid-cols-4 gap-x-2 gap-y-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-11">
             {categories.map((category) => (
               <Link
                 href={`/category/${category.id}`}
