@@ -30,6 +30,7 @@ import {
   Search,
   Bell,
   User,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Toaster } from '@/components/ui/toaster';
@@ -110,6 +111,14 @@ export default function AdminLayout({
                         <Link href="/admin/products">
                         <Package />
                         Products
+                        </Link>
+                    </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/banners')}>
+                        <Link href="/admin/banners">
+                        <ImageIcon />
+                        Banners
                         </Link>
                     </SidebarMenuButton>
                     </SidebarMenuItem>

@@ -37,3 +37,12 @@ export interface Order {
   status: 'Pending' | 'Fulfilled' | 'Cancelled';
   total: number;
 }
+
+export interface HeroSlide {
+  id: string;
+  title: string;
+  subtitle: string;
+  imageUrl: string;
+  dataAiHint: string;
+  link: string;
+}
