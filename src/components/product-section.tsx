@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { ProductCard } from "./product-card";
@@ -20,7 +21,7 @@ export function ProductSection({ title, products }: ProductSectionProps) {
       <div className="product-carousel -mx-2 flex overflow-x-auto pb-4">
          <div className="flex gap-4 px-2">
             {products.map((product) => (
-                <div key={product.id} className="w-44 sm:w-52 flex-shrink-0">
+                <div key={product.id} className="w-40 sm:w-48 flex-shrink-0">
                     <ProductCard product={product} />
                 </div>
             ))}
