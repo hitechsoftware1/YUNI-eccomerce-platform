@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 export function SecondaryPromoGrid() {
   return (
     <section className="space-y-4">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-2 gap-4">
         <Link href="#" className="block group">
           <Card className="overflow-hidden">
             <div className="relative aspect-[2/1] w-full">
