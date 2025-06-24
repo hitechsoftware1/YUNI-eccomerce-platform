@@ -1,9 +1,10 @@
+
 'use client';
 
 import * as React from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { getProductById, updateProduct } from '@/lib/products';
-import { ProductForm, type ProductFormValues } from '../components/product-form';
+import { ProductForm, type ProductFormValues } from '../../components/product-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import type { Product } from '@/lib/types';
