@@ -21,7 +21,7 @@ export function ProductSection({ title, products }: ProductSectionProps) {
       <div className="product-carousel -mx-2 flex overflow-x-auto pb-4">
          <div className="flex gap-4 px-2">
             {products.map((product) => (
-                <div key={product.id} className="w-40 sm:w-48 flex-shrink-0">
+                <div key={product.id} className="w-36 sm:w-44 flex-shrink-0">
                     <ProductCard product={product} />
                 </div>
             ))}

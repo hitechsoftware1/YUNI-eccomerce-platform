@@ -53,13 +53,13 @@ export function HeroSlider() {
           />
           <div className="absolute inset-0 bg-black/40" />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4">
-            <h2 className="text-3xl font-bold font-headline sm:text-4xl md:text-5xl lg:text-6xl">
+            <h2 className="text-2xl font-bold font-headline sm:text-4xl md:text-5xl">
               {slide.title}
             </h2>
-            <p className="mt-2 max-w-xs text-sm sm:max-w-md sm:text-base md:text-xl md:mt-4">
+            <p className="mt-2 max-w-xs text-sm sm:max-w-md md:text-lg md:mt-3">
               {slide.subtitle}
             </p>
-            <Button asChild className="mt-6 md:mt-8 bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button asChild className="mt-4 h-9 px-6 text-sm md:mt-6 bg-primary hover:bg-primary/90 text-primary-foreground">
               <Link href={slide.link}>Shop Now</Link>
             </Button>
           </div>
