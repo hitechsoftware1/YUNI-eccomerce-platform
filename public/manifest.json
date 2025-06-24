@@ -4,7 +4,7 @@
   "description": "Your one-stop shop for everything you need.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f0f0f0",
+  "background_color": "#ffffff",
   "theme_color": "#FBBF24",
   "icons": [
     {
