@@ -3,7 +3,8 @@
 
 import * as React from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { getProductById, updateProduct } from '@/lib/products';
+import { getProductById } from '@/lib/products';
+import { updateProduct } from '@/lib/product-actions';
 import { ProductForm, type ProductFormValues } from '../../components/product-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
@@ -38,12 +39,11 @@ export default function EditProductPage() {
     if (!product) return;
     setIsSaving(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      updateProduct(product.id, data);
+      const updatedProduct = await updateProduct(product.id, data);
       
       toast({
         title: 'Product Updated',
-        description: `"${data.name}" has been successfully updated.`,
+        description: `"${updatedProduct?.name}" has been successfully updated.`,
       });
 
       router.push('/admin/products');

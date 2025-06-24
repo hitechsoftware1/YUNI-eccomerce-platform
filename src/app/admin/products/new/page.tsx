@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { addProduct } from '@/lib/products';
+import { addProduct } from '@/lib/product-actions';
 import { ProductForm, type ProductFormValues } from '../components/product-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
@@ -16,19 +16,15 @@ export default function NewProductPage() {
   const handleSaveProduct = async (data: ProductFormValues) => {
     setIsSaving(true);
     try {
-      // In a real app, this would be an API call to your backend.
-      // For this prototype, we'll just simulate it.
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      addProduct(data);
+      const newProduct = await addProduct(data);
       
       toast({
         title: 'Product Created',
-        description: `"${data.name}" has been successfully added.`,
+        description: `"${newProduct.name}" has been successfully added.`,
       });
 
       router.push('/admin/products');
-      router.refresh(); // Refresh server components to show the new product
+      router.refresh();
     } catch (error) {
       console.error('Failed to create product:', error);
       toast({
