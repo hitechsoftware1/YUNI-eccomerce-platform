@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { getProductById, allProducts } from '@/lib/products';
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import Image from 'next/image';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
@@ -31,7 +31,8 @@ const StarRating = ({ rating, reviewCount }: { rating: number; reviewCount?: num
   );
 };
 
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
+export default function ProductDetailPage() {
+  const params = useParams<{ id: string }>();
   const product = getProductById(params.id);
   const { addToCart } = useCart();
   const [quantity, setQuantity] = React.useState(1);
