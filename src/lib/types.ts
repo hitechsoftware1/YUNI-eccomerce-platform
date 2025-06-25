@@ -56,3 +56,12 @@ export interface PromoBannerData {
   imageUrl: string;
   dataAiHint: string;
 }
+
+export interface SecondaryPromoGridItem {
+  id: string;
+  alt: string;
+  imageUrl: string;
+  dataAiHint: string;
+  link: string;
+  aspectRatio: '2/1' | '4/1';
+}
