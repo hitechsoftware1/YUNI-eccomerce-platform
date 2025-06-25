@@ -43,7 +43,6 @@ export let allProducts: Product[] = [
 
 export const getTopSellingProducts = () => allProducts.slice(0, 6);
 export const getNewArrivals = () => allProducts.filter(p => p.isNew).slice(0, 6);
-export const getFlashSaleProducts = () => allProducts.filter(p => p.originalPrice).slice(0, 6);
 export const getLatestProducts = () => allProducts.slice(0, 8);
 export const getGroceryProducts = () => allProducts.filter(p => p.category === 'groceries').slice(0, 6);
 export const getBeverageProducts = () => allProducts.filter(p => p.category === 'beverages').slice(0, 6);
