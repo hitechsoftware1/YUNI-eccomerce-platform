@@ -47,3 +47,12 @@ export interface HeroSlide {
   dataAiHint: string;
   link: string;
 }
+
+export interface PromoBannerData {
+  title: string;
+  subtitle: string;
+  buttonText: string;
+  link: string;
+  imageUrl: string;
+  dataAiHint: string;
+}
