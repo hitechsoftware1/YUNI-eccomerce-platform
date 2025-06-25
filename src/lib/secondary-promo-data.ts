@@ -1,6 +1,6 @@
 import type { SecondaryPromoGridItem } from '@/lib/types';
 
-export const secondaryPromoData: SecondaryPromoGridItem[] = [
+export let allSecondaryPromos: SecondaryPromoGridItem[] = [
   {
     id: 'promo1',
     alt: 'Lato Milk Promotion',
@@ -26,3 +26,5 @@ export const secondaryPromoData: SecondaryPromoGridItem[] = [
     aspectRatio: '4/1',
   },
 ];
+
+export const getSecondaryPromoById = (id: string) => allSecondaryPromos.find(p => p.id === id);

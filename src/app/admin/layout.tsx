@@ -30,7 +30,9 @@ import {
   Search,
   Bell,
   User,
-  Image as ImageIcon,
+  ImageIcon,
+  AppWindow,
+  GalleryHorizontal,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Toaster } from '@/components/ui/toaster';
@@ -104,6 +106,35 @@ export default function AdminLayout({
                 </SidebarMenu>
             </SidebarGroup>
             <SidebarGroup>
+                <SidebarGroupLabel>Content</SidebarGroupLabel>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/banners')}>
+                        <Link href="/admin/banners">
+                        <ImageIcon />
+                        Hero Banners
+                        </Link>
+                    </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/promocards')}>
+                        <Link href="/admin/promocards">
+                        <AppWindow />
+                        Promo Cards
+                        </Link>
+                    </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/promobanners')}>
+                        <Link href="/admin/promobanners">
+                        <GalleryHorizontal />
+                        Promo Banners
+                        </Link>
+                    </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarGroup>
+            <SidebarGroup>
                 <SidebarGroupLabel>Management</SidebarGroupLabel>
                 <SidebarMenu>
                     <SidebarMenuItem>
@@ -111,14 +142,6 @@ export default function AdminLayout({
                         <Link href="/admin/products">
                         <Package />
                         Products
-                        </Link>
-                    </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/banners')}>
-                        <Link href="/admin/banners">
-                        <ImageIcon />
-                        Banners
                         </Link>
                     </SidebarMenuButton>
                     </SidebarMenuItem>

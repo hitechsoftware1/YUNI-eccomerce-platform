@@ -1,11 +1,12 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
-import { secondaryPromoData } from '@/lib/secondary-promo-data';
+import { allSecondaryPromos } from '@/lib/secondary-promo-data';
 
 export function SecondaryPromoGrid() {
-  const topPromos = secondaryPromoData.filter((p) => p.aspectRatio === '2/1');
-  const bottomPromo = secondaryPromoData.find((p) => p.aspectRatio === '4/1');
+  const topPromos = allSecondaryPromos.filter((p) => p.aspectRatio === '2/1');
+  const bottomPromo = allSecondaryPromos.find((p) => p.aspectRatio === '4/1');
 
   return (
     <section className="space-y-4">

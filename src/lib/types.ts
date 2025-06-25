@@ -29,7 +29,7 @@ export interface AdminSale {
 }
 
 export interface Order {
-  id: string;
+  id:string;
   customer: {
     name: string;
     email: string;
@@ -64,4 +64,13 @@ export interface SecondaryPromoGridItem {
   dataAiHint: string;
   link: string;
   aspectRatio: '2/1' | '4/1';
+}
+
+export interface PromoCard {
+  id: string;
+  title: string;
+  category: string;
+  imageUrl: string;
+  dataAiHint: string;
+  href: string;
 }
