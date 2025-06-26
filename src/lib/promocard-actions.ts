@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { allPromoCards } from './promo-cards';
 import type { PromoCard } from '@/lib/types';
 import type { PromoCardFormValues } from '@/app/admin/promocards/components/promocard-form';
+import { addAdminNotification } from './notification-actions';
 
 export async function addPromoCard(cardData: PromoCardFormValues) {
   const newCard: PromoCard = {
@@ -13,6 +14,12 @@ export async function addPromoCard(cardData: PromoCardFormValues) {
     dataAiHint: cardData.dataAiHint || cardData.title.toLowerCase().split(' ').slice(0, 2).join(' '),
   };
   allPromoCards.unshift(newCard);
+
+  addAdminNotification({
+    title: 'New Promo Card',
+    description: `Card "${newCard.title}" was created.`,
+    href: `/admin/promocards`
+  });
   
   revalidatePath('/');
   revalidatePath('/admin/promocards');
@@ -35,6 +42,12 @@ export async function updatePromoCard(id: string, cardData: PromoCardFormValues)
     };
 
     allPromoCards[cardIndex] = updatedCard;
+
+    addAdminNotification({
+        title: 'Promo Card Updated',
+        description: `Card "${updatedCard.title}" was updated.`,
+        href: `/admin/promocards`
+    });
     
     revalidatePath('/');
     revalidatePath('/admin/promocards');
@@ -46,7 +59,14 @@ export async function deletePromoCard(id: string): Promise<void> {
     const cardIndex = allPromoCards.findIndex((p) => p.id === id);
     if (cardIndex === -1) return;
     
+    const deletedCard = allPromoCards[cardIndex];
     allPromoCards.splice(cardIndex, 1);
+
+    addAdminNotification({
+        title: 'Promo Card Deleted',
+        description: `Card "${deletedCard.title}" was deleted.`,
+        href: `/admin/promocards`
+    });
 
     revalidatePath('/');
     revalidatePath('/admin/promocards');

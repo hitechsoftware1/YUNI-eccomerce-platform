@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { allHeroSlides } from './banners';
 import type { HeroSlide } from '@/lib/types';
 import type { BannerFormValues } from '@/app/admin/banners/components/banner-form';
+import { addAdminNotification } from './notification-actions';
 
 export async function addHeroSlide(bannerData: BannerFormValues) {
   const newSlide: HeroSlide = {
@@ -13,6 +14,12 @@ export async function addHeroSlide(bannerData: BannerFormValues) {
     dataAiHint: bannerData.dataAiHint || bannerData.title.toLowerCase().split(' ').slice(0, 2).join(' '),
   };
   allHeroSlides.unshift(newSlide);
+
+  addAdminNotification({
+    title: 'New Hero Banner',
+    description: `Banner "${newSlide.title}" was created.`,
+    href: `/admin/banners`
+  });
   
   revalidatePath('/');
   revalidatePath('/admin/banners');
@@ -35,6 +42,12 @@ export async function updateHeroSlide(id: string, bannerData: BannerFormValues):
     };
 
     allHeroSlides[slideIndex] = updatedSlide;
+
+    addAdminNotification({
+      title: 'Hero Banner Updated',
+      description: `Banner "${updatedSlide.title}" was updated.`,
+      href: `/admin/banners`
+    });
     
     revalidatePath('/');
     revalidatePath('/admin/banners');
@@ -46,7 +59,14 @@ export async function deleteHeroSlide(id: string): Promise<void> {
     const slideIndex = allHeroSlides.findIndex((p) => p.id === id);
     if (slideIndex === -1) return;
     
+    const deletedSlide = allHeroSlides[slideIndex];
     allHeroSlides.splice(slideIndex, 1);
+
+    addAdminNotification({
+      title: 'Hero Banner Deleted',
+      description: `Banner "${deletedSlide.title}" was deleted.`,
+      href: `/admin/banners`
+    });
 
     revalidatePath('/');
     revalidatePath('/admin/banners');

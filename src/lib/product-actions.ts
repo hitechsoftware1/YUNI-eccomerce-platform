@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { allProducts } from './products';
 import type { Product } from '@/lib/types';
 import type { ProductFormValues } from '@/app/admin/products/components/product-form';
+import { addAdminNotification } from './notification-actions';
 
 export async function addProduct(productData: ProductFormValues) {
   const newProduct: Product = {
@@ -20,6 +21,12 @@ export async function addProduct(productData: ProductFormValues) {
   };
   allProducts.unshift(newProduct);
   
+  addAdminNotification({
+    title: 'New Product Added',
+    description: `Product "${newProduct.name}" was created.`,
+    href: `/admin/products/edit/${newProduct.id}`
+  });
+
   revalidatePath('/');
   revalidatePath('/admin/products');
   revalidatePath(`/category/${newProduct.category}`);
@@ -44,6 +51,12 @@ export async function updateProduct(id: string, productData: ProductFormValues):
 
     allProducts[productIndex] = updatedProduct;
     
+    addAdminNotification({
+        title: 'Product Updated',
+        description: `Product "${updatedProduct.name}" was updated.`,
+        href: `/admin/products/edit/${updatedProduct.id}`
+    });
+
     revalidatePath('/');
     revalidatePath('/admin/products');
     revalidatePath(`/products/${id}`);
@@ -62,6 +75,12 @@ export async function deleteProduct(id: string): Promise<void> {
     const productToDelete = allProducts[productIndex];
     
     allProducts.splice(productIndex, 1);
+
+    addAdminNotification({
+        title: 'Product Deleted',
+        description: `Product "${productToDelete.name}" was deleted.`,
+        href: '/admin/products'
+    });
 
     revalidatePath('/');
     revalidatePath('/admin/products');

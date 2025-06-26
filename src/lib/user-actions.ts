@@ -4,15 +4,24 @@
 import { revalidatePath } from 'next/cache';
 import { allUsers } from './users';
 import type { ManagedUser } from './types';
+import { addAdminNotification } from './notification-actions';
 
 export async function updateUserRole(userId: string, role: ManagedUser['role']) {
   const userIndex = allUsers.findIndex((u) => u.id === userId);
   if (userIndex === -1) {
     throw new Error('User not found');
   }
-  allUsers[userIndex].role = role;
+  const user = allUsers[userIndex];
+  user.role = role;
+  
+  addAdminNotification({
+    title: 'User Role Changed',
+    description: `User ${user.name}'s role is now ${role}.`,
+    href: `/admin/users`
+  });
+
   revalidatePath('/admin/users');
-  return allUsers[userIndex];
+  return user;
 }
 
 export async function updateUserStatus(userId: string, status: ManagedUser['status']) {
@@ -20,7 +29,15 @@ export async function updateUserStatus(userId: string, status: ManagedUser['stat
   if (userIndex === -1) {
     throw new Error('User not found');
   }
-  allUsers[userIndex].status = status;
+  const user = allUsers[userIndex];
+  user.status = status;
+
+  addAdminNotification({
+    title: 'User Status Updated',
+    description: `User ${user.name} is now ${status}.`,
+    href: `/admin/users`
+  });
+
   revalidatePath('/admin/users');
-  return allUsers[userIndex];
+  return user;
 }

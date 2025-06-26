@@ -157,3 +157,12 @@ export interface SellerPerformance {
   totalOrders: number;
   averageRating: number;
 }
+
+export interface Notification {
+  id: string;
+  title: string;
+  description: string;
+  timestamp: string;
+  read: boolean;
+  href?: string;
+}

@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { allSecondaryPromos } from './secondary-promo-data';
 import type { SecondaryPromoGridItem } from '@/lib/types';
 import type { PromoBannerFormValues } from '@/app/admin/promobanners/components/promobanner-form';
+import { addAdminNotification } from './notification-actions';
 
 export async function addPromoBanner(bannerData: PromoBannerFormValues) {
   const newBanner: SecondaryPromoGridItem = {
@@ -14,6 +15,12 @@ export async function addPromoBanner(bannerData: PromoBannerFormValues) {
   };
   allSecondaryPromos.push(newBanner);
   
+  addAdminNotification({
+    title: 'New Promo Banner',
+    description: `A new promo banner was created.`,
+    href: `/admin/promobanners`
+  });
+
   revalidatePath('/');
   revalidatePath('/admin/promobanners');
 
@@ -36,6 +43,12 @@ export async function updatePromoBanner(id: string, bannerData: PromoBannerFormV
 
     allSecondaryPromos[bannerIndex] = updatedBanner;
     
+    addAdminNotification({
+        title: 'Promo Banner Updated',
+        description: `Promo banner "${updatedBanner.alt}" was updated.`,
+        href: `/admin/promobanners`
+    });
+
     revalidatePath('/');
     revalidatePath('/admin/promobanners');
 
@@ -46,7 +59,14 @@ export async function deletePromoBanner(id: string): Promise<void> {
     const bannerIndex = allSecondaryPromos.findIndex((p) => p.id === id);
     if (bannerIndex === -1) return;
     
+    const deletedBanner = allSecondaryPromos[bannerIndex];
     allSecondaryPromos.splice(bannerIndex, 1);
+
+    addAdminNotification({
+        title: 'Promo Banner Deleted',
+        description: `Promo banner "${deletedBanner.alt}" was deleted.`,
+        href: `/admin/promobanners`
+    });
 
     revalidatePath('/');
     revalidatePath('/admin/promobanners');
