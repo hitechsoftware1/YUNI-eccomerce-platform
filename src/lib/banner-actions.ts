@@ -15,7 +15,7 @@ export async function addHeroSlide(bannerData: BannerFormValues) {
   };
   allHeroSlides.unshift(newSlide);
 
-  addAdminNotification({
+  await addAdminNotification({
     title: 'New Hero Banner',
     description: `Banner "${newSlide.title}" was created.`,
     href: `/admin/banners`
@@ -43,7 +43,7 @@ export async function updateHeroSlide(id: string, bannerData: BannerFormValues):
 
     allHeroSlides[slideIndex] = updatedSlide;
 
-    addAdminNotification({
+    await addAdminNotification({
       title: 'Hero Banner Updated',
       description: `Banner "${updatedSlide.title}" was updated.`,
       href: `/admin/banners`
@@ -62,7 +62,7 @@ export async function deleteHeroSlide(id: string): Promise<void> {
     const deletedSlide = allHeroSlides[slideIndex];
     allHeroSlides.splice(slideIndex, 1);
 
-    addAdminNotification({
+    await addAdminNotification({
       title: 'Hero Banner Deleted',
       description: `Banner "${deletedSlide.title}" was deleted.`,
       href: `/admin/banners`

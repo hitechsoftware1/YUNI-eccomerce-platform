@@ -7,7 +7,7 @@ import type { Notification } from './types';
 let allNotifications: Notification[] = [];
 
 // This is a helper function used by other server actions, not an action itself.
-export function addAdminNotification(notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) {
+export async function addAdminNotification(notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) {
     const newNotification: Notification = {
         ...notification,
         id: `notif-${Date.now()}-${Math.floor(Math.random() * 100)}`,

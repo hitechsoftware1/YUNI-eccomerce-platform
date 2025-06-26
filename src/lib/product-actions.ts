@@ -21,7 +21,7 @@ export async function addProduct(productData: ProductFormValues) {
   };
   allProducts.unshift(newProduct);
   
-  addAdminNotification({
+  await addAdminNotification({
     title: 'New Product Added',
     description: `Product "${newProduct.name}" was created.`,
     href: `/admin/products/edit/${newProduct.id}`
@@ -51,7 +51,7 @@ export async function updateProduct(id: string, productData: ProductFormValues):
 
     allProducts[productIndex] = updatedProduct;
     
-    addAdminNotification({
+    await addAdminNotification({
         title: 'Product Updated',
         description: `Product "${updatedProduct.name}" was updated.`,
         href: `/admin/products/edit/${updatedProduct.id}`
@@ -76,7 +76,7 @@ export async function deleteProduct(id: string): Promise<void> {
     
     allProducts.splice(productIndex, 1);
 
-    addAdminNotification({
+    await addAdminNotification({
         title: 'Product Deleted',
         description: `Product "${productToDelete.name}" was deleted.`,
         href: '/admin/products'

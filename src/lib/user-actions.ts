@@ -14,7 +14,7 @@ export async function updateUserRole(userId: string, role: ManagedUser['role']) 
   const user = allUsers[userIndex];
   user.role = role;
   
-  addAdminNotification({
+  await addAdminNotification({
     title: 'User Role Changed',
     description: `User ${user.name}'s role is now ${role}.`,
     href: `/admin/users`
@@ -32,7 +32,7 @@ export async function updateUserStatus(userId: string, status: ManagedUser['stat
   const user = allUsers[userIndex];
   user.status = status;
 
-  addAdminNotification({
+  await addAdminNotification({
     title: 'User Status Updated',
     description: `User ${user.name} is now ${status}.`,
     href: `/admin/users`

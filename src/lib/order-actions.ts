@@ -18,7 +18,7 @@ export async function updateOrderStatus(
 
   allUserOrders[orderIndex].status = status;
   
-  addAdminNotification({
+  await addAdminNotification({
     title: 'Order Status Updated',
     description: `Order ${orderId} is now "${status}".`,
     href: `/admin/orders/${orderId}`

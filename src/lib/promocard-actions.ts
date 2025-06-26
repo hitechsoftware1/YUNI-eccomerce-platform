@@ -15,7 +15,7 @@ export async function addPromoCard(cardData: PromoCardFormValues) {
   };
   allPromoCards.unshift(newCard);
 
-  addAdminNotification({
+  await addAdminNotification({
     title: 'New Promo Card',
     description: `Card "${newCard.title}" was created.`,
     href: `/admin/promocards`
@@ -43,7 +43,7 @@ export async function updatePromoCard(id: string, cardData: PromoCardFormValues)
 
     allPromoCards[cardIndex] = updatedCard;
 
-    addAdminNotification({
+    await addAdminNotification({
         title: 'Promo Card Updated',
         description: `Card "${updatedCard.title}" was updated.`,
         href: `/admin/promocards`
@@ -62,7 +62,7 @@ export async function deletePromoCard(id: string): Promise<void> {
     const deletedCard = allPromoCards[cardIndex];
     allPromoCards.splice(cardIndex, 1);
 
-    addAdminNotification({
+    await addAdminNotification({
         title: 'Promo Card Deleted',
         description: `Card "${deletedCard.title}" was deleted.`,
         href: `/admin/promocards`
