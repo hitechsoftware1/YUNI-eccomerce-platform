@@ -6,7 +6,7 @@ import { allProducts } from './products';
 import { allUserOrders } from './user-orders';
 import type { SellerPerformance } from './types';
 
-export function getSellerPerformanceData(): SellerPerformance[] {
+export async function getSellerPerformanceData(): Promise<SellerPerformance[]> {
     const sellers = allUsers.filter(u => u.role === 'Seller');
 
     return sellers.map(seller => {
