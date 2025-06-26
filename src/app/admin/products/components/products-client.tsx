@@ -18,6 +18,7 @@ import Link from "next/link";
 import { DeleteProductDialog } from './delete-product-dialog';
 import { useToast } from '@/hooks/use-toast';
 import type { Product } from '@/lib/types';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface ProductsClientProps {
     products: Product[];
@@ -29,6 +30,7 @@ export function ProductsClient({ products: initialProducts }: ProductsClientProp
   const [isDeleting, setIsDeleting] = React.useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const [sellerFilter, setSellerFilter] = React.useState<string>('all');
   
   React.useEffect(() => {
     setProducts(initialProducts);
@@ -61,10 +63,30 @@ export function ProductsClient({ products: initialProducts }: ProductsClientProp
       setIsDeleting(false);
     }
   };
+  
+  const allSellers = ['all', ...Array.from(new Set(initialProducts.map(p => p.sellerName)))];
+  
+  const filteredProducts = sellerFilter === 'all' 
+    ? products 
+    : products.filter(p => p.sellerName === sellerFilter);
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+           <Select value={sellerFilter} onValueChange={setSellerFilter}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Filter by seller..." />
+              </SelectTrigger>
+              <SelectContent>
+                {allSellers.map(seller => (
+                   <SelectItem key={seller} value={seller}>
+                      {seller === 'all' ? 'All Sellers' : seller}
+                    </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+        </div>
         <Button asChild>
           <Link href="/admin/products/new">
             <PlusCircle className="mr-2 h-4 w-4" />
@@ -80,7 +102,7 @@ export function ProductsClient({ products: initialProducts }: ProductsClientProp
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <ProductsTable products={products} onDeleteClick={handleDeleteClick} />
+          <ProductsTable products={filteredProducts} onDeleteClick={handleDeleteClick} />
         </CardContent>
       </Card>
       {productToDelete && (

@@ -11,6 +11,7 @@ export async function addProduct(productData: ProductFormValues) {
     id: `prod-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
     ...productData,
     price: Number(productData.price),
+    sellerName: 'YUNI Store', // In a real app, this would come from the logged-in user context
     imageUrl: productData.imageUrl || 'https://placehold.co/300x300.png',
     dataAiHint: productData.dataAiHint || productData.name.toLowerCase().split(' ').slice(0, 2).join(' '),
     rating: 0,

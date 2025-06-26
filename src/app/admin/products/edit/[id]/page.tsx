@@ -94,6 +94,7 @@ export default function EditProductPage() {
       description: product.description,
       price: product.price,
       category: product.category,
+      status: product.status,
       imageUrl: product.imageUrl,
       dataAiHint: product.dataAiHint,
   }

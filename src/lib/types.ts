@@ -13,6 +13,8 @@ export interface Product {
   isNew?: boolean;
   description: string;
   category: string;
+  status: 'In Stock' | 'Out of Stock' | 'Archived';
+  sellerName: string;
 }
 
 export interface Category {

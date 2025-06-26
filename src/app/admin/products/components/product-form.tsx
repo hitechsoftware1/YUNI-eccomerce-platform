@@ -22,6 +22,7 @@ const productFormSchema = z.object({
   description: z.string().min(10, { message: 'Description must be at least 10 characters.' }),
   price: z.coerce.number().positive({ message: 'Price must be a positive number.' }),
   category: z.string({ required_error: 'Please select a category.' }),
+  status: z.enum(['In Stock', 'Out of Stock', 'Archived'], { required_error: 'Please select a status.' }),
   imageUrl: z.string().url({ message: 'Please enter a valid URL.' }).optional().or(z.literal('')),
   dataAiHint: z.string().max(40, { message: 'Hint cannot be longer than two words.' }).optional(),
 });
@@ -42,6 +43,7 @@ export function ProductForm({ initialData, onSave, isSaving }: ProductFormProps)
       description: '',
       price: 0,
       category: '',
+      status: 'In Stock',
       imageUrl: '',
       dataAiHint: '',
     },
@@ -152,6 +154,29 @@ export function ProductForm({ initialData, onSave, isSaving }: ProductFormProps)
             )}
             />
         </div>
+        <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Status</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={allDisabled}>
+                        <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a status" />
+                        </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                            <SelectItem value="In Stock">In Stock</SelectItem>
+                            <SelectItem value="Out of Stock">Out of Stock</SelectItem>
+                            <SelectItem value="Archived">Archived</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <FormDescription>Archived products are hidden from the store.</FormDescription>
+                    <FormMessage />
+                </FormItem>
+            )}
+            />
         <FormField
             control={form.control}
             name="imageUrl"

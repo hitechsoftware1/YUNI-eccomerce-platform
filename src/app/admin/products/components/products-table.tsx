@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -21,6 +22,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface ProductsTableProps {
   products: Product[];
@@ -40,7 +42,7 @@ export function ProductsTable({ products, onDeleteClick }: ProductsTableProps) {
           <TableHead>Name</TableHead>
           <TableHead>Status</TableHead>
           <TableHead className="hidden md:table-cell">Price</TableHead>
-          <TableHead className="hidden md:table-cell">Reviews</TableHead>
+          <TableHead className="hidden md:table-cell">Seller</TableHead>
           <TableHead>
             <span className="sr-only">Actions</span>
           </TableHead>
@@ -65,10 +67,15 @@ export function ProductsTable({ products, onDeleteClick }: ProductsTableProps) {
             </TableCell>
             <TableCell className="font-medium">{product.name}</TableCell>
             <TableCell>
-              <Badge variant="outline">In Stock</Badge>
+              <Badge variant={product.status === 'Archived' ? 'outline' : 'secondary'} className={cn(
+                product.status === 'In Stock' && 'bg-green-600 text-primary-foreground',
+                product.status === 'Out of Stock' && 'bg-yellow-500 text-primary-foreground',
+              )}>
+                {product.status}
+              </Badge>
             </TableCell>
             <TableCell className="hidden md:table-cell">UGX {product.price.toLocaleString()}</TableCell>
-            <TableCell className="hidden md:table-cell">{product.reviewCount ?? 0}</TableCell>
+            <TableCell className="hidden md:table-cell">{product.sellerName}</TableCell>
             <TableCell onClick={(e) => e.stopPropagation()}>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
