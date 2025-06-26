@@ -26,6 +26,9 @@ import {
 import { Input } from '@/components/ui/input';
 import type { User } from 'firebase/auth';
 import { useAuth } from '@/contexts/auth-context';
+import { useToast } from '@/hooks/use-toast';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 const personalDetailsSchema = z.object({
   displayName: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -44,7 +47,7 @@ interface PersonalDetailsModalProps {
 export function PersonalDetailsModal({ isOpen, onOpenChange, user, onSave }: PersonalDetailsModalProps) {
   const [isSaving, setIsSaving] = React.useState(false);
   const [isResetting, setIsResetting] = React.useState(false);
-  const { resetPassword } = useAuth();
+  const { toast } = useToast();
 
   const form = useForm<PersonalDetailsFormValues>({
     resolver: zodResolver(personalDetailsSchema),
@@ -79,10 +82,18 @@ export function PersonalDetailsModal({ isOpen, onOpenChange, user, onSave }: Per
     if (!user.email) return;
     setIsResetting(true);
     try {
-        await resetPassword(user.email);
-        onOpenChange(false);
-    } catch (error) {
-        // toast is handled in auth context
+      await sendPasswordResetEmail(auth, user.email);
+      toast({
+        title: "Password Reset Email Sent",
+        description: "Please check your inbox to reset your password.",
+      });
+      onOpenChange(false);
+    } catch (error: any) {
+       toast({
+        title: "Password Reset Failed",
+        description: error.message || "An unexpected error occurred.",
+        variant: "destructive",
+      });
     } finally {
         setIsResetting(false);
     }

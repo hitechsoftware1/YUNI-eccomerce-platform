@@ -26,6 +26,9 @@ import { z } from "zod";
 import { useAuth, loginSchema, registerSchema } from "@/contexts/auth-context";
 import { Separator } from "@/components/ui/separator";
 import { GoogleIcon } from "@/components/icons/google-icon";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { useToast } from "@/hooks/use-toast";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -33,10 +36,11 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
-  const { logIn, signUp, logInWithGoogle, resetPassword } = useAuth();
+  const { logIn, signUp, logInWithGoogle } = useAuth();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isGoogleSubmitting, setIsGoogleSubmitting] = React.useState(false);
   const [isResetting, setIsResetting] = React.useState(false);
+  const { toast } = useToast();
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -113,10 +117,19 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
 
     setIsResetting(true);
     try {
-      await resetPassword(email);
+      await sendPasswordResetEmail(auth, email);
+      toast({
+        title: "Password Reset Email Sent",
+        description: "Please check your inbox to reset your password. You can close this window.",
+      });
       onOpenChange(false);
-    } catch (error) {
-      // Toast is handled in auth-context
+    } catch (error: any) {
+      console.error("Password reset error:", error);
+      toast({
+        title: "Password Reset Failed",
+        description: error.message || "An unexpected error occurred.",
+        variant: "destructive",
+      });
     } finally {
       setIsResetting(false);
     }
