@@ -10,18 +10,21 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LogOut, LayoutDashboard, ShoppingBag } from 'lucide-react';
+import { LogOut, LayoutDashboard, ShoppingBag, EyeOff } from 'lucide-react';
 import { getOrdersByEmail } from '@/lib/user-orders';
-import type { Order } from '@/lib/types';
+import type { Order, Product } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { getProductById } from '@/lib/products';
+import { ProductCard } from '@/components/product-card';
 
 
 export default function AccountPage() {
   const { currentUser, loading, logOut } = useAuth();
   const router = useRouter();
   const [orders, setOrders] = React.useState<Order[]>([]);
+  const [recentlyViewed, setRecentlyViewed] = React.useState<Product[]>([]);
 
   React.useEffect(() => {
     if (!loading && !currentUser) {
@@ -31,6 +34,17 @@ export default function AccountPage() {
         // In a real app, this would be an API call.
         const userOrders = getOrdersByEmail(currentUser.email);
         setOrders(userOrders);
+
+        // Load recently viewed items
+        try {
+            const viewedIds: string[] = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
+            if (viewedIds.length > 0) {
+                const viewedProducts = viewedIds.map(id => getProductById(id)).filter((p): p is Product => Boolean(p));
+                setRecentlyViewed(viewedProducts);
+            }
+        } catch (error) {
+            console.error("Failed to load recently viewed items:", error);
+        }
     }
   }, [currentUser, loading, router]);
 
@@ -158,6 +172,35 @@ export default function AccountPage() {
                             <p className="mt-1 text-sm text-muted-foreground">You haven't placed any orders with us. Let's change that!</p>
                             <Button asChild className="mt-4">
                                 <Link href="/">Start Shopping</Link>
+                            </Button>
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Recently Viewed</CardTitle>
+                    <CardDescription>Items you have recently looked at.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {recentlyViewed.length > 0 ? (
+                        <div className="product-carousel -mx-2 flex overflow-x-auto pb-4">
+                            <div className="flex gap-4 px-2">
+                                {recentlyViewed.map((product) => (
+                                    <div key={product.id} className="w-36 sm:w-44 flex-shrink-0">
+                                        <ProductCard product={product} />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center text-center py-10 rounded-lg bg-secondary/50">
+                            <EyeOff className="mx-auto h-12 w-12 text-muted-foreground" />
+                            <h3 className="mt-4 text-lg font-semibold">Nothing to see here</h3>
+                            <p className="mt-1 text-sm text-muted-foreground">You haven't viewed any items recently.</p>
+                            <Button asChild className="mt-4">
+                                <Link href="/">Start Browsing</Link>
                             </Button>
                         </div>
                     )}

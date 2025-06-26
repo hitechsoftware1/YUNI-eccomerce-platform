@@ -37,6 +37,20 @@ export default function ProductDetailPage() {
   const { addToCart } = useCart();
   const [quantity, setQuantity] = React.useState(1);
 
+  React.useEffect(() => {
+    if (product) {
+      try {
+        const viewedItems: string[] = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
+        const updatedItems = viewedItems.filter(id => id !== product.id);
+        updatedItems.unshift(product.id);
+        const finalItems = updatedItems.slice(0, 10);
+        localStorage.setItem('recentlyViewed', JSON.stringify(finalItems));
+      } catch (error) {
+        console.error("Failed to update recently viewed items:", error);
+      }
+    }
+  }, [product]);
+
   if (!product) {
     notFound();
   }
