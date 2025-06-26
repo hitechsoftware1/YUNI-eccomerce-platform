@@ -38,6 +38,7 @@ export interface OrderItem {
   quantity: number;
   imageUrl: string;
   dataAiHint: string;
+  sellerName: string;
 }
 
 export interface Order {
@@ -142,6 +143,17 @@ export interface ManagedUser {
   name: string;
   email: string;
   role: 'Admin' | 'Seller' | 'Buyer';
-  status: 'Active' | 'Banned';
+  status: 'Active' | 'Banned' | 'Pending Approval';
   lastLogin: string;
+}
+
+export interface SellerPerformance {
+  id: string;
+  name: string;
+  email: string;
+  status: ManagedUser['status'];
+  productCount: number;
+  totalRevenue: number;
+  totalOrders: number;
+  averageRating: number;
 }

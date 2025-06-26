@@ -66,6 +66,16 @@ export function UsersTable({ users, onBanClick }: UsersTableProps) {
             toast({ title: 'Error', description: 'Failed to update user status.', variant: 'destructive' });
         }
     }
+
+    const handleApproveSeller = async (user: ManagedUser) => {
+        try {
+            await updateUserStatus(user.id, 'Active');
+            toast({ title: 'Seller Approved', description: `User ${user.name} is now an active seller.` });
+            router.refresh();
+        } catch (error) {
+            toast({ title: 'Error', description: 'Failed to approve seller.', variant: 'destructive' });
+        }
+    };
   
   return (
     <Table>
@@ -95,7 +105,10 @@ export function UsersTable({ users, onBanClick }: UsersTableProps) {
                  </Badge>
             </TableCell>
             <TableCell>
-                <Badge variant={user.status === 'Banned' ? 'destructive' : 'outline'} className={cn('capitalize', user.status === 'Active' && 'border-green-500 text-green-600')}>
+                <Badge variant={user.status === 'Banned' ? 'destructive' : 'outline'} className={cn('capitalize', 
+                    user.status === 'Active' && 'border-green-500 text-green-600',
+                    user.status === 'Pending Approval' && 'border-yellow-500 text-yellow-600'
+                )}>
                     {user.status}
                 </Badge>
             </TableCell>
@@ -123,13 +136,28 @@ export function UsersTable({ users, onBanClick }: UsersTableProps) {
                         </DropdownMenuRadioGroup>
                     </DropdownMenuSubContent>
                   </DropdownMenuSub>
-                  <DropdownMenuItem
-                    className={cn(user.status === 'Active' ? "text-destructive focus:text-destructive" : "text-green-600 focus:text-green-700")}
-                    onClick={() => handleStatusToggle(user)}
-                  >
-                    {user.status === 'Active' ? <UserX className="mr-2 h-4 w-4" /> : <UserCheck className="mr-2 h-4 w-4" />}
-                    {user.status === 'Active' ? 'Ban User' : 'Unban User'}
-                  </DropdownMenuItem>
+                  
+                  {user.status === 'Pending Approval' ? (
+                      <>
+                        <DropdownMenuItem className="text-green-600 focus:text-green-700" onClick={() => handleApproveSeller(user)}>
+                            <UserCheck className="mr-2 h-4 w-4" />
+                            <span>Approve Seller</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => onBanClick(user)}>
+                            <UserX className="mr-2 h-4 w-4" />
+                            <span>Reject Seller</span>
+                        </DropdownMenuItem>
+                      </>
+                  ) : (
+                    <DropdownMenuItem
+                        className={cn(user.status === 'Active' ? "text-destructive focus:text-destructive" : "text-green-600 focus:text-green-700")}
+                        onClick={() => handleStatusToggle(user)}
+                    >
+                        {user.status === 'Active' ? <UserX className="mr-2 h-4 w-4" /> : <UserCheck className="mr-2 h-4 w-4" />}
+                        {user.status === 'Active' ? 'Ban User' : 'Unban User'}
+                    </DropdownMenuItem>
+                  )}
+
                 </DropdownMenuContent>
               </DropdownMenu>
             </TableCell>

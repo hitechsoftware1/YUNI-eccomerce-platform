@@ -33,6 +33,7 @@ import {
   ImageIcon,
   AppWindow,
   GalleryHorizontal,
+  Store,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Toaster } from '@/components/ui/toaster';
@@ -173,6 +174,14 @@ export default function AdminLayout({
                         <Link href="/admin/users">
                             <Users />
                             Users
+                        </Link>
+                    </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/sellers')}>
+                        <Link href="/admin/sellers">
+                            <Store />
+                            Sellers
                         </Link>
                     </SidebarMenuButton>
                     </SidebarMenuItem>
