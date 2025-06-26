@@ -74,3 +74,14 @@ export interface PromoCard {
   dataAiHint: string;
   href: string;
 }
+
+export interface Address {
+  id: string;
+  fullName: string;
+  addressLine1: string;
+  city: string;
+  country: string;
+  postalCode: string;
+  phoneNumber: string;
+  isDefault?: boolean;
+}

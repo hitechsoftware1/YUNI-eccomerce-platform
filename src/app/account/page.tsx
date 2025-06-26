@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2 } from 'lucide-react';
 import { getOrdersByEmail } from '@/lib/user-orders';
-import type { Order, Product } from '@/lib/types';
+import type { Order, Product, Address } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -22,6 +22,8 @@ import { ProductCard } from '@/components/product-card';
 import { recommendProducts } from '@/ai/flows/product-recommendations';
 import { useToast } from '@/hooks/use-toast';
 import { PersonalDetailsModal } from '@/components/personal-details-modal';
+import { AddressBookModal } from '@/components/address-book-modal';
+import { getAddresses, saveAddresses } from '@/lib/user-addresses';
 
 
 export default function AccountPage() {
@@ -35,6 +37,8 @@ export default function AccountPage() {
   const [isUploading, setIsUploading] = React.useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = React.useState(false);
+  const [isAddressModalOpen, setIsAddressModalOpen] = React.useState(false);
+  const [addresses, setAddresses] = React.useState<Address[]>([]);
 
   React.useEffect(() => {
     if (!loading && !currentUser) {
@@ -55,6 +59,9 @@ export default function AccountPage() {
         } catch (error) {
             console.error("Failed to load recently viewed items:", error);
         }
+        
+        // Load addresses
+        setAddresses(getAddresses());
     }
   }, [currentUser, loading, router]);
   
@@ -134,6 +141,15 @@ export default function AccountPage() {
     } finally {
         setIsRecsLoading(false);
     }
+  };
+  
+  const handleAddressesUpdate = (updatedAddresses: Address[]) => {
+    saveAddresses(updatedAddresses);
+    setAddresses(updatedAddresses);
+    toast({
+        title: "Address Book Updated",
+        description: "Your address list has been saved."
+    });
   };
 
 
@@ -274,15 +290,18 @@ export default function AccountPage() {
                             </CardContent>
                         </Card>
                     </button>
-                    <div className="block group cursor-not-allowed">
-                        <Card className="h-full opacity-60">
-                             <CardContent className="p-4 flex flex-col items-center text-center">
-                                <BookUser className="h-8 w-8 text-muted-foreground mb-2" />
+                    <button
+                        className="block group text-left w-full"
+                        onClick={() => setIsAddressModalOpen(true)}
+                    >
+                        <Card className="h-full transition-all hover:shadow-md hover:border-primary/50">
+                            <CardContent className="p-4 flex flex-col items-center text-center">
+                                <BookUser className="h-8 w-8 text-primary mb-2" />
                                 <h3 className="font-semibold">Address Book</h3>
                                 <p className="text-xs text-muted-foreground">Manage addresses</p>
                             </CardContent>
                         </Card>
-                    </div>
+                    </button>
                 </div>
             </div>
 
@@ -412,6 +431,12 @@ export default function AccountPage() {
             onSave={updateUserProfile}
         />
       )}
+       <AddressBookModal
+          isOpen={isAddressModalOpen}
+          onOpenChange={setIsAddressModalOpen}
+          addresses={addresses}
+          onAddressesUpdate={handleAddressesUpdate}
+       />
     </div>
   );
 }
