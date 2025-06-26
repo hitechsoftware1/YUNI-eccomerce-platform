@@ -143,21 +143,21 @@ export default function AccountPage() {
         <div className="container mx-auto px-2 py-6 sm:px-4 md:py-8 md:px-6 space-y-8">
             <Card>
                 <CardHeader>
-                    <div className="flex items-center gap-6">
-                        <Avatar className="h-24 w-24">
+                    <div className="flex items-center gap-4 sm:gap-6">
+                        <Avatar className="h-20 w-20 sm:h-24 sm:w-24">
                             <AvatarImage src={currentUser.photoURL || ''} alt={currentUser.displayName || 'User'} />
-                            <AvatarFallback className="text-3xl">
+                            <AvatarFallback className="text-2xl sm:text-3xl">
                                 {getInitials(currentUser.displayName || currentUser.email)}
                             </AvatarFallback>
                         </Avatar>
                         <div>
-                            <CardTitle className="text-3xl font-headline">{currentUser.displayName || 'Welcome!'}</CardTitle>
-                            <CardDescription className="text-lg">{currentUser.email}</CardDescription>
+                            <CardTitle className="text-2xl sm:text-3xl font-headline">{currentUser.displayName || 'Welcome!'}</CardTitle>
+                            <CardDescription className="text-base sm:text-lg">{currentUser.email}</CardDescription>
                         </div>
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <div className="flex gap-4">
+                    <div className="flex flex-wrap gap-4">
                         <Button onClick={logOut}>
                             <LogOut className="mr-2 h-4 w-4" />
                             Logout
@@ -174,7 +174,7 @@ export default function AccountPage() {
 
             <div className="space-y-4">
                 <h2 className="text-xl font-bold font-headline">Account Dashboard</h2>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                     <Link href="#order-history" className="block group">
                         <Card className="h-full transition-all hover:shadow-md hover:border-primary/50">
                             <CardContent className="p-4 flex flex-col items-center text-center">
