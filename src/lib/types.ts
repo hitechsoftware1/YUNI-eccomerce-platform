@@ -96,3 +96,24 @@ export interface Address {
   phoneNumber: string;
   isDefault?: boolean;
 }
+
+export interface UserReview {
+  id: string;
+  productId: string;
+  productName: string;
+  productImageUrl: string;
+  rating: number;
+  title: string;
+  comment: string;
+  date: string;
+}
+
+export interface LoginActivity {
+  id: string;
+  device: string;
+  deviceType: 'desktop' | 'mobile';
+  location: string;
+  ipAddress: string;
+  date: string;
+  isCurrent?: boolean;
+}

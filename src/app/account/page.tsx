@@ -11,9 +11,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2, ChevronRight, Bell, AlertTriangle } from 'lucide-react';
+import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2, ChevronRight, Bell, AlertTriangle, KeyRound, Monitor, Smartphone } from 'lucide-react';
 import { getOrdersByEmail } from '@/lib/user-orders';
-import type { Order, Product, Address } from '@/lib/types';
+import type { Order, Product, Address, UserReview, LoginActivity } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -27,6 +27,9 @@ import { getAddresses, saveAddresses } from '@/lib/user-addresses';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { DeactivateAccountDialog } from '@/components/deactivate-account-dialog';
+import { getReviewsByEmail } from '@/lib/user-reviews';
+import { allLoginActivity } from '@/lib/login-activity';
+import { UserReviewCard } from '@/components/user-review-card';
 
 
 export default function AccountPage() {
@@ -43,6 +46,8 @@ export default function AccountPage() {
   const [isAddressModalOpen, setIsAddressModalOpen] = React.useState(false);
   const [addresses, setAddresses] = React.useState<Address[]>([]);
   const [isDeactivateDialogOpen, setIsDeactivateDialogOpen] = React.useState(false);
+  const [reviews, setReviews] = React.useState<UserReview[]>([]);
+  const [loginActivity, setLoginActivity] = React.useState<LoginActivity[]>([]);
   
   // Mock state for notification preferences
   const [promoEmails, setPromoEmails] = React.useState(true);
@@ -72,6 +77,13 @@ export default function AccountPage() {
         
         // Load addresses
         setAddresses(getAddresses());
+        
+        // Load user reviews
+        const userReviews = getReviewsByEmail(currentUser.email);
+        setReviews(userReviews);
+        
+        // Load login activity
+        setLoginActivity(allLoginActivity);
     }
   }, [currentUser, loading, router]);
   
@@ -446,6 +458,57 @@ export default function AccountPage() {
                 )}
             </Card>
             
+            <Card>
+                <CardHeader>
+                    <CardTitle>My Reviews</CardTitle>
+                    <CardDescription>Reviews you have written for products.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {reviews.length > 0 ? (
+                        <div className="space-y-4">
+                            {reviews.map((review) => (
+                                <UserReviewCard key={review.id} review={review} />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center text-center py-10 rounded-lg bg-secondary/50">
+                            <Pencil className="mx-auto h-12 w-12 text-muted-foreground" />
+                            <h3 className="mt-4 text-lg font-semibold">No reviews yet</h3>
+                            <p className="mt-1 text-sm text-muted-foreground">You haven't reviewed any products yet.</p>
+                            <Button asChild className="mt-4">
+                                <Link href="#order-history">Review a purchased item</Link>
+                            </Button>
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
+            
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center gap-3">
+                        <KeyRound className="h-6 w-6 text-primary" />
+                        <CardTitle>Login Activity</CardTitle>
+                    </div>
+                    <CardDescription>Recent login sessions on your account.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="space-y-4">
+                        {loginActivity.map(activity => (
+                            <div key={activity.id} className="flex items-center justify-between rounded-lg border p-4">
+                                <div className="flex items-center gap-4">
+                                    {activity.deviceType === 'desktop' ? <Monitor className="h-6 w-6 text-muted-foreground" /> : <Smartphone className="h-6 w-6 text-muted-foreground" />}
+                                    <div>
+                                        <p className="font-semibold">{activity.device} {activity.isCurrent && <Badge variant="secondary" className="ml-2">Current</Badge>}</p>
+                                        <p className="text-sm text-muted-foreground">{activity.location} &middot; IP: {activity.ipAddress}</p>
+                                    </div>
+                                </div>
+                                <p className="text-sm text-muted-foreground">{new Date(activity.date).toLocaleDateString()}</p>
+                            </div>
+                        ))}
+                    </div>
+                </CardContent>
+            </Card>
+
             <Card>
                 <CardHeader>
                     <div className="flex items-center gap-3">
