@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2 } from 'lucide-react';
+import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2 } from 'lucide-react';
 import { getOrdersByEmail } from '@/lib/user-orders';
 import type { Order, Product } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -24,13 +24,15 @@ import { useToast } from '@/hooks/use-toast';
 
 
 export default function AccountPage() {
-  const { currentUser, loading, logOut } = useAuth();
+  const { currentUser, loading, logOut, updateUserProfile } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
   const [orders, setOrders] = React.useState<Order[]>([]);
   const [recentlyViewed, setRecentlyViewed] = React.useState<Product[]>([]);
   const [recommendations, setRecommendations] = React.useState<string[]>([]);
   const [isRecsLoading, setIsRecsLoading] = React.useState(false);
+  const [isUploading, setIsUploading] = React.useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
     if (!loading && !currentUser) {
@@ -53,6 +55,47 @@ export default function AccountPage() {
         }
     }
   }, [currentUser, loading, router]);
+  
+  const handleProfilePictureChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        toast({ title: "Invalid File", description: "Please select an image file.", variant: "destructive" });
+        return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+        toast({ title: "File Too Large", description: "Please select an image smaller than 2MB.", variant: "destructive" });
+        return;
+    }
+    
+    setIsUploading(true);
+
+    try {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = async () => {
+            const base64data = reader.result as string;
+            // In a real app, you'd upload to a storage service and get a URL.
+            // Here, we use a data URL for demonstration.
+            await updateUserProfile({ photoURL: base64data });
+        };
+        reader.onerror = () => {
+             throw new Error("Failed to read file.");
+        }
+    } catch (error) {
+      console.error("Failed to upload profile picture:", error);
+      toast({
+        variant: 'destructive',
+        title: 'Upload Error',
+        description: 'Could not upload your profile picture.',
+      });
+    } finally {
+        setIsUploading(false);
+        if(fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   const handleGetRecommendations = async () => {
     if (recentlyViewed.length === 0) {
@@ -144,12 +187,36 @@ export default function AccountPage() {
             <Card>
                 <CardHeader>
                     <div className="flex items-center gap-4 sm:gap-6">
-                        <Avatar className="h-20 w-20 sm:h-24 sm:w-24">
-                            <AvatarImage src={currentUser.photoURL || ''} alt={currentUser.displayName || 'User'} />
-                            <AvatarFallback className="text-2xl sm:text-3xl">
-                                {getInitials(currentUser.displayName || currentUser.email)}
-                            </AvatarFallback>
-                        </Avatar>
+                        <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0">
+                            <Avatar className="h-full w-full">
+                                <AvatarImage src={currentUser.photoURL || ''} alt={currentUser.displayName || 'User'} />
+                                <AvatarFallback className="text-2xl sm:text-3xl">
+                                    {getInitials(currentUser.displayName || currentUser.email)}
+                                </AvatarFallback>
+                            </Avatar>
+                            <Button
+                                size="icon"
+                                variant="outline"
+                                className="absolute bottom-0 right-0 rounded-full h-8 w-8 bg-background group"
+                                onClick={() => fileInputRef.current?.click()}
+                                disabled={isUploading}
+                                aria-label="Upload profile picture"
+                            >
+                                {isUploading ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                    <Pencil className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-foreground" />
+                                )}
+                            </Button>
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleProfilePictureChange}
+                                className="hidden"
+                                accept="image/png, image/jpeg, image/webp"
+                                disabled={isUploading}
+                            />
+                        </div>
                         <div>
                             <CardTitle className="text-2xl sm:text-3xl font-headline">{currentUser.displayName || 'Welcome!'}</CardTitle>
                             <CardDescription className="text-base sm:text-lg">{currentUser.email}</CardDescription>

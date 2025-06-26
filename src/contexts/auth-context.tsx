@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -43,6 +42,7 @@ interface AuthContextType {
   signUp: (input: RegisterInput) => Promise<void>;
   logOut: () => Promise<void>;
   logInWithGoogle: () => Promise<void>;
+  updateUserProfile: (data: { displayName?: string; photoURL?: string }) => Promise<void>;
 }
 
 const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
@@ -87,8 +87,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           displayName: name,
         });
         // This is to ensure the profile update is reflected immediately
-        await userCredential.user.reload();
-        setCurrentUser(auth.currentUser);
+        await auth.currentUser?.reload();
+        if (auth.currentUser) {
+            setCurrentUser(Object.assign(Object.create(Object.getPrototypeOf(auth.currentUser)), auth.currentUser));
+        }
       }
        toast({
         title: "Registration Successful",
@@ -142,6 +144,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const updateUserProfile = async (data: { displayName?: string; photoURL?: string }) => {
+    if (!auth.currentUser) {
+      const err = new Error("No user is currently signed in.");
+      toast({ title: "Update Failed", description: err.message, variant: "destructive" });
+      throw err;
+    }
+    try {
+      await updateProfile(auth.currentUser, data);
+      await auth.currentUser.reload();
+      // Create a new object to force a state update in React
+      setCurrentUser(Object.assign(Object.create(Object.getPrototypeOf(auth.currentUser)), auth.currentUser));
+
+      toast({
+        title: "Profile Updated",
+        description: "Your profile has been successfully updated.",
+      });
+    } catch (error: any) {
+      console.error("Profile update error:", error);
+      toast({
+        title: "Update Failed",
+        description: error.message || "An unexpected error occurred.",
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+
   const value = {
     currentUser,
     loading,
@@ -149,6 +178,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     logOut,
     logInWithGoogle,
+    updateUserProfile,
   };
 
   return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
