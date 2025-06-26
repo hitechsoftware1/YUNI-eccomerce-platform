@@ -5,6 +5,7 @@ import { CartProvider } from '@/contexts/cart-context';
 import { AuthProvider } from '@/contexts/auth-context';
 import { InstallPwaBanner } from '@/components/install-pwa-banner';
 import { WishlistProvider } from '@/contexts/wishlist-context';
+import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
   title: 'YUNI - Your Online Marketplace',
@@ -19,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="light">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -28,17 +29,24 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon.svg"></link>
       </head>
       <body className="font-body antialiased overflow-x-hidden">
-        <AuthProvider>
-          <CartProvider>
-            <WishlistProvider>
-              <div className="relative flex min-h-screen flex-col">
-                {children}
-              </div>
-              <Toaster />
-              <InstallPwaBanner />
-            </WishlistProvider>
-          </CartProvider>
-        </AuthProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            <CartProvider>
+              <WishlistProvider>
+                <div className="relative flex min-h-screen flex-col">
+                  {children}
+                </div>
+                <Toaster />
+                <InstallPwaBanner />
+              </WishlistProvider>
+            </CartProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2, ChevronRight, Bell, AlertTriangle, KeyRound, Monitor, Smartphone } from 'lucide-react';
+import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2, ChevronRight, Bell, AlertTriangle, ShieldCheck, Monitor, Smartphone, Palette, CreditCard, Undo2 } from 'lucide-react';
 import { getOrdersByEmail } from '@/lib/user-orders';
 import type { Order, Product, Address, UserReview, LoginActivity } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -30,6 +30,7 @@ import { DeactivateAccountDialog } from '@/components/deactivate-account-dialog'
 import { getReviewsByEmail } from '@/lib/user-reviews';
 import { getLoginActivity } from '@/lib/login-activity';
 import { UserReviewCard } from '@/components/user-review-card';
+import { useTheme } from 'next-themes';
 
 
 export default function AccountPage() {
@@ -48,6 +49,7 @@ export default function AccountPage() {
   const [isDeactivateDialogOpen, setIsDeactivateDialogOpen] = React.useState(false);
   const [reviews, setReviews] = React.useState<UserReview[]>([]);
   const [loginActivity, setLoginActivity] = React.useState<LoginActivity[]>([]);
+  const { theme, setTheme } = useTheme();
   
   // Mock state for notification preferences
   const [promoEmails, setPromoEmails] = React.useState(true);
@@ -482,29 +484,111 @@ export default function AccountPage() {
                     )}
                 </CardContent>
             </Card>
+
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center gap-3">
+                        <Palette className="h-6 w-6 text-primary" />
+                        <CardTitle>Appearance</CardTitle>
+                    </div>
+                     <CardDescription>Customize the look and feel of the app.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex items-center justify-between rounded-lg border p-4">
+                        <Label htmlFor="dark-mode" className="flex flex-col space-y-1">
+                            <span>Dark Mode</span>
+                            <span className="font-normal leading-snug text-muted-foreground">
+                                Switch between light and dark themes.
+                            </span>
+                        </Label>
+                        <Switch 
+                            id="dark-mode" 
+                            checked={theme === 'dark'} 
+                            onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')} 
+                        />
+                    </div>
+                </CardContent>
+            </Card>
             
             <Card>
                 <CardHeader>
                     <div className="flex items-center gap-3">
-                        <KeyRound className="h-6 w-6 text-primary" />
-                        <CardTitle>Login Activity</CardTitle>
+                        <ShieldCheck className="h-6 w-6 text-primary" />
+                        <CardTitle>Login & Security</CardTitle>
                     </div>
-                    <CardDescription>Recent login sessions on your account.</CardDescription>
+                    <CardDescription>Manage your password, 2FA, and session activity.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                     <div className="flex items-center justify-between rounded-lg border p-4">
+                        <div>
+                            <p className="font-semibold">Password</p>
+                            <p className="text-sm text-muted-foreground">Last changed: 3 months ago</p>
+                        </div>
+                        <Button variant="outline" onClick={() => toast({ title: "Feature not available", description: "Password change will be implemented soon."})}>Change</Button>
+                    </div>
+
+                    <div className="flex items-center justify-between rounded-lg border p-4">
+                        <Label htmlFor="2fa-switch" className="flex flex-col space-y-1">
+                            <span>Two-Factor Authentication</span>
+                            <span className="font-normal leading-snug text-muted-foreground">
+                                Add an extra layer of security to your account.
+                            </span>
+                        </Label>
+                        <Switch id="2fa-switch" disabled />
+                    </div>
+                    <div>
+                        <h3 className="font-semibold mb-2">Recent Login Activity</h3>
+                        <div className="space-y-4">
+                            {loginActivity.map(activity => (
+                                <div key={activity.id} className="flex items-center justify-between rounded-lg border p-3">
+                                    <div className="flex items-center gap-4">
+                                        {activity.deviceType === 'desktop' ? <Monitor className="h-6 w-6 text-muted-foreground" /> : <Smartphone className="h-6 w-6 text-muted-foreground" />}
+                                        <div>
+                                            <p className="font-semibold text-sm">{activity.device} {activity.isCurrent && <Badge variant="secondary" className="ml-2">Current</Badge>}</p>
+                                            <p className="text-xs text-muted-foreground">{activity.location} &middot; IP: {activity.ipAddress}</p>
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-muted-foreground">{new Date(activity.date).toLocaleDateString()}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center gap-3">
+                        <CreditCard className="h-6 w-6 text-primary" />
+                        <CardTitle>Payment Methods</CardTitle>
+                    </div>
+                     <CardDescription>Manage your saved payment methods.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="space-y-4">
-                        {loginActivity.map(activity => (
-                            <div key={activity.id} className="flex items-center justify-between rounded-lg border p-4">
-                                <div className="flex items-center gap-4">
-                                    {activity.deviceType === 'desktop' ? <Monitor className="h-6 w-6 text-muted-foreground" /> : <Smartphone className="h-6 w-6 text-muted-foreground" />}
-                                    <div>
-                                        <p className="font-semibold">{activity.device} {activity.isCurrent && <Badge variant="secondary" className="ml-2">Current</Badge>}</p>
-                                        <p className="text-sm text-muted-foreground">{activity.location} &middot; IP: {activity.ipAddress}</p>
-                                    </div>
-                                </div>
-                                <p className="text-sm text-muted-foreground">{new Date(activity.date).toLocaleDateString()}</p>
-                            </div>
-                        ))}
+                    <div className="flex flex-col items-center justify-center text-center py-10 rounded-lg bg-secondary/50">
+                        <p className="text-sm text-muted-foreground mb-4">You have no saved payment methods.</p>
+                        <Button disabled>Add New Card</Button>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center gap-3">
+                        <Undo2 className="h-6 w-6 text-primary" />
+                        <CardTitle>Returns & Refunds</CardTitle>
+                    </div>
+                     <CardDescription>Manage your returns and track refund status.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                     <div className="flex flex-col items-start gap-4 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <h3 className="font-semibold">Need to return an item?</h3>
+                            <p className="text-sm text-muted-foreground">
+                                Check our return policy before you proceed.
+                            </p>
+                        </div>
+                        <Button variant="outline" onClick={() => toast({title: "Coming soon!"})}>View Policy</Button>
                     </div>
                 </CardContent>
             </Card>
