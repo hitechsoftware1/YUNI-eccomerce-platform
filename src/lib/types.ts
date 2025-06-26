@@ -28,6 +28,15 @@ export interface AdminSale {
   fallback: string;
 }
 
+export interface OrderItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  imageUrl: string;
+  dataAiHint: string;
+}
+
 export interface Order {
   id:string;
   customer: {
@@ -37,6 +46,8 @@ export interface Order {
   date: string;
   status: 'Pending' | 'Fulfilled' | 'Cancelled';
   total: number;
+  items?: OrderItem[];
+  shippingAddress?: Address;
 }
 
 export interface HeroSlide {

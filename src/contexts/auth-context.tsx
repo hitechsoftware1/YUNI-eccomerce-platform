@@ -11,6 +11,7 @@ import {
   updateProfile,
   GoogleAuthProvider,
   signInWithPopup,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
@@ -43,6 +44,7 @@ interface AuthContextType {
   logOut: () => Promise<void>;
   logInWithGoogle: () => Promise<void>;
   updateUserProfile: (data: { displayName?: string; photoURL?: string }) => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
 }
 
 const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
@@ -171,6 +173,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    if (!email) {
+      const err = new Error("Email address is required to reset password.");
+      toast({ title: "Password Reset Failed", description: err.message, variant: "destructive" });
+      throw err;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      toast({
+        title: "Password Reset Email Sent",
+        description: "Please check your inbox to reset your password.",
+      });
+    } catch (error: any) {
+      console.error("Password reset error:", error);
+      toast({
+        title: "Password Reset Failed",
+        description: error.message || "An unexpected error occurred.",
+        variant: "destructive",
+      });
+      throw error;
+    }
+  };
+
   const value = {
     currentUser,
     loading,
@@ -179,6 +204,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     logOut,
     logInWithGoogle,
     updateUserProfile,
+    resetPassword,
   };
 
   return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;

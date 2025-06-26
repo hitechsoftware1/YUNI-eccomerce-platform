@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2 } from 'lucide-react';
+import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2, ChevronRight } from 'lucide-react';
 import { getOrdersByEmail } from '@/lib/user-orders';
 import type { Order, Product, Address } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -319,11 +319,12 @@ export default function AccountPage() {
                                     <TableHead className="hidden sm:table-cell">Date</TableHead>
                                     <TableHead>Status</TableHead>
                                     <TableHead className="text-right">Total</TableHead>
+                                    <TableHead className="w-[50px]"><span className="sr-only">View</span></TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {orders.map((order) => (
-                                    <TableRow key={order.id}>
+                                    <TableRow key={order.id} className="cursor-pointer" onClick={() => router.push(`/account/orders/${order.id}`)}>
                                         <TableCell className="font-medium">{order.id}</TableCell>
                                         <TableCell className="hidden sm:table-cell">{new Date(order.date).toLocaleDateString()}</TableCell>
                                         <TableCell>
@@ -338,6 +339,9 @@ export default function AccountPage() {
                                             </Badge>
                                         </TableCell>
                                         <TableCell className="text-right">UGX {order.total.toLocaleString()}</TableCell>
+                                        <TableCell className="text-right">
+                                            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

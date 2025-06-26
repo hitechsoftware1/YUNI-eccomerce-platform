@@ -10,6 +10,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -24,6 +25,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import type { User } from 'firebase/auth';
+import { useAuth } from '@/contexts/auth-context';
 
 const personalDetailsSchema = z.object({
   displayName: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -41,6 +43,8 @@ interface PersonalDetailsModalProps {
 
 export function PersonalDetailsModal({ isOpen, onOpenChange, user, onSave }: PersonalDetailsModalProps) {
   const [isSaving, setIsSaving] = React.useState(false);
+  const [isResetting, setIsResetting] = React.useState(false);
+  const { resetPassword } = useAuth();
 
   const form = useForm<PersonalDetailsFormValues>({
     resolver: zodResolver(personalDetailsSchema),
@@ -70,6 +74,19 @@ export function PersonalDetailsModal({ isOpen, onOpenChange, user, onSave }: Per
       setIsSaving(false);
     }
   };
+  
+  const handlePasswordReset = async () => {
+    if (!user.email) return;
+    setIsResetting(true);
+    try {
+        await resetPassword(user.email);
+        onOpenChange(false);
+    } catch (error) {
+        // toast is handled in auth context
+    } finally {
+        setIsResetting(false);
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -89,7 +106,7 @@ export function PersonalDetailsModal({ isOpen, onOpenChange, user, onSave }: Per
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="John Doe" {...field} disabled={isSaving} />
+                    <Input placeholder="John Doe" {...field} disabled={isSaving || isResetting} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -109,9 +126,14 @@ export function PersonalDetailsModal({ isOpen, onOpenChange, user, onSave }: Per
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={isSaving}>
-              {isSaving ? 'Saving...' : 'Save Changes'}
-            </Button>
+            <DialogFooter className="flex-col gap-2 pt-4 sm:flex-col sm:gap-2">
+                <Button type="submit" className="w-full" disabled={isSaving || isResetting}>
+                  {isSaving ? 'Saving...' : 'Save Changes'}
+                </Button>
+                <Button type="button" variant="outline" className="w-full" onClick={handlePasswordReset} disabled={isResetting || isSaving}>
+                  {isResetting ? 'Sending Email...' : 'Send Password Reset Email'}
+                </Button>
+            </DialogFooter>
           </form>
         </Form>
       </DialogContent>
