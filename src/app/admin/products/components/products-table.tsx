@@ -48,7 +48,11 @@ export function ProductsTable({ products, onDeleteClick }: ProductsTableProps) {
       </TableHeader>
       <TableBody>
         {products.map((product) => (
-          <TableRow key={product.id}>
+          <TableRow 
+            key={product.id}
+            className="cursor-pointer"
+            onClick={() => window.open(`/products/${product.id}`, '_blank', 'noopener,noreferrer')}
+          >
             <TableCell className="hidden sm:table-cell">
               <Image
                 alt={product.name}
@@ -65,7 +69,7 @@ export function ProductsTable({ products, onDeleteClick }: ProductsTableProps) {
             </TableCell>
             <TableCell className="hidden md:table-cell">UGX {product.price.toLocaleString()}</TableCell>
             <TableCell className="hidden md:table-cell">{product.reviewCount ?? 0}</TableCell>
-            <TableCell>
+            <TableCell onClick={(e) => e.stopPropagation()}>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button aria-haspopup="true" size="icon" variant="ghost">
@@ -75,6 +79,9 @@ export function ProductsTable({ products, onDeleteClick }: ProductsTableProps) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => window.open(`/products/${product.id}`, '_blank', 'noopener,noreferrer')}>
+                    View
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push(`/admin/products/edit/${product.id}`)}>
                     Edit
                   </DropdownMenuItem>
