@@ -3,31 +3,20 @@
 
 import type { LoginActivity } from './types';
 
-const LOGIN_ACTIVITY_KEY = 'yuni-login-activity';
+// This file simulates tracking login activity.
+// For this demo, we use an in-memory array that resets on page refresh.
+// A real app would store this in a secure, server-side database.
 
-// In a real app, this would use a backend service with IP-based geolocation
-// and proper user agent parsing. For this demo, we use localStorage to simulate persistence.
+let loginActivityHistory: LoginActivity[] = [];
 
 export function getLoginActivity(): LoginActivity[] {
-  if (typeof window === 'undefined') {
-    return [];
+  // Ensure only the most recent entry is marked as 'current'
+  if (loginActivityHistory.length > 0) {
+      loginActivityHistory.forEach((act, index) => {
+          act.isCurrent = index === 0;
+      });
   }
-  try {
-    const storedActivity = localStorage.getItem(LOGIN_ACTIVITY_KEY);
-    const activity = storedActivity ? (JSON.parse(storedActivity) as LoginActivity[]) : [];
-    
-    // Ensure only the most recent entry is marked as 'current'
-    if (activity.length > 0) {
-        activity.forEach((act, index) => {
-            act.isCurrent = index === 0;
-        });
-    }
-    return activity;
-
-  } catch (error) {
-    console.error("Failed to parse login activity from localStorage", error);
-    return [];
-  }
+  return loginActivityHistory;
 }
 
 export function addLoginActivity(): void {
@@ -46,15 +35,9 @@ export function addLoginActivity(): void {
         date: new Date().toISOString(),
         isCurrent: true,
     };
-
-    try {
-        const existingActivity = getLoginActivity();
-        // Remove 'isCurrent' flag from previous logs
-        const updatedHistory = existingActivity.map(act => ({...act, isCurrent: false}));
-        // Add the new activity to the start and cap the history at 5 entries
-        const newHistory = [newActivity, ...updatedHistory].slice(0, 5);
-        localStorage.setItem(LOGIN_ACTIVITY_KEY, JSON.stringify(newHistory));
-    } catch (error) {
-        console.error("Failed to save login activity to localStorage", error);
-    }
+    
+    // Remove 'isCurrent' flag from previous logs
+    const updatedHistory = loginActivityHistory.map(act => ({...act, isCurrent: false}));
+    // Add the new activity to the start and cap the history at 5 entries
+    loginActivityHistory = [newActivity, ...updatedHistory].slice(0, 5);
 }

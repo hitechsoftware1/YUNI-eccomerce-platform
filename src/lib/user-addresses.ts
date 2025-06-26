@@ -1,32 +1,29 @@
-'use client';
 
 import type { Address } from './types';
 
-const ADDRESS_STORAGE_KEY = 'yuni-user-addresses';
+// This file simulates a cloud database for user addresses.
+// In a real app, you would replace this with calls to a database like Firestore,
+// and these functions would likely be asynchronous and user-specific.
 
-// In a real app, these would be API calls to a backend service.
-// For this demo, we'll use localStorage to simulate persistence.
+let userAddresses: Address[] = [
+    {
+        id: 'addr-demouser-1',
+        fullName: 'Demo User',
+        addressLine1: '123 Fictional St',
+        city: 'Kampala',
+        country: 'Uganda',
+        postalCode: '10101',
+        phoneNumber: '+256 700 123456',
+        isDefault: true,
+    }
+];
 
 export function getAddresses(): Address[] {
-  if (typeof window === 'undefined') {
-    return [];
-  }
-  try {
-    const storedAddresses = localStorage.getItem(ADDRESS_STORAGE_KEY);
-    return storedAddresses ? JSON.parse(storedAddresses) : [];
-  } catch (error) {
-    console.error("Failed to parse addresses from localStorage", error);
-    return [];
-  }
+  // In a real app: await db.collection('users').doc(userId).collection('addresses').get()
+  return userAddresses;
 }
 
 export function saveAddresses(addresses: Address[]): void {
-  if (typeof window === 'undefined') {
-    return;
-  }
-  try {
-    localStorage.setItem(ADDRESS_STORAGE_KEY, JSON.stringify(addresses));
-  } catch (error) {
-    console.error("Failed to save addresses to localStorage", error);
-  }
+  // In a real app, this would be a series of database updates.
+  userAddresses = addresses;
 }

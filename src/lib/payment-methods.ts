@@ -1,45 +1,28 @@
-'use client';
 
 import type { PaymentMethod } from './types';
 
-const PAYMENT_METHODS_KEY = 'yuni-payment-methods';
+// This file simulates a cloud database for payment methods.
+// In a real app, this would be a secure, encrypted database store.
+
+let userPaymentMethods: PaymentMethod[] = [
+    {
+        id: 'pm_1',
+        cardholderName: 'John Doe',
+        cardNumber: '4242424242424242',
+        expiryDate: '12/25',
+        cardType: 'visa',
+    }
+];
+
 
 export function getPaymentMethods(): PaymentMethod[] {
-  if (typeof window === 'undefined') {
-    return [];
-  }
-  try {
-    const storedMethods = localStorage.getItem(PAYMENT_METHODS_KEY);
-    // Add some mock data if it's empty for the demo
-    if (!storedMethods) {
-        const mockMethods: PaymentMethod[] = [
-            {
-                id: 'pm_1',
-                cardholderName: 'John Doe',
-                cardNumber: '4242424242424242',
-                expiryDate: '12/25',
-                cardType: 'visa',
-            }
-        ];
-        localStorage.setItem(PAYMENT_METHODS_KEY, JSON.stringify(mockMethods));
-        return mockMethods;
-    }
-    return JSON.parse(storedMethods);
-  } catch (error) {
-    console.error("Failed to parse payment methods from localStorage", error);
-    return [];
-  }
+    // In a real app: await db.collection('users').doc(userId).collection('paymentMethods').get()
+    return userPaymentMethods;
 }
 
 export function savePaymentMethods(methods: PaymentMethod[]): void {
-  if (typeof window === 'undefined') {
-    return;
-  }
-  try {
-    localStorage.setItem(PAYMENT_METHODS_KEY, JSON.stringify(methods));
-  } catch (error) {
-    console.error("Failed to save payment methods to localStorage", error);
-  }
+    // In a real app, this would be a series of database updates.
+    userPaymentMethods = methods;
 }
 
 export function getCardType(cardNumber: string): 'visa' | 'mastercard' | 'amex' | 'discover' | 'other' {

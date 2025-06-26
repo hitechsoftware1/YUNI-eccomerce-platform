@@ -1,9 +1,15 @@
+
 'use client';
 
 import * as React from 'react';
 import type { Product } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import { allProducts } from '@/lib/products';
+import { 
+    getWishlistItems, 
+    addToWishlist as apiAddToWishlist, 
+    removeFromWishlist as apiRemoveFromWishlist 
+} from '@/lib/user-wishlist';
 
 interface WishlistContextType {
   wishlistItems: Product[];
@@ -20,26 +26,17 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
 
   React.useEffect(() => {
-    try {
-      const storedWishlist = localStorage.getItem('yuni-wishlist');
-      if (storedWishlist) {
-        setWishlistProductIds(JSON.parse(storedWishlist));
-      }
-    } catch (error) {
-      console.error("Failed to parse wishlist from localStorage", error);
-      setWishlistProductIds([]);
-    }
+    // In a real app, this would be an async call to get the user's wishlist IDs.
+    const initialIds = getWishlistItems().map(item => item.id);
+    setWishlistProductIds(initialIds);
   }, []);
 
-  React.useEffect(() => {
-    localStorage.setItem('yuni-wishlist', JSON.stringify(wishlistProductIds));
-  }, [wishlistProductIds]);
-  
   const addToWishlist = (productId: string) => {
     if (wishlistProductIds.includes(productId)) {
         return; // Already in wishlist
     }
-    setWishlistProductIds((prevIds) => [...prevIds, productId]);
+    apiAddToWishlist(productId); // Update "backend"
+    setWishlistProductIds((prevIds) => [...prevIds, productId]); // Update client state
     toast({
         title: "Added to Wishlist",
         description: "Item has been saved to your wishlist.",
@@ -50,8 +47,9 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
     if (!wishlistProductIds.includes(productId)) {
         return; // Not in wishlist
     }
-    setWishlistProductIds((prevIds) => prevIds.filter((id) => id !== productId));
-     toast({
+    apiRemoveFromWishlist(productId); // Update "backend"
+    setWishlistProductIds((prevIds) => prevIds.filter((id) => id !== productId)); // Update client state
+    toast({
         title: "Removed from Wishlist",
         description: `Item has been removed from your wishlist.`,
     });

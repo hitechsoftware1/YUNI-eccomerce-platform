@@ -1,8 +1,16 @@
+
 'use client';
 
 import * as React from 'react';
 import type { Product } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
+import {
+  getCartItems as apiGetCartItems,
+  addToCart as apiAddToCart,
+  removeFromCart as apiRemoveFromCart,
+  updateQuantity as apiUpdateQuantity,
+  clearCart as apiClearCart,
+} from '@/lib/user-cart';
 
 export type CartItem = Product & {
   quantity: number;
@@ -25,34 +33,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
 
   React.useEffect(() => {
-    try {
-      const storedCart = localStorage.getItem('yuni-cart');
-      if (storedCart) {
-        setCartItems(JSON.parse(storedCart));
-      }
-    } catch (error) {
-      console.error("Failed to parse cart from localStorage", error);
-      setCartItems([]);
-    }
+    // In a real app, this would be an async call to get the user's cart.
+    setCartItems(apiGetCartItems());
   }, []);
 
-  React.useEffect(() => {
-    localStorage.setItem('yuni-cart', JSON.stringify(cartItems));
-  }, [cartItems]);
-
   const addToCart = (product: Product, quantity: number) => {
-    setCartItems((prevItems) => {
-      const existingItem = prevItems.find((item) => item.id === product.id);
-      if (existingItem) {
-        const newItems = prevItems.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
-        return newItems;
-      }
-      return [...prevItems, { ...product, quantity }];
-    });
+    // In a real app, this would be an async call.
+    apiAddToCart(product, quantity);
+    setCartItems([...apiGetCartItems()]); // "re-fetch" from the mock backend
+
     toast({
         title: "Added to Cart",
         description: `${quantity} x ${product.name} has been added to your cart.`,
@@ -60,26 +49,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const removeFromCart = (productId: string) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));
-     toast({
+    apiRemoveFromCart(productId);
+    setCartItems([...apiGetCartItems()]); // "re-fetch"
+
+    toast({
         title: "Item Removed",
         description: `Item has been removed from your cart.`,
     });
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
-    if (quantity <= 0) {
-      removeFromCart(productId);
-      return;
-    }
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === productId ? { ...item, quantity } : item
-      )
-    );
+    apiUpdateQuantity(productId, quantity);
+    setCartItems([...apiGetCartItems()]); // "re-fetch"
   };
   
   const clearCart = () => {
+    apiClearCart();
     setCartItems([]);
   };
 

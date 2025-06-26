@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -13,6 +14,7 @@ import { ProductSection } from '@/components/product-section';
 import { useCart } from '@/contexts/cart-context';
 import { useWishlist } from '@/contexts/wishlist-context';
 import { cn } from '@/lib/utils';
+import { addRecentlyViewedItem } from '@/lib/recently-viewed';
 
 const StarRating = ({ rating, reviewCount }: { rating: number; reviewCount?: number }) => {
   return (
@@ -42,15 +44,8 @@ export default function ProductDetailPage() {
 
   React.useEffect(() => {
     if (product) {
-      try {
-        const viewedItems: string[] = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
-        const updatedItems = viewedItems.filter(id => id !== product.id);
-        updatedItems.unshift(product.id);
-        const finalItems = updatedItems.slice(0, 10);
-        localStorage.setItem('recentlyViewed', JSON.stringify(finalItems));
-      } catch (error) {
-        console.error("Failed to update recently viewed items:", error);
-      }
+      // In a real app, this might be an API call to a "recently viewed" service.
+      addRecentlyViewedItem(product.id);
     }
   }, [product]);
 

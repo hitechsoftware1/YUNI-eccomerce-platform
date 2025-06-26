@@ -17,7 +17,6 @@ import type { Order, Product, Address, UserReview, LoginActivity, PaymentMethod 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { getProductById } from '@/lib/products';
 import { ProductCard } from '@/components/product-card';
 import { recommendProducts } from '@/ai/flows/product-recommendations';
 import { useToast } from '@/hooks/use-toast';
@@ -35,6 +34,7 @@ import { getPaymentMethods, savePaymentMethods } from '@/lib/payment-methods';
 import { AddPaymentMethodModal } from '@/components/add-payment-method-modal';
 import { VisaIcon } from '@/components/icons/visa-icon';
 import { MastercardIcon } from '@/components/icons/mastercard-icon';
+import { getRecentlyViewedItems } from '@/lib/recently-viewed';
 
 
 export default function AccountPage() {
@@ -70,32 +70,12 @@ export default function AccountPage() {
       router.push('/');
     }
     if (currentUser) {
-        // In a real app, this would be an API call.
-        const userOrders = getOrdersByEmail(currentUser.email);
-        setOrders(userOrders);
-
-        // Load recently viewed items
-        try {
-            const viewedIds: string[] = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
-            if (viewedIds.length > 0) {
-                const viewedProducts = viewedIds.map(id => getProductById(id)).filter((p): p is Product => Boolean(p));
-                setRecentlyViewed(viewedProducts);
-            }
-        } catch (error) {
-            console.error("Failed to load recently viewed items:", error);
-        }
-        
-        // Load addresses
+        // In a real app, these would be API calls.
+        setOrders(getOrdersByEmail(currentUser.email));
+        setRecentlyViewed(getRecentlyViewedItems());
         setAddresses(getAddresses());
-        
-        // Load user reviews
-        const userReviews = getReviewsByEmail(currentUser.email);
-        setReviews(userReviews);
-        
-        // Load login activity from localStorage
+        setReviews(getReviewsByEmail(currentUser.email));
         setLoginActivity(getLoginActivity());
-
-        // Load payment methods
         setPaymentMethods(getPaymentMethods());
     }
   }, [currentUser, loading, router]);
