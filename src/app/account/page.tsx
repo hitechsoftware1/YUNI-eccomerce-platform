@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser } from 'lucide-react';
+import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2 } from 'lucide-react';
 import { getOrdersByEmail } from '@/lib/user-orders';
 import type { Order, Product } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -19,13 +19,18 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { getProductById } from '@/lib/products';
 import { ProductCard } from '@/components/product-card';
+import { recommendProducts } from '@/ai/flows/product-recommendations';
+import { useToast } from '@/hooks/use-toast';
 
 
 export default function AccountPage() {
   const { currentUser, loading, logOut } = useAuth();
   const router = useRouter();
+  const { toast } = useToast();
   const [orders, setOrders] = React.useState<Order[]>([]);
   const [recentlyViewed, setRecentlyViewed] = React.useState<Product[]>([]);
+  const [recommendations, setRecommendations] = React.useState<string[]>([]);
+  const [isRecsLoading, setIsRecsLoading] = React.useState(false);
 
   React.useEffect(() => {
     if (!loading && !currentUser) {
@@ -48,6 +53,44 @@ export default function AccountPage() {
         }
     }
   }, [currentUser, loading, router]);
+
+  const handleGetRecommendations = async () => {
+    if (recentlyViewed.length === 0) {
+        toast({
+            title: "Not enough data",
+            description: "View some products first to get personalized recommendations.",
+        });
+        return;
+    }
+    
+    setIsRecsLoading(true);
+    setRecommendations([]);
+
+    try {
+        const history = `User has recently viewed the following products: ${recentlyViewed.map(p => p.name).join(', ')}.`;
+        const result = await recommendProducts({
+            browsingHistory: history,
+            searchQueries: "products similar to browsing history or complementary to them"
+        });
+        setRecommendations(result.recommendedProducts);
+        if (result.recommendedProducts.length === 0) {
+            toast({
+                title: "No recommendations found",
+                description: "We couldn't find specific recommendations based on your history.",
+            });
+        }
+    } catch (error) {
+      console.error("Failed to get recommendations:", error);
+      toast({
+        variant: 'destructive',
+        title: 'Recommendation Error',
+        description: 'Could not fetch recommendations at this time.',
+      });
+    } finally {
+        setIsRecsLoading(false);
+    }
+  };
+
 
   if (loading || !currentUser) {
     return (
@@ -248,6 +291,43 @@ export default function AccountPage() {
                         </div>
                     )}
                 </CardContent>
+            </Card>
+
+             <Card className="bg-gradient-to-br from-primary/5 to-transparent">
+                <CardHeader>
+                    <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-primary/20">
+                            <Wand2 className="h-6 w-6 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                            <CardTitle>AI Personalized For You</CardTitle>
+                            <CardDescription>Get recommendations based on your viewing history.</CardDescription>
+                        </div>
+                        <Button onClick={handleGetRecommendations} disabled={isRecsLoading} className="w-full sm:w-auto">
+                            <Wand2 className="mr-2 h-4 w-4" />
+                            {isRecsLoading ? 'Generating...' : 'Get Recommendations'}
+                        </Button>
+                    </div>
+                </CardHeader>
+                { (isRecsLoading || recommendations.length > 0) && (
+                    <CardContent>
+                        {isRecsLoading ? (
+                            <div className="space-y-3">
+                                <Skeleton className="h-5 w-3/4" />
+                                <Skeleton className="h-5 w-1/2" />
+                                <Skeleton className="h-5 w-2/3" />
+                            </div>
+                        ) : (
+                             recommendations.length > 0 && (
+                                <ul className="list-disc space-y-2 pl-5 text-sm text-muted-foreground">
+                                    {recommendations.map((rec, index) => (
+                                        <li key={index}>{rec}</li>
+                                    ))}
+                                </ul>
+                            )
+                        )}
+                    </CardContent>
+                )}
             </Card>
         </div>
       </main>

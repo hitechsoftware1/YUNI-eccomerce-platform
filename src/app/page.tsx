@@ -6,7 +6,6 @@ import { FlashSales } from '@/components/flash-sales';
 import { ProductSection } from '@/components/product-section';
 import { LatestProducts } from '@/components/latest-products';
 import { ExploreMore } from '@/components/promo-grid';
-import { ProductRecommendations } from '@/components/product-recommendations';
 import { Footer } from '@/components/layout/footer';
 import { BottomNav } from '@/components/layout/bottom-nav';
 import { PromoBanner } from '@/components/promo-banner';
@@ -39,7 +38,6 @@ export default function Home() {
           <LatestProducts />
           <ExploreMore />
           <SecondaryPromoGrid />
-          <ProductRecommendations />
         </div>
       </main>
       <Footer />
