@@ -1,3 +1,4 @@
+
 import type { LucideIcon } from 'lucide-react';
 
 export interface Product {
@@ -132,4 +133,13 @@ export interface UserReturn {
   date: string;
   status: 'Processing' | 'Approved' | 'Refunded' | 'Rejected';
   items: { productId: string; productName: string; quantity: number }[];
+}
+
+export interface ManagedUser {
+  id: string;
+  name: string;
+  email: string;
+  role: 'Admin' | 'Seller' | 'Buyer';
+  status: 'Active' | 'Banned';
+  lastLogin: string;
 }

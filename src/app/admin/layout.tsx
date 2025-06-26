@@ -169,9 +169,11 @@ export default function AdminLayout({
                     </SidebarMenuButton>
                     </SidebarMenuItem>
                     <SidebarMenuItem>
-                    <SidebarMenuButton disabled>
-                        <Users />
-                        Customers
+                    <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/users')}>
+                        <Link href="/admin/users">
+                            <Users />
+                            Users
+                        </Link>
                     </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
