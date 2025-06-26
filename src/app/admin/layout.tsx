@@ -46,6 +46,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { isAdmin } from '@/lib/admins';
+import { useToast } from '@/hooks/use-toast';
 
 export default function AdminLayout({
   children,
@@ -55,17 +57,30 @@ export default function AdminLayout({
   const { currentUser, loading, logOut } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const { toast } = useToast();
 
   React.useEffect(() => {
-    if (!loading && !currentUser) {
+    if (loading) return;
+
+    if (!currentUser) {
+      router.push('/');
+      return;
+    }
+
+    if (!isAdmin(currentUser.email)) {
+      toast({
+        title: 'Access Denied',
+        description: 'You do not have permission to view this page.',
+        variant: 'destructive',
+      });
       router.push('/');
     }
-  }, [currentUser, loading, router]);
+  }, [currentUser, loading, router, toast]);
 
-  if (loading || !currentUser) {
+  if (loading || !currentUser || !isAdmin(currentUser.email)) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <p>Loading...</p>
+      <div className="flex h-screen items-center justify-center bg-background">
+        <p>Loading or redirecting...</p>
       </div>
     );
   }

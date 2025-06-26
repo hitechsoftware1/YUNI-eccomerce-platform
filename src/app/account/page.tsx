@@ -38,6 +38,7 @@ import { getRecentlyViewedItems } from '@/lib/recently-viewed';
 import { EditReviewModal } from '@/components/edit-review-modal';
 import { DeleteReviewDialog } from '@/components/delete-review-dialog';
 import { getReturnsForUser } from '@/lib/user-returns';
+import { isAdmin } from '@/lib/admins';
 
 
 export default function AccountPage() {
@@ -277,6 +278,8 @@ export default function AccountPage() {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   }
 
+  const isUserAdmin = isAdmin(currentUser.email);
+
   return (
     <div className="bg-background text-foreground">
       <Header />
@@ -327,12 +330,14 @@ export default function AccountPage() {
                             <LogOut className="mr-2 h-4 w-4" />
                             Logout
                         </Button>
-                        <Button asChild variant="outline">
-                            <Link href="/admin/dashboard">
-                            <LayoutDashboard className="mr-2 h-4 w-4" />
-                            Admin Dashboard
-                            </Link>
-                        </Button>
+                        {isUserAdmin && (
+                             <Button asChild variant="outline">
+                                <Link href="/admin/dashboard">
+                                <LayoutDashboard className="mr-2 h-4 w-4" />
+                                Admin Dashboard
+                                </Link>
+                            </Button>
+                        )}
                     </div>
                 </CardContent>
             </Card>
