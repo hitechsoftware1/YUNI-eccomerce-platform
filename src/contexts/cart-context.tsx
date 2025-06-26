@@ -4,6 +4,7 @@
 import * as React from 'react';
 import type { Product } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/auth-context';
 import {
   getCartItems as apiGetCartItems,
   addToCart as apiAddToCart,
@@ -31,14 +32,20 @@ const CartContext = React.createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = React.useState<CartItem[]>([]);
   const { toast } = useToast();
+  const { currentUser } = useAuth();
 
   React.useEffect(() => {
-    // In a real app, this would be an async call to get the user's cart.
-    setCartItems(apiGetCartItems());
-  }, []);
+    // This effect now runs whenever the user changes.
+    if (currentUser) {
+      // If a user is logged in, load their cart from the mock backend.
+      setCartItems(apiGetCartItems());
+    } else {
+      // If no user is logged in (e.g., after logout), clear the cart state.
+      setCartItems([]);
+    }
+  }, [currentUser]);
 
   const addToCart = (product: Product, quantity: number) => {
-    // In a real app, this would be an async call.
     apiAddToCart(product, quantity);
     setCartItems([...apiGetCartItems()]); // "re-fetch" from the mock backend
 

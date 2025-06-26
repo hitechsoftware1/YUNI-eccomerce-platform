@@ -18,6 +18,8 @@ import { auth } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 import { addLoginActivity } from '@/lib/login-activity';
+import { clearCart } from '@/lib/user-cart';
+import { clearWishlist } from '@/lib/user-wishlist';
 
 // Define and export schemas for reuse
 export const loginSchema = z.object({
@@ -136,6 +138,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logOut = async () => {
     try {
       await signOut(auth);
+      // Clear user-specific data on logout to simulate switching accounts
+      clearCart();
+      clearWishlist();
       router.push('/');
       toast({
         title: 'Logged Out',

@@ -1,10 +1,10 @@
 
+import { allProducts } from './products';
+import type { Product } from './types';
+
 // This file simulates a cloud database for user wishlists.
 // In a real app, you would replace this with calls to a database like Firestore,
 // and these functions would likely be asynchronous and user-specific.
-
-import { allProducts } from './products';
-import type { Product } from './types';
 
 // Let's start with a few items in the wishlist for demonstration.
 let wishlistProductIds: string[] = ['1', 'fs6', 'lp2'];
@@ -30,4 +30,8 @@ export function addToWishlist(productId: string): void {
 export function removeFromWishlist(productId: string): void {
   // In a real app: await db.collection('users').doc(userId).update({ wishlist: FieldValue.arrayRemove(productId) })
   wishlistProductIds = wishlistProductIds.filter(id => id !== productId);
+}
+
+export function clearWishlist(): void {
+  wishlistProductIds = [];
 }

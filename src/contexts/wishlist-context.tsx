@@ -5,6 +5,7 @@ import * as React from 'react';
 import type { Product } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import { allProducts } from '@/lib/products';
+import { useAuth } from '@/contexts/auth-context';
 import { 
     getWishlistItems, 
     addToWishlist as apiAddToWishlist, 
@@ -24,12 +25,19 @@ const WishlistContext = React.createContext<WishlistContextType | undefined>(und
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const [wishlistProductIds, setWishlistProductIds] = React.useState<string[]>([]);
   const { toast } = useToast();
+  const { currentUser } = useAuth();
 
   React.useEffect(() => {
-    // In a real app, this would be an async call to get the user's wishlist IDs.
-    const initialIds = getWishlistItems().map(item => item.id);
-    setWishlistProductIds(initialIds);
-  }, []);
+    // This effect now runs whenever the user changes.
+    if (currentUser) {
+      // If a user is logged in, "fetch" their wishlist IDs from the mock backend.
+      const initialIds = getWishlistItems().map(item => item.id);
+      setWishlistProductIds(initialIds);
+    } else {
+      // If no user is logged in (e.g., after logout), clear the wishlist state.
+      setWishlistProductIds([]);
+    }
+  }, [currentUser]);
 
   const addToWishlist = (productId: string) => {
     if (wishlistProductIds.includes(productId)) {
