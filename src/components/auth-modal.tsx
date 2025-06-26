@@ -29,6 +29,7 @@ import { GoogleIcon } from "@/components/icons/google-icon";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
+import { Eye, EyeOff } from "lucide-react";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -40,6 +41,8 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isGoogleSubmitting, setIsGoogleSubmitting] = React.useState(false);
   const [isResetting, setIsResetting] = React.useState(false);
+  const [isLoginPasswordVisible, setIsLoginPasswordVisible] = React.useState(false);
+  const [isRegisterPasswordVisible, setIsRegisterPasswordVisible] = React.useState(false);
   const { toast } = useToast();
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
@@ -196,12 +199,26 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
                         </Button>
                       </div>
                       <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="••••••••"
-                          {...field}
-                          disabled={allSubmitting}
-                        />
+                        <div className="relative">
+                            <Input
+                            type={isLoginPasswordVisible ? "text" : "password"}
+                            placeholder="••••••••"
+                            className="pr-10"
+                            {...field}
+                            disabled={allSubmitting}
+                            />
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="absolute inset-y-0 right-0 h-full px-3 text-muted-foreground hover:bg-transparent"
+                                onClick={() => setIsLoginPasswordVisible((prev) => !prev)}
+                                disabled={allSubmitting}
+                                tabIndex={-1}
+                            >
+                                {isLoginPasswordVisible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            </Button>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -275,12 +292,26 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="••••••••"
-                          {...field}
-                          disabled={allSubmitting}
-                        />
+                        <div className="relative">
+                            <Input
+                                type={isRegisterPasswordVisible ? "text" : "password"}
+                                placeholder="••••••••"
+                                className="pr-10"
+                                {...field}
+                                disabled={allSubmitting}
+                            />
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="absolute inset-y-0 right-0 h-full px-3 text-muted-foreground hover:bg-transparent"
+                                onClick={() => setIsRegisterPasswordVisible((prev) => !prev)}
+                                disabled={allSubmitting}
+                                tabIndex={-1}
+                            >
+                                {isRegisterPasswordVisible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            </Button>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
