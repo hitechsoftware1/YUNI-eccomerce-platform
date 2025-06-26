@@ -115,16 +115,19 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
         return;
     }
 
+    console.log(`Attempting password reset for: ${email}`);
     setIsResetting(true);
     try {
       await sendPasswordResetEmail(auth, email);
+      console.log(`Password reset email sent successfully to ${email}`);
       toast({
         title: "Password Reset Email Sent",
-        description: "Please check your inbox to reset your password. You can close this window.",
+        description: "Please check your inbox (and spam folder) to reset your password.",
       });
       onOpenChange(false);
     } catch (error: any) {
       console.error("Password reset error:", error);
+      console.log(`Password reset failed for ${email}:`, error.message);
       toast({
         title: "Password Reset Failed",
         description: error.message || "An unexpected error occurred.",
