@@ -28,7 +28,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { DeactivateAccountDialog } from '@/components/deactivate-account-dialog';
 import { getReviewsByEmail } from '@/lib/user-reviews';
-import { allLoginActivity } from '@/lib/login-activity';
+import { getLoginActivity } from '@/lib/login-activity';
 import { UserReviewCard } from '@/components/user-review-card';
 
 
@@ -82,8 +82,8 @@ export default function AccountPage() {
         const userReviews = getReviewsByEmail(currentUser.email);
         setReviews(userReviews);
         
-        // Load login activity
-        setLoginActivity(allLoginActivity);
+        // Load login activity from localStorage
+        setLoginActivity(getLoginActivity());
     }
   }, [currentUser, loading, router]);
   

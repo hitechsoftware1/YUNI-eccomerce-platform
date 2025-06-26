@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -16,6 +17,7 @@ import {
 import { auth } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
+import { addLoginActivity } from '@/lib/login-activity';
 
 // Define and export schemas for reuse
 export const loginSchema = z.object({
@@ -66,6 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logIn = async ({ email, password }: LoginInput) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      addLoginActivity();
       toast({
         title: 'Login Successful',
         description: 'Welcome back!',
@@ -94,6 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setCurrentUser(Object.assign(Object.create(Object.getPrototypeOf(auth.currentUser)), auth.currentUser));
         }
       }
+       addLoginActivity();
        toast({
         title: "Registration Successful",
         description: "Your account has been created.",
@@ -113,6 +117,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
+      addLoginActivity();
       toast({
         title: 'Login Successful',
         description: 'Welcome!',
