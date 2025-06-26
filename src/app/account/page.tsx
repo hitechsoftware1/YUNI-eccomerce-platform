@@ -29,7 +29,6 @@ import { DeactivateAccountDialog } from '@/components/deactivate-account-dialog'
 import { getReviewsByEmail } from '@/lib/user-reviews';
 import { getLoginActivity } from '@/lib/login-activity';
 import { UserReviewCard } from '@/components/user-review-card';
-import { useTheme } from 'next-themes';
 import { getPaymentMethods, savePaymentMethods } from '@/lib/payment-methods';
 import { AddPaymentMethodModal } from '@/components/add-payment-method-modal';
 import { VisaIcon } from '@/components/icons/visa-icon';
@@ -39,6 +38,7 @@ import { EditReviewModal } from '@/components/edit-review-modal';
 import { DeleteReviewDialog } from '@/components/delete-review-dialog';
 import { getReturnsForUser } from '@/lib/user-returns';
 import { isAdmin } from '@/lib/admins';
+import { AppearanceForm } from '@/components/appearance-form';
 
 
 export default function AccountPage() {
@@ -57,7 +57,6 @@ export default function AccountPage() {
   const [isDeactivateDialogOpen, setIsDeactivateDialogOpen] = React.useState(false);
   const [reviews, setReviews] = React.useState<UserReview[]>([]);
   const [loginActivity, setLoginActivity] = React.useState<LoginActivity[]>([]);
-  const { theme, setTheme } = useTheme();
   
   // Mock state for notification preferences
   const [promoEmails, setPromoEmails] = React.useState(true);
@@ -540,30 +539,7 @@ export default function AccountPage() {
                 </CardContent>
             </Card>
 
-            <Card id="appearance">
-                <CardHeader>
-                    <div className="flex items-center gap-3">
-                        <Palette className="h-6 w-6 text-primary" />
-                        <CardTitle>Appearance</CardTitle>
-                    </div>
-                     <CardDescription>Customize the look and feel of the app.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div className="flex items-center justify-between rounded-lg border p-4">
-                        <Label htmlFor="dark-mode" className="flex flex-col space-y-1">
-                            <span>Dark Mode</span>
-                            <span className="font-normal leading-snug text-muted-foreground">
-                                Switch between light and dark themes.
-                            </span>
-                        </Label>
-                        <Switch 
-                            id="dark-mode" 
-                            checked={theme === 'dark'} 
-                            onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')} 
-                        />
-                    </div>
-                </CardContent>
-            </Card>
+            <AppearanceForm />
             
             <Card id="login-security">
                 <CardHeader>

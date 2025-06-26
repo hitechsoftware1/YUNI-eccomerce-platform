@@ -30,9 +30,9 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased overflow-x-hidden">
         <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
+          attribute="data-theme"
+          defaultTheme="orange-light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <AuthProvider>
