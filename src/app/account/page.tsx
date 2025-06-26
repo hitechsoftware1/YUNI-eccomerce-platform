@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2, ChevronRight, Bell, AlertTriangle, ShieldCheck, Monitor, Smartphone, Palette, CreditCard, Undo2, PlusCircle, Trash2, Gift, Copy } from 'lucide-react';
 import { getOrdersByEmail } from '@/lib/user-orders';
-import type { Order, Product, Address, UserReview, LoginActivity, PaymentMethod } from '@/lib/types';
+import type { Order, Product, Address, UserReview, LoginActivity, PaymentMethod, UserReturn } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -37,6 +37,7 @@ import { MastercardIcon } from '@/components/icons/mastercard-icon';
 import { getRecentlyViewedItems } from '@/lib/recently-viewed';
 import { EditReviewModal } from '@/components/edit-review-modal';
 import { DeleteReviewDialog } from '@/components/delete-review-dialog';
+import { getReturnsForUser } from '@/lib/user-returns';
 
 
 export default function AccountPage() {
@@ -71,6 +72,8 @@ export default function AccountPage() {
   const [isDeleteReviewDialogOpen, setIsDeleteReviewDialogOpen] = React.useState(false);
   const [reviewIdToDelete, setReviewIdToDelete] = React.useState<string | null>(null);
 
+  const [returns, setReturns] = React.useState<UserReturn[]>([]);
+
 
   React.useEffect(() => {
     if (!loading && !currentUser) {
@@ -84,6 +87,7 @@ export default function AccountPage() {
         setReviews(getReviewsByEmail(currentUser.email));
         setLoginActivity(getLoginActivity());
         setPaymentMethods(getPaymentMethods());
+        setReturns(getReturnsForUser(currentUser.email));
     }
   }, [currentUser, loading, router]);
   
@@ -672,30 +676,36 @@ export default function AccountPage() {
                 <CardContent className="space-y-6">
                     <div className="space-y-4">
                         <h3 className="font-semibold">Recent Returns</h3>
-                        <div className="space-y-2">
-                            <div className="flex items-center justify-between rounded-lg border p-3">
-                                <div>
-                                    <p className="font-medium text-sm">Order #ORD001</p>
-                                    <p className="text-xs text-muted-foreground">
-                                        Status: <Badge variant="secondary" className="bg-green-600 text-primary-foreground hover:bg-green-600/80">Refunded</Badge>
-                                    </p>
-                                </div>
-                                <Button variant="outline" size="sm" onClick={() => toast({ title: "Coming Soon!", description: "This feature will be available soon."})}>
-                                    View Details
-                                </Button>
+                         {returns.length > 0 ? (
+                            <div className="space-y-2">
+                                {returns.map((ret) => (
+                                    <div key={ret.id} className="flex items-center justify-between rounded-lg border p-3">
+                                        <div>
+                                            <p className="font-medium text-sm">Order #{ret.orderId}</p>
+                                            <p className="text-xs text-muted-foreground">
+                                                Status: <Badge
+                                                    variant={ret.status === 'Rejected' ? 'destructive' : 'secondary'}
+                                                    className={cn('capitalize',
+                                                        ret.status === 'Refunded' && 'bg-green-600 text-primary-foreground hover:bg-green-600/80',
+                                                        ret.status === 'Processing' && 'bg-yellow-500 text-primary-foreground hover:bg-yellow-500/80',
+                                                        ret.status === 'Approved' && 'bg-blue-500 text-primary-foreground hover:bg-blue-500/80'
+                                                    )}
+                                                >
+                                                    {ret.status}
+                                                </Badge>
+                                            </p>
+                                        </div>
+                                        <Button variant="outline" size="sm" onClick={() => toast({ title: "Coming Soon!", description: "This feature will be available soon."})}>
+                                            View Details
+                                        </Button>
+                                    </div>
+                                ))}
                             </div>
-                            <div className="flex items-center justify-between rounded-lg border p-3">
-                                <div>
-                                    <p className="font-medium text-sm">Order #ORD007</p>
-                                    <p className="text-xs text-muted-foreground">
-                                       Status: <Badge variant="secondary" className="bg-yellow-500 text-primary-foreground hover:bg-yellow-500/80">Processing</Badge>
-                                    </p>
-                                </div>
-                                <Button variant="outline" size="sm" onClick={() => toast({ title: "Coming Soon!", description: "This feature will be available soon."})}>
-                                    View Details
-                                </Button>
+                        ) : (
+                             <div className="flex flex-col items-center justify-center text-center py-6 rounded-lg bg-secondary/50">
+                                <p className="text-sm text-muted-foreground">You have no returns or refund requests.</p>
                             </div>
-                        </div>
+                        )}
                     </div>
                      <div className="flex flex-col items-start gap-4 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>

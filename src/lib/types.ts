@@ -125,3 +125,11 @@ export interface PaymentMethod {
   expiryDate: string;
   cardType: 'visa' | 'mastercard' | 'amex' | 'discover' | 'other';
 }
+
+export interface UserReturn {
+  id: string;
+  orderId: string;
+  date: string;
+  status: 'Processing' | 'Approved' | 'Refunded' | 'Rejected';
+  items: { productId: string; productName: string; quantity: number }[];
+}

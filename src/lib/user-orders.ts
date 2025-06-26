@@ -31,7 +31,7 @@ const mockAddress3: Address = {
     phoneNumber: '+256 700 789012'
 };
 
-const allUserOrders: Order[] = [
+export const allUserOrders: Order[] = [
     {
         id: 'ORD001',
         customer: { name: 'Olivia Martin', email: 'olivia.martin@email.com' },
