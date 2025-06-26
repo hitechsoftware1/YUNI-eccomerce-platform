@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2, ChevronRight } from 'lucide-react';
+import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2, ChevronRight, Bell, AlertTriangle } from 'lucide-react';
 import { getOrdersByEmail } from '@/lib/user-orders';
 import type { Order, Product, Address } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -24,6 +24,9 @@ import { useToast } from '@/hooks/use-toast';
 import { PersonalDetailsModal } from '@/components/personal-details-modal';
 import { AddressBookModal } from '@/components/address-book-modal';
 import { getAddresses, saveAddresses } from '@/lib/user-addresses';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { DeactivateAccountDialog } from '@/components/deactivate-account-dialog';
 
 
 export default function AccountPage() {
@@ -39,6 +42,13 @@ export default function AccountPage() {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = React.useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = React.useState(false);
   const [addresses, setAddresses] = React.useState<Address[]>([]);
+  const [isDeactivateDialogOpen, setIsDeactivateDialogOpen] = React.useState(false);
+  
+  // Mock state for notification preferences
+  const [promoEmails, setPromoEmails] = React.useState(true);
+  const [orderUpdates, setOrderUpdates] = React.useState(true);
+  const [newsletter, setNewsletter] = React.useState(false);
+
 
   React.useEffect(() => {
     if (!loading && !currentUser) {
@@ -150,6 +160,17 @@ export default function AccountPage() {
         title: "Address Book Updated",
         description: "Your address list has been saved."
     });
+  };
+  
+  const handleDeactivateConfirm = () => {
+    // In a real app, this would trigger a backend process.
+    // For now, we just show a toast and log out.
+    setIsDeactivateDialogOpen(false);
+    toast({
+        title: "Account Deactivation Initiated",
+        description: "Your account is scheduled for deactivation. You have been logged out."
+    });
+    logOut();
   };
 
 
@@ -424,6 +445,68 @@ export default function AccountPage() {
                     </CardContent>
                 )}
             </Card>
+            
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center gap-3">
+                        <Bell className="h-6 w-6 text-primary" />
+                        <CardTitle>Notification Preferences</CardTitle>
+                    </div>
+                     <CardDescription>Manage how we communicate with you.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="flex items-center justify-between rounded-lg border p-4">
+                        <Label htmlFor="promo-emails" className="flex flex-col space-y-1">
+                            <span>Promotional Emails</span>
+                            <span className="font-normal leading-snug text-muted-foreground">
+                                Receive discounts, offers, and new product announcements.
+                            </span>
+                        </Label>
+                        <Switch id="promo-emails" checked={promoEmails} onCheckedChange={setPromoEmails} />
+                    </div>
+                     <div className="flex items-center justify-between rounded-lg border p-4">
+                        <Label htmlFor="order-updates" className="flex flex-col space-y-1">
+                            <span>Order Updates</span>
+                            <span className="font-normal leading-snug text-muted-foreground">
+                                Get notified about your order status, shipping, and delivery.
+                            </span>
+                        </Label>
+                        <Switch id="order-updates" checked={orderUpdates} onCheckedChange={setOrderUpdates} />
+                    </div>
+                     <div className="flex items-center justify-between rounded-lg border p-4">
+                        <Label htmlFor="newsletter" className="flex flex-col space-y-1">
+                            <span>YUNI Newsletter</span>
+                            <span className="font-normal leading-snug text-muted-foreground">
+                                Subscribe to our weekly newsletter for tips and trends.
+                            </span>
+                        </Label>
+                        <Switch id="newsletter" checked={newsletter} onCheckedChange={setNewsletter} />
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card className="border-destructive/50">
+                <CardHeader>
+                    <div className="flex items-center gap-3">
+                         <AlertTriangle className="h-6 w-6 text-destructive" />
+                         <CardTitle className="text-destructive">Danger Zone</CardTitle>
+                    </div>
+                    <CardDescription>Manage sensitive account actions.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex flex-col items-start gap-4 rounded-lg border border-destructive/30 bg-destructive/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <h3 className="font-semibold">Deactivate Account</h3>
+                            <p className="text-sm text-muted-foreground">
+                                This will permanently delete your account and all associated data. This action cannot be undone.
+                            </p>
+                        </div>
+                        <Button variant="destructive" onClick={() => setIsDeactivateDialogOpen(true)}>
+                            Deactivate
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
       </main>
       <Footer />
@@ -441,6 +524,11 @@ export default function AccountPage() {
           addresses={addresses}
           onAddressesUpdate={handleAddressesUpdate}
        />
+        <DeactivateAccountDialog
+            isOpen={isDeactivateDialogOpen}
+            onOpenChange={setIsDeactivateDialogOpen}
+            onConfirm={handleDeactivateConfirm}
+        />
     </div>
   );
 }
