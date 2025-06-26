@@ -7,10 +7,12 @@ import Image from 'next/image';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { Button } from '@/components/ui/button';
-import { Star, ShoppingCart, Minus, Plus } from 'lucide-react';
+import { Star, ShoppingCart, Minus, Plus, Heart } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { ProductSection } from '@/components/product-section';
 import { useCart } from '@/contexts/cart-context';
+import { useWishlist } from '@/contexts/wishlist-context';
+import { cn } from '@/lib/utils';
 
 const StarRating = ({ rating, reviewCount }: { rating: number; reviewCount?: number }) => {
   return (
@@ -35,6 +37,7 @@ export default function ProductDetailPage() {
   const params = useParams<{ id: string }>();
   const product = getProductById(params.id);
   const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [quantity, setQuantity] = React.useState(1);
 
   React.useEffect(() => {
@@ -54,6 +57,8 @@ export default function ProductDetailPage() {
   if (!product) {
     notFound();
   }
+  
+  const isWishlisted = isInWishlist(product.id);
 
   const discount = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
@@ -71,6 +76,15 @@ export default function ProductDetailPage() {
   const handleAddToCart = () => {
     if (product) {
       addToCart(product, quantity);
+    }
+  };
+  
+  const handleWishlistToggle = () => {
+    if (!product) return;
+    if (isWishlisted) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product.id);
     }
   };
 
@@ -144,8 +158,9 @@ export default function ProductDetailPage() {
                   <Button size="lg" className="flex-1" onClick={handleAddToCart}>
                       <ShoppingCart className="mr-2 h-5 w-5" /> Add to Cart
                   </Button>
-                  <Button size="lg" variant="outline" className="flex-1">
-                      Buy Now
+                  <Button size="lg" variant="outline" className="flex-1" onClick={handleWishlistToggle}>
+                      <Heart className={cn("mr-2 h-5 w-5", isWishlisted && "fill-red-500 text-red-500")} /> 
+                      {isWishlisted ? 'In Wishlist' : 'Add to Wishlist'}
                   </Button>
               </div>
             </div>

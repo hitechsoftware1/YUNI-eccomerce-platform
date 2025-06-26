@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { CartProvider } from '@/contexts/cart-context';
 import { AuthProvider } from '@/contexts/auth-context';
 import { InstallPwaBanner } from '@/components/install-pwa-banner';
+import { WishlistProvider } from '@/contexts/wishlist-context';
 
 export const metadata: Metadata = {
   title: 'YUNI - Your Online Marketplace',
@@ -29,11 +30,13 @@ export default function RootLayout({
       <body className="font-body antialiased overflow-x-hidden">
         <AuthProvider>
           <CartProvider>
+            <WishlistProvider>
               <div className="relative flex min-h-screen flex-col">
                 {children}
               </div>
               <Toaster />
               <InstallPwaBanner />
+            </WishlistProvider>
           </CartProvider>
         </AuthProvider>
       </body>

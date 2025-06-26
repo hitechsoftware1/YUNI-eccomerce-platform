@@ -269,15 +269,15 @@ export default function AccountPage() {
                             </CardContent>
                         </Card>
                     </Link>
-                    <div className="block group cursor-not-allowed">
-                        <Card className="h-full opacity-60">
+                    <Link href="/wishlist" className="block group">
+                        <Card className="h-full transition-all hover:shadow-md hover:border-primary/50">
                              <CardContent className="p-4 flex flex-col items-center text-center">
-                                <Heart className="h-8 w-8 text-muted-foreground mb-2" />
+                                <Heart className="h-8 w-8 text-primary mb-2" />
                                 <h3 className="font-semibold">Wishlist</h3>
                                 <p className="text-xs text-muted-foreground">Your saved items</p>
                             </CardContent>
                         </Card>
-                    </div>
+                    </Link>
                     <button
                         className="block group text-left w-full"
                         onClick={() => setIsDetailsModalOpen(true)}
