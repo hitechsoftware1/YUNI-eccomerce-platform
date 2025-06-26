@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -10,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LogOut, LayoutDashboard, ShoppingBag, EyeOff } from 'lucide-react';
+import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser } from 'lucide-react';
 import { getOrdersByEmail } from '@/lib/user-orders';
 import type { Order, Product } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -128,7 +129,49 @@ export default function AccountPage() {
                 </CardContent>
             </Card>
 
-            <Card>
+            <div className="space-y-4">
+                <h2 className="text-xl font-bold font-headline">Account Dashboard</h2>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    <Link href="#order-history" className="block group">
+                        <Card className="h-full transition-all hover:shadow-md hover:border-primary/50">
+                            <CardContent className="p-4 flex flex-col items-center text-center">
+                                <ShoppingBag className="h-8 w-8 text-primary mb-2" />
+                                <h3 className="font-semibold">My Orders</h3>
+                                <p className="text-xs text-muted-foreground">View & track orders</p>
+                            </CardContent>
+                        </Card>
+                    </Link>
+                    <div className="block group cursor-not-allowed">
+                        <Card className="h-full opacity-60">
+                             <CardContent className="p-4 flex flex-col items-center text-center">
+                                <Heart className="h-8 w-8 text-muted-foreground mb-2" />
+                                <h3 className="font-semibold">Wishlist</h3>
+                                <p className="text-xs text-muted-foreground">Your saved items</p>
+                            </CardContent>
+                        </Card>
+                    </div>
+                    <div className="block group cursor-not-allowed">
+                        <Card className="h-full opacity-60">
+                            <CardContent className="p-4 flex flex-col items-center text-center">
+                                <UserCog className="h-8 w-8 text-muted-foreground mb-2" />
+                                <h3 className="font-semibold">Personal Details</h3>
+                                <p className="text-xs text-muted-foreground">Update your info</p>
+                            </CardContent>
+                        </Card>
+                    </div>
+                    <div className="block group cursor-not-allowed">
+                        <Card className="h-full opacity-60">
+                             <CardContent className="p-4 flex flex-col items-center text-center">
+                                <BookUser className="h-8 w-8 text-muted-foreground mb-2" />
+                                <h3 className="font-semibold">Address Book</h3>
+                                <p className="text-xs text-muted-foreground">Manage addresses</p>
+                            </CardContent>
+                        </Card>
+                    </div>
+                </div>
+            </div>
+
+            <Card id="order-history">
                 <CardHeader>
                     <CardTitle>Order History</CardTitle>
                     <CardDescription>View the status of your recent orders.</CardDescription>
