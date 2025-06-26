@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2, ChevronRight, Bell, AlertTriangle, ShieldCheck, Monitor, Smartphone, Palette, CreditCard, Undo2, PlusCircle, Trash2 } from 'lucide-react';
+import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2, ChevronRight, Bell, AlertTriangle, ShieldCheck, Monitor, Smartphone, Palette, CreditCard, Undo2, PlusCircle, Trash2, Gift, Copy } from 'lucide-react';
 import { getOrdersByEmail } from '@/lib/user-orders';
 import type { Order, Product, Address, UserReview, LoginActivity, PaymentMethod } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -599,6 +599,13 @@ export default function AccountPage() {
                             ))}
                         </div>
                     </div>
+                     <div className="flex items-center justify-between rounded-lg border p-4">
+                        <div>
+                            <p className="font-semibold">Sign Out Everywhere</p>
+                            <p className="text-sm text-muted-foreground">Log out from all other active sessions.</p>
+                        </div>
+                        <Button variant="outline" onClick={() => toast({ title: "Feature not available", description: "This will be implemented soon."})}>Sign Out</Button>
+                    </div>
                 </CardContent>
             </Card>
 
@@ -672,6 +679,31 @@ export default function AccountPage() {
                         </div>
                         <Button variant="outline" onClick={() => toast({title: "Coming soon!"})}>View Policy</Button>
                     </div>
+                </CardContent>
+            </Card>
+            
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center gap-3">
+                        <Gift className="h-6 w-6 text-primary" />
+                        <CardTitle>Refer & Earn</CardTitle>
+                    </div>
+                        <CardDescription>Share YUNI with friends and earn rewards.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="flex items-center justify-between rounded-lg border bg-secondary/50 p-4">
+                        <p className="font-mono text-lg text-muted-foreground">YUNI-REF-{currentUser.uid.slice(0, 8).toUpperCase()}</p>
+                        <Button variant="outline" onClick={() => {
+                            navigator.clipboard.writeText(`YUNI-REF-${currentUser.uid.slice(0, 8).toUpperCase()}`);
+                            toast({ title: "Copied!", description: "Referral code copied to clipboard." });
+                        }}>
+                            <Copy className="mr-2 h-4 w-4" />
+                            Copy Code
+                        </Button>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                        Your friends get 10% off their first order, and you get UGX 10,000 in credits for each successful referral.
+                    </p>
                 </CardContent>
             </Card>
 
