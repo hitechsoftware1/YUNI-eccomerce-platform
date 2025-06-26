@@ -34,6 +34,10 @@ import {
   AppWindow,
   GalleryHorizontal,
   Store,
+  Settings,
+  ShieldCheck,
+  CreditCard,
+  Palette,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Toaster } from '@/components/ui/toaster';
@@ -46,6 +50,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
+  DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
 import { isAdmin } from '@/lib/admins';
 import { useToast } from '@/hooks/use-toast';
@@ -288,7 +296,20 @@ export function AdminLayoutClient({
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild><Link href="/account">Profile</Link></DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Settings</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                        <DropdownMenuItem asChild><Link href="/account#appearance"><Palette className="mr-2 h-4 w-4" />Appearance</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/account#login-security"><ShieldCheck className="mr-2 h-4 w-4" />Login & Security</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/account#payment-methods"><CreditCard className="mr-2 h-4 w-4" />Payment Methods</Link></DropdownMenuItem>
+                        <DropdownMenuItem asChild><Link href="/account#notification-preferences"><Bell className="mr-2 h-4 w-4" />Notifications</Link></DropdownMenuItem>
+                    </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={logOut}>Logout</DropdownMenuItem>
             </DropdownMenuContent>

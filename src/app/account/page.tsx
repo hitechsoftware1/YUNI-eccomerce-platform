@@ -540,7 +540,7 @@ export default function AccountPage() {
                 </CardContent>
             </Card>
 
-            <Card>
+            <Card id="appearance">
                 <CardHeader>
                     <div className="flex items-center gap-3">
                         <Palette className="h-6 w-6 text-primary" />
@@ -565,7 +565,7 @@ export default function AccountPage() {
                 </CardContent>
             </Card>
             
-            <Card>
+            <Card id="login-security">
                 <CardHeader>
                     <div className="flex items-center gap-3">
                         <ShieldCheck className="h-6 w-6 text-primary" />
@@ -618,7 +618,7 @@ export default function AccountPage() {
                 </CardContent>
             </Card>
 
-            <Card>
+            <Card id="payment-methods">
                 <CardHeader>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -749,7 +749,7 @@ export default function AccountPage() {
                 </CardContent>
             </Card>
 
-            <Card>
+            <Card id="notification-preferences">
                 <CardHeader>
                     <div className="flex items-center gap-3">
                         <Bell className="h-6 w-6 text-primary" />
@@ -788,7 +788,7 @@ export default function AccountPage() {
                 </CardContent>
             </Card>
 
-            <Card className="border-destructive/50">
+            <Card className="border-destructive/50" id="danger-zone">
                 <CardHeader>
                     <div className="flex items-center gap-3">
                          <AlertTriangle className="h-6 w-6 text-destructive" />
