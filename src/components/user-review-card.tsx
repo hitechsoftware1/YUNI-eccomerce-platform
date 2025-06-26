@@ -1,12 +1,16 @@
+
 'use client';
 
 import Image from "next/image";
 import Link from "next/link";
-import { Star } from "lucide-react";
+import { Star, Pencil, Trash2 } from "lucide-react";
 import type { UserReview } from "@/lib/types";
+import { Button } from "./ui/button";
 
 interface UserReviewCardProps {
   review: UserReview;
+  onEdit: (review: UserReview) => void;
+  onDelete: (reviewId: string) => void;
 }
 
 const StarRating = ({ rating }: { rating: number }) => {
@@ -24,7 +28,7 @@ const StarRating = ({ rating }: { rating: number }) => {
   );
 };
 
-export function UserReviewCard({ review }: UserReviewCardProps) {
+export function UserReviewCard({ review, onEdit, onDelete }: UserReviewCardProps) {
   return (
     <div className="flex items-start gap-4 rounded-lg border p-4">
         <Link href={`/products/${review.productId}`}>
@@ -42,6 +46,14 @@ export function UserReviewCard({ review }: UserReviewCardProps) {
             </div>
             <p className="mt-2 text-sm font-medium">{review.title}</p>
             <p className="mt-1 text-sm text-muted-foreground">{review.comment}</p>
+        </div>
+         <div className="flex flex-col gap-1">
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onEdit(review)}>
+                <Pencil className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => onDelete(review.id)}>
+                <Trash2 className="h-4 w-4" />
+            </Button>
         </div>
     </div>
   );

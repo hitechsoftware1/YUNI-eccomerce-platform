@@ -1,3 +1,4 @@
+
 import type { UserReview } from './types';
 import { allProducts } from './products';
 
@@ -32,4 +33,21 @@ export function getReviewsByEmail(email: string | null | undefined): UserReview[
     if (!email) return [];
     // This is a mock, so we return all reviews for any logged-in user.
     return allUserReviews;
+}
+
+export function updateReview(reviewId: string, data: { title: string; comment: string; rating: number }): UserReview | undefined {
+    const reviewIndex = allUserReviews.findIndex(r => r.id === reviewId);
+    if (reviewIndex === -1) {
+        return undefined;
+    }
+    const updatedReview = { ...allUserReviews[reviewIndex], ...data };
+    allUserReviews[reviewIndex] = updatedReview;
+    return updatedReview;
+}
+
+export function deleteReview(reviewId: string): void {
+    const reviewIndex = allUserReviews.findIndex(r => r.id === reviewId);
+    if (reviewIndex !== -1) {
+        allUserReviews.splice(reviewIndex, 1);
+    }
 }

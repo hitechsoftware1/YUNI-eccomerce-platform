@@ -35,6 +35,8 @@ import { AddPaymentMethodModal } from '@/components/add-payment-method-modal';
 import { VisaIcon } from '@/components/icons/visa-icon';
 import { MastercardIcon } from '@/components/icons/mastercard-icon';
 import { getRecentlyViewedItems } from '@/lib/recently-viewed';
+import { EditReviewModal } from '@/components/edit-review-modal';
+import { DeleteReviewDialog } from '@/components/delete-review-dialog';
 
 
 export default function AccountPage() {
@@ -63,6 +65,11 @@ export default function AccountPage() {
   const [paymentMethods, setPaymentMethods] = React.useState<PaymentMethod[]>([]);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = React.useState(false);
   const [isDeletingPayment, setIsDeletingPayment] = React.useState<string | null>(null);
+  
+  const [isEditReviewModalOpen, setIsEditReviewModalOpen] = React.useState(false);
+  const [reviewToEdit, setReviewToEdit] = React.useState<UserReview | null>(null);
+  const [isDeleteReviewDialogOpen, setIsDeleteReviewDialogOpen] = React.useState(false);
+  const [reviewIdToDelete, setReviewIdToDelete] = React.useState<string | null>(null);
 
 
   React.useEffect(() => {
@@ -198,6 +205,27 @@ export default function AccountPage() {
       setIsDeletingPayment(null);
       toast({ title: "Payment Method Removed", description: "The card has been deleted." });
     }, 500);
+  };
+
+  const handleEditReview = (review: UserReview) => {
+    setReviewToEdit(review);
+    setIsEditReviewModalOpen(true);
+  };
+
+  const handleDeleteReviewClick = (reviewId: string) => {
+    setReviewIdToDelete(reviewId);
+    setIsDeleteReviewDialogOpen(true);
+  };
+
+  const onReviewUpdate = (updatedReview: UserReview) => {
+    setReviews(prevReviews => 
+        prevReviews.map(r => r.id === updatedReview.id ? updatedReview : r)
+    );
+  };
+
+  const onReviewDeleted = (deletedReviewId: string) => {
+    setReviews(prevReviews => prevReviews.filter(r => r.id !== deletedReviewId));
+    setReviewIdToDelete(null);
   };
 
 
@@ -482,7 +510,12 @@ export default function AccountPage() {
                     {reviews.length > 0 ? (
                         <div className="space-y-4">
                             {reviews.map((review) => (
-                                <UserReviewCard key={review.id} review={review} />
+                                <UserReviewCard 
+                                    key={review.id} 
+                                    review={review}
+                                    onEdit={handleEditReview}
+                                    onDelete={handleDeleteReviewClick}
+                                />
                             ))}
                         </div>
                     ) : (
@@ -729,6 +762,18 @@ export default function AccountPage() {
             isOpen={isPaymentModalOpen}
             onOpenChange={setIsPaymentModalOpen}
             onSave={handleAddPaymentMethod}
+        />
+        <EditReviewModal
+            isOpen={isEditReviewModalOpen}
+            onOpenChange={setIsEditReviewModalOpen}
+            review={reviewToEdit}
+            onReviewUpdate={onReviewUpdate}
+        />
+        <DeleteReviewDialog
+            isOpen={isDeleteReviewDialogOpen}
+            onOpenChange={setIsDeleteReviewDialogOpen}
+            reviewId={reviewIdToDelete}
+            onReviewDeleted={onReviewDeleted}
         />
     </div>
   );
