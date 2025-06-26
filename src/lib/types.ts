@@ -117,3 +117,11 @@ export interface LoginActivity {
   date: string;
   isCurrent?: boolean;
 }
+
+export interface PaymentMethod {
+  id: string;
+  cardholderName: string;
+  cardNumber: string;
+  expiryDate: string;
+  cardType: 'visa' | 'mastercard' | 'amex' | 'discover' | 'other';
+}

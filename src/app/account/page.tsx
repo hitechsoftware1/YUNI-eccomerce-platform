@@ -11,9 +11,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2, ChevronRight, Bell, AlertTriangle, ShieldCheck, Monitor, Smartphone, Palette, CreditCard, Undo2 } from 'lucide-react';
+import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2, ChevronRight, Bell, AlertTriangle, ShieldCheck, Monitor, Smartphone, Palette, CreditCard, Undo2, PlusCircle, Trash2 } from 'lucide-react';
 import { getOrdersByEmail } from '@/lib/user-orders';
-import type { Order, Product, Address, UserReview, LoginActivity } from '@/lib/types';
+import type { Order, Product, Address, UserReview, LoginActivity, PaymentMethod } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -31,6 +31,10 @@ import { getReviewsByEmail } from '@/lib/user-reviews';
 import { getLoginActivity } from '@/lib/login-activity';
 import { UserReviewCard } from '@/components/user-review-card';
 import { useTheme } from 'next-themes';
+import { getPaymentMethods, savePaymentMethods } from '@/lib/payment-methods';
+import { AddPaymentMethodModal } from '@/components/add-payment-method-modal';
+import { VisaIcon } from '@/components/icons/visa-icon';
+import { MastercardIcon } from '@/components/icons/mastercard-icon';
 
 
 export default function AccountPage() {
@@ -55,6 +59,10 @@ export default function AccountPage() {
   const [promoEmails, setPromoEmails] = React.useState(true);
   const [orderUpdates, setOrderUpdates] = React.useState(true);
   const [newsletter, setNewsletter] = React.useState(false);
+
+  const [paymentMethods, setPaymentMethods] = React.useState<PaymentMethod[]>([]);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = React.useState(false);
+  const [isDeletingPayment, setIsDeletingPayment] = React.useState<string | null>(null);
 
 
   React.useEffect(() => {
@@ -86,6 +94,9 @@ export default function AccountPage() {
         
         // Load login activity from localStorage
         setLoginActivity(getLoginActivity());
+
+        // Load payment methods
+        setPaymentMethods(getPaymentMethods());
     }
   }, [currentUser, loading, router]);
   
@@ -185,6 +196,28 @@ export default function AccountPage() {
         description: "Your account is scheduled for deactivation. You have been logged out."
     });
     logOut();
+  };
+
+  const handlePaymentMethodsUpdate = (updatedMethods: PaymentMethod[]) => {
+    savePaymentMethods(updatedMethods);
+    setPaymentMethods(updatedMethods);
+  };
+
+  const handleAddPaymentMethod = (newMethod: PaymentMethod) => {
+    const updatedMethods = [...paymentMethods, newMethod];
+    handlePaymentMethodsUpdate(updatedMethods);
+    toast({ title: "Payment Method Added", description: "Your new card has been saved." });
+  };
+
+  const handleDeletePaymentMethod = (id: string) => {
+    setIsDeletingPayment(id);
+    // simulate async delete
+    setTimeout(() => {
+      const updatedMethods = paymentMethods.filter(pm => pm.id !== id);
+      handlePaymentMethodsUpdate(updatedMethods);
+      setIsDeletingPayment(null);
+      toast({ title: "Payment Method Removed", description: "The card has been deleted." });
+    }, 500);
   };
 
 
@@ -558,17 +591,53 @@ export default function AccountPage() {
 
             <Card>
                 <CardHeader>
-                    <div className="flex items-center gap-3">
-                        <CreditCard className="h-6 w-6 text-primary" />
-                        <CardTitle>Payment Methods</CardTitle>
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <CreditCard className="h-6 w-6 text-primary" />
+                            <CardTitle>Payment Methods</CardTitle>
+                        </div>
+                        <Button variant="outline" size="sm" onClick={() => setIsPaymentModalOpen(true)}>
+                            <PlusCircle className="mr-2 h-4 w-4" />
+                            Add Card
+                        </Button>
                     </div>
                      <CardDescription>Manage your saved payment methods.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="flex flex-col items-center justify-center text-center py-10 rounded-lg bg-secondary/50">
-                        <p className="text-sm text-muted-foreground mb-4">You have no saved payment methods.</p>
-                        <Button disabled>Add New Card</Button>
-                    </div>
+                    {paymentMethods.length > 0 ? (
+                        <div className="space-y-4">
+                            {paymentMethods.map((pm) => (
+                                <div key={pm.id} className="flex items-center justify-between rounded-lg border p-3">
+                                    <div className="flex items-center gap-4">
+                                        {pm.cardType === 'visa' && <VisaIcon />}
+                                        {pm.cardType === 'mastercard' && <MastercardIcon />}
+                                        {pm.cardType !== 'visa' && pm.cardType !== 'mastercard' && <CreditCard className="h-8 w-8 text-muted-foreground" />}
+                                        <div>
+                                            <p className="font-semibold text-sm">{pm.cardholderName}</p>
+                                            <p className="text-xs text-muted-foreground">
+                                                **** **** **** {pm.cardNumber.slice(-4)}
+                                                <span className="ml-4">Expires {pm.expiryDate}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <Button 
+                                        variant="ghost" 
+                                        size="icon" 
+                                        className="h-8 w-8 text-destructive hover:text-destructive"
+                                        onClick={() => handleDeletePaymentMethod(pm.id)}
+                                        disabled={isDeletingPayment === pm.id}
+                                    >
+                                        {isDeletingPayment === pm.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center text-center py-10 rounded-lg bg-secondary/50">
+                            <p className="text-sm text-muted-foreground mb-4">You have no saved payment methods.</p>
+                            <Button onClick={() => setIsPaymentModalOpen(true)}>Add New Card</Button>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
 
@@ -675,6 +744,11 @@ export default function AccountPage() {
             isOpen={isDeactivateDialogOpen}
             onOpenChange={setIsDeactivateDialogOpen}
             onConfirm={handleDeactivateConfirm}
+        />
+        <AddPaymentMethodModal 
+            isOpen={isPaymentModalOpen}
+            onOpenChange={setIsPaymentModalOpen}
+            onSave={handleAddPaymentMethod}
         />
     </div>
   );
