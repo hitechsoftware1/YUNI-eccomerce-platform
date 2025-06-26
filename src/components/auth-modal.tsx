@@ -33,9 +33,10 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
-  const { logIn, signUp, logInWithGoogle } = useAuth();
+  const { logIn, signUp, logInWithGoogle, resetPassword } = useAuth();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isGoogleSubmitting, setIsGoogleSubmitting] = React.useState(false);
+  const [isResetting, setIsResetting] = React.useState(false);
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -91,8 +92,37 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
         setIsGoogleSubmitting(false);
     }
   }
+  
+  async function handlePasswordReset() {
+    const email = loginForm.getValues("email");
+    if (!email) {
+      loginForm.setError("email", { 
+        type: "manual", 
+        message: "Please enter your email to reset the password." 
+      });
+      return;
+    }
+    const emailValidation = z.string().email().safeParse(email);
+    if (!emailValidation.success) {
+        loginForm.setError("email", {
+            type: "manual",
+            message: "Please enter a valid email address.",
+        });
+        return;
+    }
 
-  const allSubmitting = isSubmitting || isGoogleSubmitting;
+    setIsResetting(true);
+    try {
+      await resetPassword(email);
+      onOpenChange(false);
+    } catch (error) {
+      // Toast is handled in auth-context
+    } finally {
+      setIsResetting(false);
+    }
+  }
+
+  const allSubmitting = isSubmitting || isGoogleSubmitting || isResetting;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -136,7 +166,19 @@ export function AuthModal({ isOpen, onOpenChange }: AuthModalProps) {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <div className="flex items-center justify-between">
+                        <FormLabel>Password</FormLabel>
+                        <Button
+                          type="button"
+                          variant="link"
+                          className="p-0 h-auto text-xs font-normal"
+                          onClick={handlePasswordReset}
+                          disabled={allSubmitting}
+                          tabIndex={-1}
+                        >
+                          {isResetting ? "Sending..." : "Forgot Password?"}
+                        </Button>
+                      </div>
                       <FormControl>
                         <Input
                           type="password"
