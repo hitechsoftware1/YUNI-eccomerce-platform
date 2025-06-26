@@ -21,6 +21,7 @@ import { getProductById } from '@/lib/products';
 import { ProductCard } from '@/components/product-card';
 import { recommendProducts } from '@/ai/flows/product-recommendations';
 import { useToast } from '@/hooks/use-toast';
+import { PersonalDetailsModal } from '@/components/personal-details-modal';
 
 
 export default function AccountPage() {
@@ -33,6 +34,7 @@ export default function AccountPage() {
   const [isRecsLoading, setIsRecsLoading] = React.useState(false);
   const [isUploading, setIsUploading] = React.useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (!loading && !currentUser) {
@@ -260,15 +262,18 @@ export default function AccountPage() {
                             </CardContent>
                         </Card>
                     </div>
-                    <div className="block group cursor-not-allowed">
-                        <Card className="h-full opacity-60">
+                    <button
+                        className="block group text-left w-full"
+                        onClick={() => setIsDetailsModalOpen(true)}
+                    >
+                        <Card className="h-full transition-all hover:shadow-md hover:border-primary/50">
                             <CardContent className="p-4 flex flex-col items-center text-center">
-                                <UserCog className="h-8 w-8 text-muted-foreground mb-2" />
+                                <UserCog className="h-8 w-8 text-primary mb-2" />
                                 <h3 className="font-semibold">Personal Details</h3>
                                 <p className="text-xs text-muted-foreground">Update your info</p>
                             </CardContent>
                         </Card>
-                    </div>
+                    </button>
                     <div className="block group cursor-not-allowed">
                         <Card className="h-full opacity-60">
                              <CardContent className="p-4 flex flex-col items-center text-center">
@@ -399,6 +404,14 @@ export default function AccountPage() {
         </div>
       </main>
       <Footer />
+       {currentUser && (
+        <PersonalDetailsModal
+            isOpen={isDetailsModalOpen}
+            onOpenChange={setIsDetailsModalOpen}
+            user={currentUser}
+            onSave={updateUserProfile}
+        />
+      )}
     </div>
   );
 }
