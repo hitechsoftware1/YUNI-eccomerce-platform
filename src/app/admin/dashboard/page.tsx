@@ -26,6 +26,7 @@ import type { AdminSale } from '@/lib/types';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import type { Order } from '@/lib/types';
+import { FlashSaleStatus } from '@/components/admin/flash-sale-status';
 
 const recentSalesData: AdminSale[] = [
   { name: 'Olivia Martin', email: 'olivia.martin@email.com', amount: '+UGX 1,999,990', fallback: 'OM' },
@@ -102,8 +103,8 @@ export default function DashboardPage() {
             </CardContent>
             </Card>
         </div>
-        <div className="grid gap-4 lg:grid-cols-7">
-            <Card className="col-span-1 lg:col-span-4">
+        <div className="grid gap-4 lg:grid-cols-2">
+            <Card className="col-span-1">
                 <CardHeader>
                     <CardTitle>Sales Overview</CardTitle>
                 </CardHeader>
@@ -111,17 +112,20 @@ export default function DashboardPage() {
                     <OverviewChart />
                 </CardContent>
             </Card>
-            <Card className="col-span-1 lg:col-span-3">
-            <CardHeader>
-                <CardTitle>Recent Sales</CardTitle>
-                <CardDescription>
-                You made 265 sales this month.
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <RecentSales sales={recentSalesData} />
-            </CardContent>
-            </Card>
+            <div className="col-span-1 space-y-4">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Recent Sales</CardTitle>
+                        <CardDescription>
+                        You made 265 sales this month.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <RecentSales sales={recentSalesData} />
+                    </CardContent>
+                </Card>
+                <FlashSaleStatus />
+            </div>
         </div>
         <Card>
             <CardHeader className="flex flex-row items-center">
