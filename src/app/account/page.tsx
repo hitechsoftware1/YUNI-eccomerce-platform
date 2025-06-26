@@ -669,7 +669,34 @@ export default function AccountPage() {
                     </div>
                      <CardDescription>Manage your returns and track refund status.</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-6">
+                    <div className="space-y-4">
+                        <h3 className="font-semibold">Recent Returns</h3>
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between rounded-lg border p-3">
+                                <div>
+                                    <p className="font-medium text-sm">Order #ORD001</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Status: <Badge variant="secondary" className="bg-green-600 text-primary-foreground hover:bg-green-600/80">Refunded</Badge>
+                                    </p>
+                                </div>
+                                <Button variant="outline" size="sm" onClick={() => toast({ title: "Coming Soon!", description: "This feature will be available soon."})}>
+                                    View Details
+                                </Button>
+                            </div>
+                            <div className="flex items-center justify-between rounded-lg border p-3">
+                                <div>
+                                    <p className="font-medium text-sm">Order #ORD007</p>
+                                    <p className="text-xs text-muted-foreground">
+                                       Status: <Badge variant="secondary" className="bg-yellow-500 text-primary-foreground hover:bg-yellow-500/80">Processing</Badge>
+                                    </p>
+                                </div>
+                                <Button variant="outline" size="sm" onClick={() => toast({ title: "Coming Soon!", description: "This feature will be available soon."})}>
+                                    View Details
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
                      <div className="flex flex-col items-start gap-4 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <h3 className="font-semibold">Need to return an item?</h3>
