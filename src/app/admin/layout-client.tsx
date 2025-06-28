@@ -38,6 +38,7 @@ import {
   ShieldCheck,
   CreditCard,
   Palette,
+  LayoutList,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Toaster } from '@/components/ui/toaster';
@@ -177,6 +178,14 @@ export function AdminLayoutClient({
                         <Link href="/admin/promobanners">
                         <GalleryHorizontal />
                         Promo Banners
+                        </Link>
+                    </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/homepage')}>
+                        <Link href="/admin/homepage">
+                        <LayoutList />
+                        Homepage
                         </Link>
                     </SidebarMenuButton>
                     </SidebarMenuItem>

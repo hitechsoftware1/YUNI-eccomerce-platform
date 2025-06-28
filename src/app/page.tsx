@@ -11,33 +11,70 @@ import { BottomNav } from '@/components/layout/bottom-nav';
 import { PromoBanner } from '@/components/promo-banner';
 import { SecondaryPromoGrid } from '@/components/secondary-promo-grid';
 import { HelpButton } from '@/components/help-button';
-import { getNewArrivals, getTopSellingProducts, getGroceryProducts, getBeverageProducts } from '@/lib/products';
+import { getHomepageSections } from '@/lib/homepage-sections';
+import { getNewArrivals, getTopSellingProducts, getGroceryProducts, getBeverageProducts, allProducts } from '@/lib/products';
+import type { Product, HomepageSection } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
+const sectionComponentMap = {
+  HeroSlider: HeroSlider,
+  AnimatedBanner: AnimatedBanner,
+  CategoryGrid: CategoryGrid,
+  FlashSales: FlashSales,
+  PromoBanner: PromoBanner,
+  ProductSection: ProductSection,
+  LatestProducts: LatestProducts,
+  ExploreMore: ExploreMore,
+  SecondaryPromoGrid: SecondaryPromoGrid,
+};
+
+function getProductsForSection(section: HomepageSection): Product[] {
+  switch (section.productSource) {
+    case 'top-selling':
+      return getTopSellingProducts();
+    case 'new-arrivals':
+      return getNewArrivals();
+    case 'groceries':
+      return getGroceryProducts();
+    case 'beverages':
+      return getBeverageProducts();
+    case 'custom':
+      return section.productIds
+        ?.map(id => allProducts.find(p => p.id === id))
+        .filter((p): p is Product => Boolean(p)) || [];
+    default:
+      return [];
+  }
+}
+
 export default function Home() {
-  const topSellingProducts = getTopSellingProducts();
-  const newArrivals = getNewArrivals();
-  const groceryProducts = getGroceryProducts();
-  const beverageProducts = getBeverageProducts();
+  const sections = getHomepageSections().filter(s => s.enabled);
+
+  const topLevelSections = sections.filter(s => s.type === 'HeroSlider' || s.type === 'AnimatedBanner');
+  const containerSections = sections.filter(s => s.type !== 'HeroSlider' && s.type !== 'AnimatedBanner');
+
+  const renderSection = (section: HomepageSection) => {
+    const Component = sectionComponentMap[section.type];
+    if (!Component) return null;
+
+    if (section.type === 'ProductSection') {
+      const products = getProductsForSection(section);
+      if (products.length === 0 && section.productSource === 'custom') return null;
+      return <ProductSection key={section.id} title={section.title!} products={products} />;
+    }
+
+    return <Component key={section.id} />;
+  };
 
   return (
     <div className="bg-background text-foreground">
       <Header />
       <main className="pt-16 md:pt-20">
-        <HeroSlider />
-        <AnimatedBanner />
+        {topLevelSections.map(renderSection)}
+        
         <div className="container mx-auto space-y-10 px-2 py-6 sm:px-4 md:space-y-12 md:py-8 md:px-6">
-          <CategoryGrid />
-          <FlashSales />
-          <PromoBanner />
-          <ProductSection title="Top Selling Items" products={topSellingProducts} />
-          <ProductSection title="New Arrivals" products={newArrivals} />
-          <ProductSection title="Groceries" products={groceryProducts} />
-          <ProductSection title="Beverages" products={beverageProducts} />
-          <LatestProducts />
-          <ExploreMore />
-          <SecondaryPromoGrid />
+          {containerSections.map(renderSection)}
         </div>
       </main>
       <Footer />

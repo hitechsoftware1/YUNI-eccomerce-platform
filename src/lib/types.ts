@@ -1,4 +1,5 @@
 
+
 import type { LucideIcon } from 'lucide-react';
 
 export interface Product {
@@ -166,3 +167,27 @@ export interface Notification {
   read: boolean;
   href?: string;
 }
+
+export type SectionType = 
+  | 'HeroSlider' 
+  | 'AnimatedBanner' 
+  | 'CategoryGrid' 
+  | 'FlashSales' 
+  | 'PromoBanner' 
+  | 'ProductSection' 
+  | 'LatestProducts' 
+  | 'ExploreMore' 
+  | 'SecondaryPromoGrid';
+
+export interface HomepageSection {
+  id: string;
+  type: SectionType;
+  title: string; // Used as a display name in admin, and for product section titles
+  enabled: boolean;
+  order: number;
+  // A property to identify which specific product data to load for hardcoded sections
+  productSource?: 'top-selling' | 'new-arrivals' | 'groceries' | 'beverages';
+  // for custom sections in the future
+  productIds?: string[]; 
+}
+
