@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -49,7 +50,7 @@ export function BannersClient({ slides: initialSlides }: BannersClientProps) {
         description: `Banner "${slideToDelete.title}" has been successfully deleted.`,
       });
       setSlideToDelete(null);
-      router.refresh();
+      router.refresh(); // Fetches new props from the server
     } catch (error) {
       toast({
         title: 'Error',

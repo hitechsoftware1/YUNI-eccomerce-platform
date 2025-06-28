@@ -1,22 +1,10 @@
 import type { PromoCard } from './types';
+import { db } from './db';
 
-export let allPromoCards: PromoCard[] = [
-    { id: 'exp1', category: "electronics", title: "Explore Gadgets", imageUrl: "https://images.unsplash.com/photo-1593344473520-745a5857e1ab?q=80&w=2514&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", dataAiHint: "gadgets iphone", href: "/category/electronics" },
-    { id: 'exp2', category: "beauty", title: "Beauty Deals", imageUrl: "https://images.unsplash.com/photo-1580852300004-15942c754651?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", dataAiHint: "beauty product", href: "/category/beauty" },
-    { id: 'exp3', category: "mobiles", title: "Smartphone Ad", imageUrl: "https://images.unsplash.com/photo-1587426868910-c361a3842137?q=80&w=2535&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", dataAiHint: "smartphone ad", href: "/search?q=mobiles" },
-    { id: 'exp4', category: "groceries", title: "Visit Grocery", imageUrl: "https://images.unsplash.com/photo-1628102390447-e6f5f838724d?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", dataAiHint: "grocery juice", href: "/category/groceries" },
-    { id: 'exp5', category: "events", title: "Watch Event Promo", imageUrl: "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=2669&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", dataAiHint: "event promo", href: "/search?q=events" },
-    { id: 'exp6', category: "beverages", title: "Beverage Offers", imageUrl: "https://images.unsplash.com/photo-1543253687-c931c8e01820?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", dataAiHint: "beverages juice", href: "/category/beverages" },
-    { id: 'exp7', category: "fashion", title: "Fashion Spotlight", imageUrl: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", dataAiHint: "fashion models", href: "/category/fashion" },
-    { id: 'exp8', category: "new-arrivals", title: "New Arrivals Ad", imageUrl: "https://images.unsplash.com/photo-1523381294911-8d3cead13475?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", dataAiHint: "new arrival", href: "/search?q=new arrivals" },
-    { id: 'exp9', category: "tools", title: "Tech & Tools", imageUrl: "https://images.unsplash.com/photo-1618389041498-c0b784a0d8f8?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", dataAiHint: "tech tools", href: "/search?q=tools" },
-    { id: 'exp10', category: "deals", title: "Deals of the Day", imageUrl: "https://images.unsplash.com/photo-1560250056-07ba64664864?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", dataAiHint: "office chair", href: "/search?q=deals" },
-    { id: 'exp11', category: "showcase", title: "Promo Showcase", imageUrl: "https://images.unsplash.com/photo-1522204523234-8729aa6e3d5f?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", dataAiHint: "promo showcase", href: "/search?q=showcase" },
-    { id: 'exp12', category: "home-office", title: "Office Furniture", imageUrl: "https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", dataAiHint: "office furniture", href: "/category/home-office" },
-    { id: 'exp13', category: "branding", title: "Branding Ad", imageUrl: "https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2671&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", dataAiHint: "branding ad", href: "/search?q=branding" },
-    { id: 'exp14', category: "services", title: "Services", imageUrl: "https://images.unsplash.com/photo-1576092762791-5c0df886071a?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", dataAiHint: "delivery service", href: "/search?q=services" },
-];
+export function getAllPromoCards(): PromoCard[] {
+    return db.promoCards;
+}
 
 export function getPromoCardById(id: string): PromoCard | undefined {
-    return allPromoCards.find((card) => card.id === id);
+    return db.promoCards.find((card) => card.id === id);
 }

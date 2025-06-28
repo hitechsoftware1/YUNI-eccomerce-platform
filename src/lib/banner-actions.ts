@@ -1,7 +1,8 @@
+
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { allHeroSlides } from './banners';
+import { db } from './db';
 import type { HeroSlide } from '@/lib/types';
 import type { BannerFormValues } from '@/app/admin/banners/components/banner-form';
 import { addAdminNotification } from './notification-actions';
@@ -13,7 +14,7 @@ export async function addHeroSlide(bannerData: BannerFormValues) {
     imageUrl: bannerData.imageUrl || 'https://placehold.co/1600x600.png',
     dataAiHint: bannerData.dataAiHint || bannerData.title.toLowerCase().split(' ').slice(0, 2).join(' '),
   };
-  allHeroSlides.unshift(newSlide);
+  db.heroSlides.unshift(newSlide);
 
   await addAdminNotification({
     title: 'New Hero Banner',
@@ -28,12 +29,12 @@ export async function addHeroSlide(bannerData: BannerFormValues) {
 }
 
 export async function updateHeroSlide(id: string, bannerData: BannerFormValues): Promise<HeroSlide | undefined> {
-    const slideIndex = allHeroSlides.findIndex((p) => p.id === id);
+    const slideIndex = db.heroSlides.findIndex((p) => p.id === id);
     if (slideIndex === -1) {
         return undefined;
     }
 
-    const existingSlide = allHeroSlides[slideIndex];
+    const existingSlide = db.heroSlides[slideIndex];
     const updatedSlide: HeroSlide = {
         ...existingSlide,
         ...bannerData,
@@ -41,7 +42,7 @@ export async function updateHeroSlide(id: string, bannerData: BannerFormValues):
         dataAiHint: bannerData.dataAiHint || bannerData.title.toLowerCase().split(' ').slice(0, 2).join(' '),
     };
 
-    allHeroSlides[slideIndex] = updatedSlide;
+    db.heroSlides[slideIndex] = updatedSlide;
 
     await addAdminNotification({
       title: 'Hero Banner Updated',
@@ -56,11 +57,11 @@ export async function updateHeroSlide(id: string, bannerData: BannerFormValues):
 }
 
 export async function deleteHeroSlide(id: string): Promise<void> {
-    const slideIndex = allHeroSlides.findIndex((p) => p.id === id);
+    const slideIndex = db.heroSlides.findIndex((p) => p.id === id);
     if (slideIndex === -1) return;
     
-    const deletedSlide = allHeroSlides[slideIndex];
-    allHeroSlides.splice(slideIndex, 1);
+    const deletedSlide = db.heroSlides[slideIndex];
+    db.heroSlides.splice(slideIndex, 1);
 
     await addAdminNotification({
       title: 'Hero Banner Deleted',

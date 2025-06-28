@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Sparkles } from "lucide-react";
 import type { PromoCard } from "@/lib/types";
-import { allPromoCards } from "@/lib/promo-cards";
+import { getAllPromoCards } from "@/lib/promo-cards";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const PromoCardItem = ({ promo }: { promo: PromoCard }) => (
@@ -50,8 +50,7 @@ export function ExploreMore() {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-      // In a real app, this would be an API call.
-      // We simulate it with the imported data.
+      const allPromoCards = getAllPromoCards();
       setPromos(allPromoCards);
       
       const uniqueCategories = ["all", ...new Set(allPromoCards.map(p => p.category))];

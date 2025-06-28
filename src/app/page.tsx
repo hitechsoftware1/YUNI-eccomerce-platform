@@ -12,7 +12,7 @@ import { PromoBanner } from '@/components/promo-banner';
 import { SecondaryPromoGrid } from '@/components/secondary-promo-grid';
 import { HelpButton } from '@/components/help-button';
 import { getHomepageSections } from '@/lib/homepage-sections';
-import { getNewArrivals, getTopSellingProducts, getGroceryProducts, getBeverageProducts, allProducts } from '@/lib/products';
+import { getAllProducts, getNewArrivals, getTopSellingProducts, getGroceryProducts, getBeverageProducts } from '@/lib/products';
 import type { Product, HomepageSection } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
@@ -30,6 +30,7 @@ const sectionComponentMap = {
 };
 
 function getProductsForSection(section: HomepageSection): Product[] {
+  const allProducts = getAllProducts();
   switch (section.productSource) {
     case 'top-selling':
       return getTopSellingProducts();

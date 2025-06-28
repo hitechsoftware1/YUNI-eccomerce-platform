@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { useSearchParams } from 'next/navigation';
-import { allProducts } from '@/lib/products';
+import { getAllProducts } from '@/lib/products';
 import type { Product } from '@/lib/types';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
@@ -18,6 +18,7 @@ export default function SearchPage() {
   React.useEffect(() => {
     if (query) {
       const lowerCaseQuery = query.toLowerCase();
+      const allProducts = getAllProducts();
       const results = allProducts.filter(
         (product) =>
           product.name.toLowerCase().includes(lowerCaseQuery) ||

@@ -2,16 +2,16 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { allUsers } from './users';
+import { db } from './db';
 import type { ManagedUser } from './types';
 import { addAdminNotification } from './notification-actions';
 
 export async function updateUserRole(userId: string, role: ManagedUser['role']) {
-  const userIndex = allUsers.findIndex((u) => u.id === userId);
+  const userIndex = db.users.findIndex((u) => u.id === userId);
   if (userIndex === -1) {
     throw new Error('User not found');
   }
-  const user = allUsers[userIndex];
+  const user = db.users[userIndex];
   user.role = role;
   
   await addAdminNotification({
@@ -25,11 +25,11 @@ export async function updateUserRole(userId: string, role: ManagedUser['role']) 
 }
 
 export async function updateUserStatus(userId: string, status: ManagedUser['status']) {
-  const userIndex = allUsers.findIndex((u) => u.id === userId);
+  const userIndex = db.users.findIndex((u) => u.id === userId);
   if (userIndex === -1) {
     throw new Error('User not found');
   }
-  const user = allUsers[userIndex];
+  const user = db.users[userIndex];
   user.status = status;
 
   await addAdminNotification({

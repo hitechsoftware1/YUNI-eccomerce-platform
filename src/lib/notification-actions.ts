@@ -1,10 +1,9 @@
+
 'use server';
 
 import { revalidatePath } from 'next/cache';
 import type { Notification } from './types';
-
-// This file simulates a "database" for notifications
-let allNotifications: Notification[] = [];
+import { db } from './db';
 
 // This is a helper function used by other server actions, not an action itself.
 export async function addAdminNotification(notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) {
@@ -14,19 +13,19 @@ export async function addAdminNotification(notification: Omit<Notification, 'id'
         timestamp: new Date().toISOString(),
         read: false,
     };
-    allNotifications.unshift(newNotification);
-    if (allNotifications.length > 30) {
-        allNotifications = allNotifications.slice(0, 30);
+    db.allNotifications.unshift(newNotification);
+    if (db.allNotifications.length > 30) {
+        db.allNotifications = db.allNotifications.slice(0, 30);
     }
     // Revalidate the layout path to trigger a refetch of notifications on the client
     revalidatePath('/admin', 'layout');
 }
 
 export async function getNotificationsAction(): Promise<Notification[]> {
-  return allNotifications;
+  return db.allNotifications;
 }
 
 export async function markAllAsReadAction(): Promise<void> {
-  allNotifications.forEach(n => { n.read = true; });
+  db.allNotifications.forEach(n => { n.read = true; });
   revalidatePath('/admin', 'layout');
 }

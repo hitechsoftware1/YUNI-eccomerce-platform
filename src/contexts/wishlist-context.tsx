@@ -4,7 +4,7 @@
 import * as React from 'react';
 import type { Product } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
-import { allProducts } from '@/lib/products';
+import { getAllProducts } from '@/lib/products';
 import { useAuth } from '@/contexts/auth-context';
 import { 
     getWishlistItems, 
@@ -68,6 +68,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
   };
   
   const wishlistItems = React.useMemo(() => {
+      const allProducts = getAllProducts();
       return wishlistProductIds.map(id => allProducts.find(p => p.id === id)).filter((p): p is Product => Boolean(p));
   }, [wishlistProductIds]);
 

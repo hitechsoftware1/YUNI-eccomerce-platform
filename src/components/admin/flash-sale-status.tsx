@@ -5,7 +5,7 @@ import * as React from 'react';
 import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCountdown } from '@/hooks/use-countdown';
-import { flashSaleProducts } from '@/lib/flash-sales-data';
+import { getFlashSaleProducts } from '@/lib/flash-sales-data';
 import { Zap } from 'lucide-react';
 
 const CountdownTimer = ({ targetDate }: { targetDate: number }) => {
@@ -26,6 +26,7 @@ const CountdownTimer = ({ targetDate }: { targetDate: number }) => {
 
 export function FlashSaleStatus() {
   const [targetDate, setTargetDate] = React.useState(0);
+  const flashSaleProducts = getFlashSaleProducts();
 
   React.useEffect(() => {
     // Set a future date for the countdown timer when the component mounts

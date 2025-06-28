@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { ProductCard } from "./product-card";
 import { useCountdown } from "@/hooks/use-countdown";
-import { flashSaleProducts } from "@/lib/flash-sales-data";
+import { getFlashSaleProducts } from "@/lib/flash-sales-data";
 
 const CountdownTimer = ({ targetDate }: { targetDate: number }) => {
   const { hours, minutes, seconds } = useCountdown(targetDate);
@@ -25,6 +25,7 @@ const CountdownTimer = ({ targetDate }: { targetDate: number }) => {
 
 export function FlashSales() {
   const threeHoursFromNow = new Date().getTime() + 3 * 60 * 60 * 1000;
+  const flashSaleProducts = getFlashSaleProducts();
 
   return (
     <section className="bg-red-50 rounded-lg p-4 md:p-6">

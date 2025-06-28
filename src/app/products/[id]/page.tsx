@@ -2,7 +2,7 @@
 'use client';
 
 import * as React from 'react';
-import { getProductById, allProducts } from '@/lib/products';
+import { getProductById, getAllProducts } from '@/lib/products';
 import { notFound, useParams } from 'next/navigation';
 import Image from 'next/image';
 import { Header } from '@/components/layout/header';
@@ -59,6 +59,7 @@ export default function ProductDetailPage() {
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
 
+  const allProducts = getAllProducts();
   const sameCategoryProducts = allProducts.filter(
     (p) => p.category === product.category && p.id !== product.id
   );

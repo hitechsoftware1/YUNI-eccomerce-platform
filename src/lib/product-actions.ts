@@ -2,7 +2,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { allProducts } from './products';
+import { db } from './db';
 import type { Product } from '@/lib/types';
 import type { ProductFormValues } from '@/app/admin/products/components/product-form';
 import { addAdminNotification } from './notification-actions';
@@ -19,7 +19,7 @@ export async function addProduct(productData: ProductFormValues) {
     reviewCount: 0,
     isNew: true,
   };
-  allProducts.unshift(newProduct);
+  db.products.unshift(newProduct);
   
   await addAdminNotification({
     title: 'New Product Added',
@@ -35,12 +35,12 @@ export async function addProduct(productData: ProductFormValues) {
 }
 
 export async function updateProduct(id: string, productData: ProductFormValues): Promise<Product | undefined> {
-    const productIndex = allProducts.findIndex((p) => p.id === id);
+    const productIndex = db.products.findIndex((p) => p.id === id);
     if (productIndex === -1) {
         return undefined;
     }
 
-    const existingProduct = allProducts[productIndex];
+    const existingProduct = db.products[productIndex];
     const updatedProduct: Product = {
         ...existingProduct,
         ...productData,
@@ -49,7 +49,7 @@ export async function updateProduct(id: string, productData: ProductFormValues):
         dataAiHint: productData.dataAiHint || productData.name.toLowerCase().split(' ').slice(0, 2).join(' '),
     };
 
-    allProducts[productIndex] = updatedProduct;
+    db.products[productIndex] = updatedProduct;
     
     await addAdminNotification({
         title: 'Product Updated',
@@ -69,12 +69,12 @@ export async function updateProduct(id: string, productData: ProductFormValues):
 }
 
 export async function deleteProduct(id: string): Promise<void> {
-    const productIndex = allProducts.findIndex((p) => p.id === id);
+    const productIndex = db.products.findIndex((p) => p.id === id);
     if (productIndex === -1) return;
     
-    const productToDelete = allProducts[productIndex];
+    const productToDelete = db.products[productIndex];
     
-    allProducts.splice(productIndex, 1);
+    db.products.splice(productIndex, 1);
 
     await addAdminNotification({
         title: 'Product Deleted',

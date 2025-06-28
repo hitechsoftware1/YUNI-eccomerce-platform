@@ -1,5 +1,5 @@
 import type { Product } from '@/lib/types';
-import { allProducts } from './products';
+import { getAllProducts } from './products';
 
 // Define which products are part of the flash sale by their ID
 const flashSaleProductIds: string[] = [
@@ -12,6 +12,9 @@ const flashSaleProductIds: string[] = [
 ];
 
 // Fetch the full product details for the flash sale items
-export const flashSaleProducts: Product[] = flashSaleProductIds
-  .map(id => allProducts.find(p => p.id === id))
-  .filter((p): p is Product => Boolean(p));
+export const getFlashSaleProducts = (): Product[] => {
+    const allProducts = getAllProducts();
+    return flashSaleProductIds
+        .map(id => allProducts.find(p => p.id === id))
+        .filter((p): p is Product => Boolean(p));
+}

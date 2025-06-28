@@ -1,23 +1,21 @@
 
 'use server';
 
-import { allUsers } from './users';
-import { allProducts } from './products';
-import { allUserOrders } from './user-orders';
+import { db } from './db';
 import type { SellerPerformance } from './types';
 
 export async function getSellerPerformanceData(): Promise<SellerPerformance[]> {
-    const sellers = allUsers.filter(u => u.role === 'Seller');
+    const sellers = db.users.filter(u => u.role === 'Seller');
 
     return sellers.map(seller => {
-        const sellerProducts = allProducts.filter(p => p.sellerName === seller.name);
+        const sellerProducts = db.products.filter(p => p.sellerName === seller.name);
         
         const productCount = sellerProducts.length;
 
         let totalRevenue = 0;
         const sellerOrderIds = new Set<string>();
 
-        for (const order of allUserOrders) {
+        for (const order of db.userOrders) {
             if (!order.items) continue;
             for (const item of order.items) {
                 if (item.sellerName === seller.name) {

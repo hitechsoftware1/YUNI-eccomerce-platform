@@ -2,9 +2,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
-import { allSecondaryPromos } from '@/lib/secondary-promo-data';
+import { getAllSecondaryPromos } from '@/lib/secondary-promo-data';
 
 export function SecondaryPromoGrid() {
+  const allSecondaryPromos = getAllSecondaryPromos();
   const topPromos = allSecondaryPromos.filter((p) => p.aspectRatio === '2/1');
   const bottomPromo = allSecondaryPromos.find((p) => p.aspectRatio === '4/1');
 

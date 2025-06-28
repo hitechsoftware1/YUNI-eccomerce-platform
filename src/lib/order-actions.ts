@@ -2,7 +2,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { allUserOrders } from './user-orders';
+import { db } from './db';
 import type { Order } from '@/lib/types';
 import { addAdminNotification } from './notification-actions';
 
@@ -10,13 +10,13 @@ export async function updateOrderStatus(
   orderId: string,
   status: Order['status']
 ): Promise<Order | { error: string }> {
-  const orderIndex = allUserOrders.findIndex((o) => o.id === orderId);
+  const orderIndex = db.userOrders.findIndex((o) => o.id === orderId);
 
   if (orderIndex === -1) {
     return { error: 'Order not found' };
   }
 
-  allUserOrders[orderIndex].status = status;
+  db.userOrders[orderIndex].status = status;
   
   await addAdminNotification({
     title: 'Order Status Updated',
@@ -30,5 +30,5 @@ export async function updateOrderStatus(
   revalidatePath('/account'); // User's order history
   revalidatePath(`/account/orders/${orderId}`); // User's order detail
 
-  return allUserOrders[orderIndex];
+  return db.userOrders[orderIndex];
 }

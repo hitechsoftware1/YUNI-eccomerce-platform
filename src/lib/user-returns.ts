@@ -1,9 +1,9 @@
 
 import type { UserReturn } from './types';
-import { allUserOrders } from './user-orders';
+import { db } from './db';
 
-const returnedOrder1 = allUserOrders.find(o => o.id === 'ORD001');
-const returnedOrder7 = allUserOrders.find(o => o.id === 'ORD007');
+const returnedOrder1 = db.userOrders.find(o => o.id === 'ORD001');
+const returnedOrder7 = db.userOrders.find(o => o.id === 'ORD007');
 
 let allUserReturns: UserReturn[] = [
     {
@@ -29,7 +29,7 @@ export function getReturnsForUser(email: string | null | undefined): UserReturn[
         return [];
     }
     // For this mock, we'll return returns for orders that belong to the user.
-    const userOrders = allUserOrders.filter(o => o.customer.email === email);
+    const userOrders = db.userOrders.filter(o => o.customer.email === email);
     const userOrderIds = userOrders.map(o => o.id);
     return allUserReturns.filter(r => userOrderIds.includes(r.orderId));
 }

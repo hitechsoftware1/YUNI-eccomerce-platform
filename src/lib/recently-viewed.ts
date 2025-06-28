@@ -1,12 +1,13 @@
 
 import type { Product } from './types';
-import { allProducts } from './products';
+import { getAllProducts } from './products';
 
 // This file simulates a cloud database for recently viewed items.
 // In a real app, this would be a user-specific collection in a database.
 let recentlyViewedIds: string[] = [];
 
 export function getRecentlyViewedItems(): Product[] {
+  const allProducts = getAllProducts();
   return recentlyViewedIds
     .map(id => allProducts.find(p => p.id === id))
     .filter((p): p is Product => Boolean(p));

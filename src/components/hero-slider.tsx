@@ -6,11 +6,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { allHeroSlides } from "@/lib/banners";
+import { getHeroSlides } from "@/lib/banners";
 
 export function HeroSlider() {
   const [currentSlide, setCurrentSlide] = React.useState(0);
-  const slides = allHeroSlides;
+  const slides = getHeroSlides();
 
   const nextSlide = React.useCallback(() => {
     setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
