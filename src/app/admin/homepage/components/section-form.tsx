@@ -33,7 +33,7 @@ interface SectionFormProps {
 }
 
 const allSectionTypes: SectionType[] = [
-  'HeroSlider', 'AnimatedBanner', 'CategoryGrid', 'FlashSales', 'PromoBanner', 
+  'HeroSlider', 'AnimatedBanner', 'CategoryGrid', 'CuratedForYou', 'FlashSales', 'PromoBanner', 
   'ProductSection', 'LatestProducts', 'ExploreMore', 'SecondaryPromoGrid'
 ];
 const allProductSources = ['top-selling', 'new-arrivals', 'groceries', 'beverages'];

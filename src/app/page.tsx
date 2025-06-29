@@ -7,13 +7,13 @@ import { ProductSection } from '@/components/product-section';
 import { LatestProducts } from '@/components/latest-products';
 import { ExploreMore } from '@/components/promo-grid';
 import { Footer } from '@/components/layout/footer';
-import { BottomNav } from '@/components/layout/bottom-nav';
 import { PromoBanner } from '@/components/promo-banner';
 import { SecondaryPromoGrid } from '@/components/secondary-promo-grid';
 import { HelpButton } from '@/components/help-button';
 import { getHomepageSections } from '@/lib/homepage-sections';
 import { getAllProducts, getNewArrivals, getTopSellingProducts, getGroceryProducts, getBeverageProducts } from '@/lib/products';
 import type { Product, HomepageSection } from '@/lib/types';
+import { CuratedForYou } from '@/components/curated-for-you';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,6 +21,7 @@ const sectionComponentMap = {
   HeroSlider: HeroSlider,
   AnimatedBanner: AnimatedBanner,
   CategoryGrid: CategoryGrid,
+  CuratedForYou: CuratedForYou,
   FlashSales: FlashSales,
   PromoBanner: PromoBanner,
   ProductSection: ProductSection,
@@ -79,7 +80,6 @@ export default function Home() {
         </div>
       </main>
       <Footer />
-      <BottomNav />
       <HelpButton />
     </div>
   );

@@ -173,6 +173,7 @@ export type SectionType =
   | 'HeroSlider' 
   | 'AnimatedBanner' 
   | 'CategoryGrid' 
+  | 'CuratedForYou'
   | 'FlashSales' 
   | 'PromoBanner' 
   | 'ProductSection' 
@@ -192,3 +193,10 @@ export interface HomepageSection {
   productIds?: string[]; 
 }
 
+export interface CuratedItem {
+  id: string;
+  title: string;
+  imageUrl: string;
+  dataAiHint: string;
+  link: string;
+}
