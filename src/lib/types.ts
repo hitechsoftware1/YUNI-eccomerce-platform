@@ -16,6 +16,7 @@ export interface Product {
   category: string;
   status: 'In Stock' | 'Out of Stock' | 'Archived';
   sellerName: string;
+  stock?: number;
 }
 
 export interface Category {

@@ -10,6 +10,7 @@ import { useWishlist } from "@/contexts/wishlist-context";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import * as React from 'react';
+import { Progress } from "./ui/progress";
 
 
 interface ProductCardProps {
@@ -47,6 +48,8 @@ export function ProductCard({ product }: ProductCardProps) {
           addToWishlist(product.id);
       }
   };
+
+  const stockProgress = product.stock ? Math.min((product.stock / 30) * 100, 100) : 0;
 
   return (
     <Card className="h-full w-full overflow-hidden transition-all duration-300 hover:shadow-lg group">
@@ -96,14 +99,22 @@ export function ProductCard({ product }: ProductCardProps) {
                 {product.reviewCount && <span className="text-xs text-muted-foreground">({product.reviewCount})</span>}
               </div>
             </div>
-            <div className="mt-2">
-              <p className="text-lg font-bold text-primary">
-                UGX {product.price.toLocaleString()}
-              </p>
-              {product.originalPrice && (
-                <p className="text-sm text-muted-foreground line-through">
-                  UGX {product.originalPrice.toLocaleString()}
-                </p>
+            <div className="mt-2 space-y-2">
+              <div>
+                  <p className="text-lg font-bold text-primary">
+                      UGX {product.price.toLocaleString()}
+                  </p>
+                  {product.originalPrice && (
+                      <p className="text-sm text-muted-foreground line-through">
+                      UGX {product.originalPrice.toLocaleString()}
+                      </p>
+                  )}
+              </div>
+              {product.stock && product.stock > 0 && (
+                <div>
+                    <p className="text-xs text-muted-foreground mb-1">{product.stock} items left</p>
+                    <Progress value={stockProgress} className="h-1.5" />
+                </div>
               )}
             </div>
           </div>
