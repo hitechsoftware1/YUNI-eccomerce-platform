@@ -12,6 +12,10 @@ import {
   ShoppingBag,
   X,
   LayoutDashboard,
+  Heart,
+  LayoutGrid,
+  Package,
+  Store,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -21,6 +25,8 @@ import { AuthModal } from "@/components/auth-modal";
 import { useCart } from "@/contexts/cart-context";
 import { useAuth } from "@/contexts/auth-context";
 import { Badge } from "@/components/ui/badge";
+import { isAdmin } from "@/lib/admins";
+import { Separator } from "@/components/ui/separator";
 
 export function Header() {
   const [isAuthModalOpen, setIsAuthModalOpen] = React.useState(false);
@@ -29,6 +35,7 @@ export function Header() {
   const { itemCount } = useCart();
   const { currentUser } = useAuth();
   const router = useRouter();
+  const isUserAdmin = isAdmin(currentUser?.email);
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
@@ -78,26 +85,18 @@ export function Header() {
 
     if (currentUser) {
       return (
-        <Button
-          asChild
-          variant="ghost"
-          className="flex items-center justify-start gap-2"
-        >
-          <Link href="/account" onClick={handleClick}>
-            <LayoutDashboard className="h-5 w-5" />
-            Account
+        <Button asChild variant="ghost" className="justify-start">
+          <Link href="/account" onClick={handleClick} className="w-full">
+            <LayoutDashboard className="mr-2 h-5 w-5" />
+            My Account
           </Link>
         </Button>
       );
     }
     return (
-      <Button
-        variant="ghost"
-        onClick={handleClick}
-        className="flex items-center justify-start gap-2"
-      >
-        <User className="h-5 w-5" />
-        Account
+      <Button variant="ghost" onClick={handleClick} className="justify-start w-full">
+        <User className="mr-2 h-5 w-5" />
+        Login / Register
       </Button>
     );
   };
@@ -156,29 +155,71 @@ export function Header() {
               </SheetTrigger>
               <SheetContent side="left">
                 {( {close} ) => (
-                    <div className="flex flex-col gap-6 p-6">
-                    <Link
-                        href="/"
-                        className="flex items-center gap-2 text-lg font-bold"
-                        onClick={close}
-                    >
-                        <ShoppingBag className="h-6 w-6 text-primary" />
-                        <span className="text-xl font-bold font-headline text-primary">
-                        YUNI
-                        </span>
-                    </Link>
-                    <nav className="flex flex-col gap-4 mt-8">
+                    <div className="flex flex-col p-4">
+                      <Link
+                          href="/"
+                          className="mb-4 flex items-center gap-2 text-lg font-bold"
+                          onClick={close}
+                      >
+                          <ShoppingBag className="h-6 w-6 text-primary" />
+                          <span className="text-xl font-bold font-headline text-primary">
+                          YUNI
+                          </span>
+                      </Link>
+                      <nav className="flex flex-col gap-1">
                         <MobileAccountButton closeSheet={close} />
-                        <Button asChild variant="ghost" className="flex items-center justify-start gap-2 relative">
-                        <Link href="/cart" onClick={close}>
-                            <ShoppingCart className="h-5 w-5" />
-                            Cart
-                            {itemCount > 0 && (
-                                <Badge variant="destructive" className="absolute top-0 left-8 h-5 w-5 flex items-center justify-center p-0">{itemCount}</Badge>
-                            )}
-                        </Link>
+                        
+                        {currentUser && (
+                          <Button asChild variant="ghost" className="justify-start">
+                              <Link href="/account#order-history" onClick={close}>
+                                  <Package className="mr-2 h-5 w-5" />
+                                  My Orders
+                              </Link>
+                          </Button>
+                        )}
+
+                        <Button asChild variant="ghost" className="justify-start">
+                          <Link href="/wishlist" onClick={close}>
+                            <Heart className="mr-2 h-5 w-5" />
+                            Wishlist
+                          </Link>
                         </Button>
-                    </nav>
+                        
+                        <Button asChild variant="ghost" className="justify-start">
+                          <Link href="/#categories" onClick={close}>
+                            <LayoutGrid className="mr-2 h-5 w-5" />
+                            Categories
+                          </Link>
+                        </Button>
+                        
+                        <Button asChild variant="ghost" className="justify-start relative">
+                            <Link href="/cart" onClick={close}>
+                                <ShoppingCart className="mr-2 h-5 w-5" />
+                                Cart
+                                {itemCount > 0 && (
+                                    <Badge variant="destructive" className="ml-auto">{itemCount}</Badge>
+                                )}
+                            </Link>
+                        </Button>
+
+                        <Separator className="my-2" />
+
+                        <Button asChild variant="ghost" className="justify-start">
+                          <Link href="/become-a-seller" onClick={close}>
+                            <Store className="mr-2 h-5 w-5" />
+                            Become a Seller
+                          </Link>
+                        </Button>
+
+                        {isUserAdmin && (
+                           <Button asChild variant="ghost" className="justify-start">
+                              <Link href="/admin/dashboard" onClick={close}>
+                                  <LayoutDashboard className="mr-2 h-5 w-5" />
+                                  Admin Dashboard
+                              </Link>
+                          </Button>
+                        )}
+                      </nav>
                     </div>
                 )}
               </SheetContent>
