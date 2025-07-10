@@ -28,6 +28,8 @@ import {
 } from "@/components/ui/table";
 import { Building, Mail, Phone, User } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminOrderDetailPage({ params }: { params: { id: string } }) {
   const order = getOrderById(params.id);
 

@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { notFound } from 'next/navigation';
 import type { PromoCard } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 export default function EditPromoCardPage({ params }: { params: { id: string } }) {
   const card: PromoCard | undefined = getPromoCardById(params.id);
 

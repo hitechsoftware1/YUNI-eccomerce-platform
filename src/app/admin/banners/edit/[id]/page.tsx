@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { notFound } from 'next/navigation';
 import type { HeroSlide } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 export default function EditBannerPage({ params }: { params: { id: string } }) {
     const slide: HeroSlide | undefined = getHeroSlideById(params.id);
 

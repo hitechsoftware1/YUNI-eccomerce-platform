@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { notFound } from 'next/navigation';
 import type { SecondaryPromoGridItem } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 export default function EditPromoBannerPage({ params }: { params: { id: string } }) {
   const promo: SecondaryPromoGridItem | undefined = getSecondaryPromoById(params.id);
 

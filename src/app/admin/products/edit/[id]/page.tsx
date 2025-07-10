@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { notFound } from 'next/navigation';
 import type { Product } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 export default function EditProductPage({ params }: { params: { id: string } }) {
   const product: Product | undefined = getProductById(params.id);
 

@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { notFound } from 'next/navigation';
 import type { HomepageSection } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 export default function EditHomepageSectionPage({ params }: { params: { id: string } }) {
   const section: HomepageSection | undefined = getHomepageSectionById(params.id);
 
