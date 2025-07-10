@@ -9,3 +9,10 @@ export function getUsers(): ManagedUser[] {
 export function getUserById(id: string): ManagedUser | undefined {
     return db.users.find(user => user.id === id);
 }
+
+export function addUser(user: ManagedUser): void {
+  const existingUser = db.users.find(u => u.id === user.id);
+  if (!existingUser) {
+    db.users.push(user);
+  }
+}

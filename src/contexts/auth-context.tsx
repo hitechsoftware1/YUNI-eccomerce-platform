@@ -19,6 +19,7 @@ import { z } from 'zod';
 import { addLoginActivity } from '@/lib/login-activity';
 import { clearCart } from '@/lib/user-cart';
 import { clearWishlist } from '@/lib/user-wishlist';
+import { getUserById, addUser } from '@/lib/users';
 
 // Define and export schemas for reuse
 export const loginSchema = z.object({
@@ -60,6 +61,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
+      if (user) {
+        // This is a mock: check if user exists in our DB, if not, add them.
+        if (!getUserById(user.uid)) {
+          addUser({
+            id: user.uid,
+            name: user.displayName || 'New User',
+            email: user.email || '',
+            role: 'Buyer',
+            status: 'Active',
+            lastLogin: new Date().toISOString(),
+          });
+        }
+      }
       setLoading(false);
     });
     return unsubscribe;
@@ -87,12 +101,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signUp = async ({ name, email, password }: RegisterInput) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-       if (userCredential.user) {
-        await updateProfile(userCredential.user, {
+      const user = userCredential.user;
+       if (user) {
+        await updateProfile(user, {
           displayName: name,
         });
-        // This is to ensure the profile update is reflected immediately
-        await auth.currentUser?.reload();
+
+        addUser({
+          id: user.uid,
+          name: name,
+          email: email,
+          role: 'Buyer',
+          status: 'Active',
+          lastLogin: new Date().toISOString(),
+        });
+        
+        await user.reload();
         if (auth.currentUser) {
             setCurrentUser(Object.assign(Object.create(Object.getPrototypeOf(auth.currentUser)), auth.currentUser));
         }
@@ -117,6 +141,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
+      // The onAuthStateChanged listener will handle adding the user to our DB
       addLoginActivity();
       toast({
         title: 'Login Successful',

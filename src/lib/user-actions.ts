@@ -41,3 +41,28 @@ export async function updateUserStatus(userId: string, status: ManagedUser['stat
   revalidatePath('/admin/users');
   return user;
 }
+
+
+export async function applyToBeSeller(userId: string) {
+    const userIndex = db.users.findIndex((u) => u.id === userId);
+    if (userIndex === -1) {
+        throw new Error('User not found');
+    }
+    const user = db.users[userIndex];
+    if (user.role === 'Seller' || user.status === 'Pending Approval') {
+        throw new Error('You have already applied or are already a seller.');
+    }
+
+    user.status = 'Pending Approval';
+    user.role = 'Seller'; // Set role to seller, but status keeps them restricted
+
+    await addAdminNotification({
+        title: 'New Seller Application',
+        description: `${user.name} has applied to become a seller.`,
+        href: '/admin/users'
+    });
+
+    revalidatePath('/admin/users');
+    revalidatePath('/become-a-seller');
+    return user;
+}
