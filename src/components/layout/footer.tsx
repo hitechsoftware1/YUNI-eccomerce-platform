@@ -84,6 +84,13 @@ export function Footer() {
         </div>
         <div className="mt-8 border-t border-border pt-8 text-center text-sm text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} YUNI. All rights reserved.</p>
+          <div className="mt-4">
+            <p>Designed by hìtechsoftwarecompany</p>
+            <a href="https://wa.me/256708281146" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-primary transition-colors">
+              <WhatsappIcon className="h-4 w-4" />
+              <span>+256 708 281146</span>
+            </a>
+          </div>
         </div>
       </div>
     </footer>
