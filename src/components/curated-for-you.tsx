@@ -2,22 +2,25 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getCuratedForYouItems } from '@/lib/curated-for-you-data';
 import type { CuratedItem } from '@/lib/types';
+import { Card } from './ui/card';
 
 const CuratedCard = ({ item }: { item: CuratedItem }) => (
   <Link href={item.link} className="block group">
-    <div className="bg-rose-50 dark:bg-rose-900/20 rounded-2xl p-4 flex flex-col items-center text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-full">
-      <div className="relative h-24 w-24 sm:h-32 sm:w-32 flex-grow">
+    <Card className="overflow-hidden h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+      <div className="relative aspect-[3/4] w-full">
         <Image
           src={item.imageUrl}
           alt={item.title}
-          width={150}
-          height={150}
-          className="object-contain transition-transform duration-300 group-hover:scale-105"
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
           data-ai-hint={item.dataAiHint}
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 p-3">
+            <h3 className="font-semibold text-white text-base drop-shadow-md">{item.title}</h3>
+        </div>
       </div>
-      <h3 className="mt-2 text-sm font-semibold text-foreground">{item.title}</h3>
-    </div>
+    </Card>
   </Link>
 );
 
