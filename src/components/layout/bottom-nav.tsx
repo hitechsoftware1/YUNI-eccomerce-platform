@@ -57,11 +57,14 @@ export function BottomNav() {
             </Link>
           </Button>
           <Button
+            asChild
             variant="ghost"
             className="inline-flex flex-col items-center justify-center text-muted-foreground hover:bg-accent hover:text-accent-foreground"
           >
-            <LayoutGrid className="h-6 w-6 mb-1" />
-            <span className="text-xs font-medium">Categories</span>
+            <Link href="/#categories">
+              <LayoutGrid className="h-6 w-6 mb-1" />
+              <span className="text-xs font-medium">Categories</span>
+            </Link>
           </Button>
           <Button
             asChild

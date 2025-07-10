@@ -65,6 +65,15 @@ export default function Home() {
       if (products.length === 0 && section.productSource === 'custom') return null;
       return <ProductSection key={section.id} title={section.title!} products={products} />;
     }
+    
+    // Add a wrapper with an ID for the CategoryGrid section for anchor linking
+    if (section.type === 'CategoryGrid') {
+      return (
+        <div id="categories" key={section.id} className="scroll-mt-20">
+          <Component />
+        </div>
+      );
+    }
 
     return <Component key={section.id} />;
   };
