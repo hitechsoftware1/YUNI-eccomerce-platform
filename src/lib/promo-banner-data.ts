@@ -8,6 +8,6 @@ export const promoBannerData: PromoBannerData = {
   subtitle: 'Get your daily essentials delivered to your doorstep. Quality guaranteed.',
   buttonText: 'Shop Groceries',
   link: '/category/groceries',
-  imageUrl: 'https://images.unsplash.com/photo-1542838132-92c53300491e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxncm9jZXJ5JTIwYmFubmVyfGVufDB8fHx8MTc1MDc3NzY1Mnww&ixlib=rb-4.1.0&q=80&w=1080',
+  imageUrl: 'https://i.pinimg.com/564x/f2/83/87/f2838797f1f33a18a5f36e3a9c73e878.jpg',
   dataAiHint: 'grocery banner'
 };
