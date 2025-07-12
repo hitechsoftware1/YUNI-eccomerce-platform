@@ -1,10 +1,17 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import { promoBannerData } from '@/lib/promo-banner-data';
+import { getPromoBanner } from '@/lib/promo-banner-data';
 
 export function PromoBanner() {
+  const promoBannerData = getPromoBanner();
+  
+  if (!promoBannerData) {
+    return null;
+  }
+
   const { title, subtitle, buttonText, link, imageUrl, dataAiHint } = promoBannerData;
 
   return (

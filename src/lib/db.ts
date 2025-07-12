@@ -13,10 +13,10 @@ import type {
     PaymentMethod,
     Address,
     Notification,
-    CuratedItem
+    CuratedItem,
+    PromoBannerData
 } from '@/lib/types';
 import { type CartItem } from '@/contexts/cart-context';
-import { promoBannerData } from './promo-banner-data';
 import { curatedForYouItems as initialCuratedForYouItems } from './curated-for-you-data';
 
 // --- INITIAL DATA ---
@@ -142,6 +142,19 @@ const initialOrders: Order[] = [
 const initialPaymentMethods: PaymentMethod[] = [{ id: 'pm_1', cardholderName: 'John Doe', cardNumber: '4242424242424242', expiryDate: '12/25', cardType: 'visa' }];
 const initialUserAddresses: Address[] = [{ id: 'addr-demouser-1', fullName: 'Demo User', addressLine1: '123 Fictional St', city: 'Kampala', country: 'Uganda', postalCode: '10101', phoneNumber: '+256 700 123456', isDefault: true }];
 
+const initialPromoBanners: PromoBannerData[] = [
+  {
+    id: 'main-promo-1',
+    title: 'Fresh Groceries',
+    subtitle: 'Get your daily essentials delivered to your doorstep. Quality guaranteed.',
+    buttonText: 'Shop Groceries',
+    link: '/category/groceries',
+    imageUrl: 'https://i.pinimg.com/564x/f2/83/87/f2838797f1f33a18a5f36e3a9c73e878.jpg',
+    dataAiHint: 'grocery banner'
+  }
+];
+
+
 // --- DATABASE SETUP ---
 
 // This setup ensures that in a development environment with hot-reloading,
@@ -151,6 +164,7 @@ declare global {
     products: Product[];
     heroSlides: HeroSlide[];
     promoCards: PromoCard[];
+    promoBanners: PromoBannerData[];
     secondaryPromos: SecondaryPromoGridItem[];
     homepageSections: HomepageSection[];
     users: ManagedUser[];
@@ -161,7 +175,6 @@ declare global {
     cartItems: CartItem[];
     wishlistProductIds: string[];
     allNotifications: Notification[];
-    promoBanner: typeof promoBannerData;
     curatedForYouItems: CuratedItem[];
   }
 }
@@ -171,6 +184,7 @@ if (!global.__db__) {
     products: initialProducts,
     heroSlides: initialHeroSlides,
     promoCards: initialPromoCards,
+    promoBanners: initialPromoBanners,
     secondaryPromos: initialSecondaryPromos,
     homepageSections: initialHomepageSections,
     users: initialUsers,
@@ -181,7 +195,6 @@ if (!global.__db__) {
     cartItems: [],
     wishlistProductIds: ['1', 'fs6', 'lp2'],
     allNotifications: [],
-    promoBanner: promoBannerData,
     curatedForYouItems: initialCuratedForYouItems,
   };
 }

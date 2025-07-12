@@ -66,6 +66,7 @@ export interface HeroSlide {
 }
 
 export interface PromoBannerData {
+  id: string;
   title: string;
   subtitle: string;
   buttonText: string;
