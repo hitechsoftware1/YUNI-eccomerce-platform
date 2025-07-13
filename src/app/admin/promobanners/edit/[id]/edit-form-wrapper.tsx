@@ -43,6 +43,7 @@ export function EditFormWrapper({ promo }: { promo: SecondaryPromoGridItem }) {
     imageUrl: promo.imageUrl,
     dataAiHint: promo.dataAiHint,
     aspectRatio: promo.aspectRatio,
+    enabled: promo.enabled,
   };
 
   return <PromoBannerForm onSave={handleSave} isSaving={isSaving} initialData={initialData} />;

@@ -22,6 +22,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 interface PromoBannersTableProps {
   promos: SecondaryPromoGridItem[];
@@ -39,6 +40,7 @@ export function PromoBannersTable({ promos, onDeleteClick }: PromoBannersTablePr
             Image
           </TableHead>
           <TableHead>Alt Text</TableHead>
+          <TableHead>Status</TableHead>
           <TableHead className="hidden md:table-cell">Link</TableHead>
           <TableHead className="hidden md:table-cell">Aspect Ratio</TableHead>
           <TableHead>
@@ -60,6 +62,13 @@ export function PromoBannersTable({ promos, onDeleteClick }: PromoBannersTablePr
               />
             </TableCell>
             <TableCell className="font-medium">{promo.alt}</TableCell>
+            <TableCell>
+              <Badge variant={promo.enabled ? 'secondary' : 'outline'} className={cn(
+                promo.enabled && 'bg-green-600 text-primary-foreground',
+              )}>
+                {promo.enabled ? 'Enabled' : 'Disabled'}
+              </Badge>
+            </TableCell>
             <TableCell className="hidden md:table-cell">{promo.link}</TableCell>
              <TableCell className="hidden md:table-cell">
                 <Badge variant="outline">{promo.aspectRatio}</Badge>

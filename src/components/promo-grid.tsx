@@ -50,7 +50,7 @@ export function ExploreMore() {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-      const allPromoCards = getAllPromoCards();
+      const allPromoCards = getAllPromoCards().filter(p => p.enabled);
       setPromos(allPromoCards);
       
       const uniqueCategories = ["all", ...new Set(allPromoCards.map(p => p.category))];
@@ -63,6 +63,10 @@ export function ExploreMore() {
     activeFilter === "all"
       ? promos
       : promos.filter((p) => p.category === activeFilter);
+      
+    if (promos.length === 0 && !loading) {
+        return null;
+    }
 
   return (
     <section>

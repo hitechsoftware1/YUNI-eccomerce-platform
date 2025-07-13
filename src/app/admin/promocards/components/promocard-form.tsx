@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { generatePromoCardImage } from '@/ai/flows/generate-promo-card-image-flow';
 import { Wand2 } from 'lucide-react';
 import Image from 'next/image';
+import { Switch } from '@/components/ui/switch';
 
 const promoCardFormSchema = z.object({
   title: z.string().min(3, { message: 'Title must be at least 3 characters.' }),
@@ -19,6 +20,7 @@ const promoCardFormSchema = z.object({
   href: z.string().min(1, { message: 'Link is required. Use / for homepage.' }),
   imageUrl: z.string().url({ message: 'Please enter a valid URL.' }).optional().or(z.literal('')),
   dataAiHint: z.string().max(40, { message: 'Hint cannot be longer than two words.' }).optional(),
+  enabled: z.boolean().default(true),
 });
 
 export type PromoCardFormValues = z.infer<typeof promoCardFormSchema>;
@@ -38,6 +40,7 @@ export function PromoCardForm({ initialData, onSave, isSaving }: PromoCardFormPr
       href: '',
       imageUrl: '',
       dataAiHint: '',
+      enabled: true,
     },
   });
   const { toast } = useToast();
@@ -80,6 +83,29 @@ export function PromoCardForm({ initialData, onSave, isSaving }: PromoCardFormPr
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSave)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="enabled"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel className="text-base">
+                  Enabled
+                </FormLabel>
+                <FormDescription>
+                  If disabled, this card will not be shown in the "Explore More" section.
+                </FormDescription>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  disabled={allDisabled}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="title"

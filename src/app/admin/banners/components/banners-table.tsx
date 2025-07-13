@@ -21,6 +21,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 interface BannersTableProps {
   slides: HeroSlide[];
@@ -38,7 +40,7 @@ export function BannersTable({ slides, onDeleteClick }: BannersTableProps) {
             Image
           </TableHead>
           <TableHead>Title</TableHead>
-          <TableHead className="hidden md:table-cell">Subtitle</TableHead>
+          <TableHead>Status</TableHead>
           <TableHead className="hidden md:table-cell">Link</TableHead>
           <TableHead>
             <span className="sr-only">Actions</span>
@@ -59,7 +61,13 @@ export function BannersTable({ slides, onDeleteClick }: BannersTableProps) {
               />
             </TableCell>
             <TableCell className="font-medium">{slide.title}</TableCell>
-            <TableCell className="hidden md:table-cell">{slide.subtitle}</TableCell>
+             <TableCell>
+              <Badge variant={slide.enabled ? 'secondary' : 'outline'} className={cn(
+                slide.enabled && 'bg-green-600 text-primary-foreground',
+              )}>
+                {slide.enabled ? 'Enabled' : 'Disabled'}
+              </Badge>
+            </TableCell>
             <TableCell className="hidden md:table-cell">{slide.link}</TableCell>
             <TableCell>
               <DropdownMenu>

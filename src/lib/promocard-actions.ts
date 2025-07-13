@@ -11,6 +11,7 @@ export async function addPromoCard(cardData: PromoCardFormValues) {
   const newCard: PromoCard = {
     id: `promo-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
     ...cardData,
+    enabled: cardData.enabled,
     imageUrl: cardData.imageUrl || 'https://placehold.co/400x500.png',
     dataAiHint: cardData.dataAiHint || cardData.title.toLowerCase().split(' ').slice(0, 2).join(' '),
   };
@@ -38,6 +39,7 @@ export async function updatePromoCard(id: string, cardData: PromoCardFormValues)
     const updatedCard: PromoCard = {
         ...existingCard,
         ...cardData,
+        enabled: cardData.enabled,
         imageUrl: cardData.imageUrl || 'https://placehold.co/400x500.png',
         dataAiHint: cardData.dataAiHint || cardData.title.toLowerCase().split(' ').slice(0, 2).join(' '),
     };

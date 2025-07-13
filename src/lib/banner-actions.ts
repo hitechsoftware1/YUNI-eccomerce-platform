@@ -11,6 +11,7 @@ export async function addHeroSlide(bannerData: BannerFormValues) {
   const newSlide: HeroSlide = {
     id: `slide-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
     ...bannerData,
+    enabled: bannerData.enabled,
     imageUrl: bannerData.imageUrl || 'https://placehold.co/1600x600.png',
     dataAiHint: bannerData.dataAiHint || bannerData.title.toLowerCase().split(' ').slice(0, 2).join(' '),
   };
@@ -38,6 +39,7 @@ export async function updateHeroSlide(id: string, bannerData: BannerFormValues):
     const updatedSlide: HeroSlide = {
         ...existingSlide,
         ...bannerData,
+        enabled: bannerData.enabled,
         imageUrl: bannerData.imageUrl || 'https://placehold.co/1600x600.png',
         dataAiHint: bannerData.dataAiHint || bannerData.title.toLowerCase().split(' ').slice(0, 2).join(' '),
     };

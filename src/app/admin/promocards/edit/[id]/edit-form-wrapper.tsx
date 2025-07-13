@@ -43,6 +43,7 @@ export function EditFormWrapper({ card }: { card: PromoCard }) {
     href: card.href,
     imageUrl: card.imageUrl,
     dataAiHint: card.dataAiHint,
+    enabled: card.enabled,
   };
 
   return <PromoCardForm onSave={handleSave} isSaving={isSaving} initialData={initialData} />;

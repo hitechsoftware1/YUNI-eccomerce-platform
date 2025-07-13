@@ -21,6 +21,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 interface PromoCardsTableProps {
   cards: PromoCard[];
@@ -38,6 +40,7 @@ export function PromoCardsTable({ cards, onDeleteClick }: PromoCardsTableProps) 
             Image
           </TableHead>
           <TableHead>Title</TableHead>
+          <TableHead>Status</TableHead>
           <TableHead className="hidden md:table-cell">Category</TableHead>
           <TableHead className="hidden md:table-cell">Link</TableHead>
           <TableHead>
@@ -59,6 +62,13 @@ export function PromoCardsTable({ cards, onDeleteClick }: PromoCardsTableProps) 
               />
             </TableCell>
             <TableCell className="font-medium">{card.title}</TableCell>
+            <TableCell>
+              <Badge variant={card.enabled ? 'secondary' : 'outline'} className={cn(
+                card.enabled && 'bg-green-600 text-primary-foreground',
+              )}>
+                {card.enabled ? 'Enabled' : 'Disabled'}
+              </Badge>
+            </TableCell>
             <TableCell className="hidden md:table-cell capitalize">{card.category}</TableCell>
             <TableCell className="hidden md:table-cell">{card.href}</TableCell>
             <TableCell>

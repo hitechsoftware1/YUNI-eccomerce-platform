@@ -43,6 +43,7 @@ export function EditFormWrapper({ slide }: { slide: HeroSlide }) {
         link: slide.link,
         imageUrl: slide.imageUrl,
         dataAiHint: slide.dataAiHint,
+        enabled: slide.enabled,
     }
 
     return <BannerForm onSave={handleSaveBanner} isSaving={isSaving} initialData={initialData} />;

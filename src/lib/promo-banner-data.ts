@@ -6,5 +6,5 @@ import { db } from './db';
 export const getPromoBanner = (): PromoBannerData | undefined => {
     // For this example, we assume there's only one main promo banner.
     // In a more complex app, you might have a way to flag which one is active.
-    return db.promoBanners[0];
+    return db.promoBanners.find(b => b.enabled);
 }

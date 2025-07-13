@@ -17,7 +17,8 @@ export function HeroSlider() {
 
   React.useEffect(() => {
     // Fetch slides on the client side to ensure data is always fresh
-    const slidesData = getHeroSlides();
+    // and filter for only enabled slides.
+    const slidesData = getHeroSlides().filter(s => s.enabled);
     setSlides(slidesData);
     setLoading(false);
   }, []);
@@ -47,11 +48,7 @@ export function HeroSlider() {
   }
   
   if (!slides || slides.length === 0) {
-    return (
-        <section className="relative h-[300px] w-full overflow-hidden md:h-[400px] lg:h-[500px] bg-secondary flex items-center justify-center">
-            <p className="text-muted-foreground">No hero banners available.</p>
-        </section>
-    )
+    return null; // Return null if there are no enabled slides
   }
 
   return (

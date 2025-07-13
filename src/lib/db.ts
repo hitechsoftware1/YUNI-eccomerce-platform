@@ -63,32 +63,32 @@ const initialProducts: Product[] = [
 ];
 
 const initialHeroSlides: HeroSlide[] = [
-  { id: '1', imageUrl: "https://i.pinimg.com/564x/8e/31/a3/8e31a3a3399b244670a417bf2b12658f.jpg", dataAiHint: "sale fashion", title: "Mega Fashion Sale", subtitle: "Up to 70% off on all brands", link: "/category/fashion" },
-  { id: '2', imageUrl: "https://i.pinimg.com/564x/f3/09/98/f309983f4368153eb3c93e4219156b69.jpg", dataAiHint: "new electronics", title: "Latest Gadgets Arrived", subtitle: "Discover cutting-edge technology", link: "/category/electronics" },
-  { id: '3', imageUrl: "https://i.pinimg.com/564x/16/e2/25/16e22557521e1a556da8740c83235313.jpg", dataAiHint: "home decor", title: "Transform Your Home", subtitle: "Find the perfect decor for your space", link: "/category/home-office" },
+  { id: '1', imageUrl: "https://i.pinimg.com/564x/8e/31/a3/8e31a3a3399b244670a417bf2b12658f.jpg", dataAiHint: "sale fashion", title: "Mega Fashion Sale", subtitle: "Up to 70% off on all brands", link: "/category/fashion", enabled: true },
+  { id: '2', imageUrl: "https://i.pinimg.com/564x/f3/09/98/f309983f4368153eb3c93e4219156b69.jpg", dataAiHint: "new electronics", title: "Latest Gadgets Arrived", subtitle: "Discover cutting-edge technology", link: "/category/electronics", enabled: true },
+  { id: '3', imageUrl: "https://i.pinimg.com/564x/16/e2/25/16e22557521e1a556da8740c83235313.jpg", dataAiHint: "home decor", title: "Transform Your Home", subtitle: "Find the perfect decor for your space", link: "/category/home-office", enabled: true },
 ];
 
 const initialPromoCards: PromoCard[] = [
-    { id: 'exp1', category: "electronics", title: "Explore Gadgets", imageUrl: "https://i.pinimg.com/564x/6c/e3/37/6ce3378393521b444b04938640742f9d.jpg", dataAiHint: "gadgets iphone", href: "/category/electronics" },
-    { id: 'exp2', category: "beauty", title: "Beauty Deals", imageUrl: "https://i.pinimg.com/564x/0f/7f/7a/0f7f7a77b09d93b3337905f02c638634.jpg", dataAiHint: "beauty product", href: "/category/beauty" },
-    { id: 'exp3', category: "mobiles", title: "Smartphone Ad", imageUrl: "https://i.pinimg.com/564x/c2/f0/a8/c2f0a8274d75153229b1192931a153f3.jpg", dataAiHint: "smartphone ad", href: "/search?q=mobiles" },
-    { id: 'exp4', category: "groceries", title: "Visit Grocery", imageUrl: "https://i.pinimg.com/564x/4b/81/79/4b817924c5e88414434e321528b9c8a9.jpg", dataAiHint: "grocery juice", href: "/category/groceries" },
-    { id: 'exp5', category: "events", title: "Watch Event Promo", imageUrl: "https://i.pinimg.com/564x/15/8e/31/158e31745428a1924615a137ef2c954b.jpg", dataAiHint: "event promo", href: "/search?q=events" },
-    { id: 'exp6', category: "beverages", title: "Beverage Offers", imageUrl: "https://i.pinimg.com/564x/1c/9b/6c/1c9b6c0e0b3967d1da50901e16f3d4d4.jpg", dataAiHint: "beverages juice", href: "/category/beverages" },
-    { id: 'exp7', category: "fashion", title: "Fashion Spotlight", imageUrl: "https://i.pinimg.com/564x/78/34/00/7834005b632646c24b6138676a6e5b88.jpg", dataAiHint: "fashion models", href: "/category/fashion" },
-    { id: 'exp8', category: "new-arrivals", title: "New Arrivals Ad", imageUrl: "https://i.pinimg.com/564x/87/42/1d/87421d51a659796e62241b1238d35d25.jpg", dataAiHint: "new arrival", href: "/search?q=new arrivals" },
-    { id: 'exp9', category: "tools", title: "Tech & Tools", imageUrl: "https://i.pinimg.com/564x/27/e6/22/27e62238382103f56b7f3a8b417e997f.jpg", dataAiHint: "tech tools", href: "/search?q=tools" },
-    { id: 'exp10', category: "deals", title: "Deals of the Day", imageUrl: "https://i.pinimg.com/564x/3b/b1/7d/3bb17d84f884562080a501a357b9ac07.jpg", dataAiHint: "office chair", href: "/search?q=deals" },
-    { id: 'exp11', category: "showcase", title: "Promo Showcase", imageUrl: "https://i.pinimg.com/564x/2a/3a/0e/2a3a0e1b6f8f0477207604d445218d6e.jpg", dataAiHint: "promo showcase", href: "/search?q=showcase" },
-    { id: 'exp12', category: "home-office", title: "Office Furniture", imageUrl: "https://i.pinimg.com/564x/84/d4/9f/84d49f6323c2a4f40498e8a7199c0182.jpg", dataAiHint: "office furniture", href: "/category/home-office" },
-    { id: 'exp13', category: "branding", title: "Branding Ad", imageUrl: "https://i.pinimg.com/564x/72/06/f3/7206f343a41a4a49fe0f1a41551c7a87.jpg", dataAiHint: "branding ad", href: "/search?q=branding" },
-    { id: 'exp14', category: "services", title: "Services", imageUrl: "https://i.pinimg.com/564x/dd/b5/de/ddb5de2a5b1eba604314c1186b8c9d03.jpg", dataAiHint: "delivery service", href: "/search?q=services" },
+    { id: 'exp1', category: "electronics", title: "Explore Gadgets", imageUrl: "https://i.pinimg.com/564x/6c/e3/37/6ce3378393521b444b04938640742f9d.jpg", dataAiHint: "gadgets iphone", href: "/category/electronics", enabled: true },
+    { id: 'exp2', category: "beauty", title: "Beauty Deals", imageUrl: "https://i.pinimg.com/564x/0f/7f/7a/0f7f7a77b09d93b3337905f02c638634.jpg", dataAiHint: "beauty product", href: "/category/beauty", enabled: true },
+    { id: 'exp3', category: "mobiles", title: "Smartphone Ad", imageUrl: "https://i.pinimg.com/564x/c2/f0/a8/c2f0a8274d75153229b1192931a153f3.jpg", dataAiHint: "smartphone ad", href: "/search?q=mobiles", enabled: true },
+    { id: 'exp4', category: "groceries", title: "Visit Grocery", imageUrl: "https://i.pinimg.com/564x/4b/81/79/4b817924c5e88414434e321528b9c8a9.jpg", dataAiHint: "grocery juice", href: "/category/groceries", enabled: true },
+    { id: 'exp5', category: "events", title: "Watch Event Promo", imageUrl: "https://i.pinimg.com/564x/15/8e/31/158e31745428a1924615a137ef2c954b.jpg", dataAiHint: "event promo", href: "/search?q=events", enabled: true },
+    { id: 'exp6', category: "beverages", title: "Beverage Offers", imageUrl: "https://i.pinimg.com/564x/1c/9b/6c/1c9b6c0e0b3967d1da50901e16f3d4d4.jpg", dataAiHint: "beverages juice", href: "/category/beverages", enabled: true },
+    { id: 'exp7', category: "fashion", title: "Fashion Spotlight", imageUrl: "https://i.pinimg.com/564x/78/34/00/7834005b632646c24b6138676a6e5b88.jpg", dataAiHint: "fashion models", href: "/category/fashion", enabled: true },
+    { id: 'exp8', category: "new-arrivals", title: "New Arrivals Ad", imageUrl: "https://i.pinimg.com/564x/87/42/1d/87421d51a659796e62241b1238d35d25.jpg", dataAiHint: "new arrival", href: "/search?q=new arrivals", enabled: true },
+    { id: 'exp9', category: "tools", title: "Tech & Tools", imageUrl: "https://i.pinimg.com/564x/27/e6/22/27e62238382103f56b7f3a8b417e997f.jpg", dataAiHint: "tech tools", href: "/search?q=tools", enabled: true },
+    { id: 'exp10', category: "deals", title: "Deals of the Day", imageUrl: "https://i.pinimg.com/564x/3b/b1/7d/3bb17d84f884562080a501a357b9ac07.jpg", dataAiHint: "office chair", href: "/search?q=deals", enabled: true },
+    { id: 'exp11', category: "showcase", title: "Promo Showcase", imageUrl: "https://i.pinimg.com/564x/2a/3a/0e/2a3a0e1b6f8f0477207604d445218d6e.jpg", dataAiHint: "promo showcase", href: "/search?q=showcase", enabled: true },
+    { id: 'exp12', category: "home-office", title: "Office Furniture", imageUrl: "https://i.pinimg.com/564x/84/d4/9f/84d49f6323c2a4f40498e8a7199c0182.jpg", dataAiHint: "office furniture", href: "/category/home-office", enabled: true },
+    { id: 'exp13', category: "branding", title: "Branding Ad", imageUrl: "https://i.pinimg.com/564x/72/06/f3/7206f343a41a4a49fe0f1a41551c7a87.jpg", dataAiHint: "branding ad", href: "/search?q=branding", enabled: true },
+    { id: 'exp14', category: "services", title: "Services", imageUrl: "https://i.pinimg.com/564x/dd/b5/de/ddb5de2a5b1eba604314c1186b8c9d03.jpg", dataAiHint: "delivery service", href: "/search?q=services", enabled: true },
 ];
 
 const initialSecondaryPromos: SecondaryPromoGridItem[] = [
-  { id: 'promo1', alt: 'Lato Milk Promotion', imageUrl: 'https://i.pinimg.com/564x/e7/87/40/e78740d39e25d2c5e5264b971a7428ac.jpg', dataAiHint: 'milk promotion', link: '#', aspectRatio: '2/1' },
-  { id: 'promo2', alt: 'Tang Promotion', imageUrl: 'https://i.pinimg.com/564x/a0/0b/49/a00b490f0580436d655f414523c13bb1.jpg', dataAiHint: 'juice promotion', link: '#', aspectRatio: '2/1' },
-  { id: 'promo3', alt: 'Tropical Heat Snack Promotion', imageUrl: 'https://i.pinimg.com/564x/5b/c9/a1/5bc9a1c1d09292376999a03195f2e6e3.jpg', dataAiHint: 'snack promotion', link: '#', aspectRatio: '4/1' },
+  { id: 'promo1', alt: 'Lato Milk Promotion', imageUrl: 'https://i.pinimg.com/564x/e7/87/40/e78740d39e25d2c5e5264b971a7428ac.jpg', dataAiHint: 'milk promotion', link: '#', aspectRatio: '2/1', enabled: true },
+  { id: 'promo2', alt: 'Tang Promotion', imageUrl: 'https://i.pinimg.com/564x/a0/0b/49/a00b490f0580436d655f414523c13bb1.jpg', dataAiHint: 'juice promotion', link: '#', aspectRatio: '2/1', enabled: true },
+  { id: 'promo3', alt: 'Tropical Heat Snack Promotion', imageUrl: 'https://i.pinimg.com/564x/5b/c9/a1/5bc9a1c1d09292376999a03195f2e6e3.jpg', dataAiHint: 'snack promotion', link: '#', aspectRatio: '4/1', enabled: true },
 ];
 
 const initialHomepageSections: HomepageSection[] = [
@@ -150,7 +150,8 @@ const initialPromoBanners: PromoBannerData[] = [
     buttonText: 'Shop Groceries',
     link: '/category/groceries',
     imageUrl: 'https://i.pinimg.com/564x/f2/83/87/f2838797f1f33a18a5f36e3a9c73e878.jpg',
-    dataAiHint: 'grocery banner'
+    dataAiHint: 'grocery banner',
+    enabled: true,
   }
 ];
 

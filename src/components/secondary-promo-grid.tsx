@@ -5,29 +5,35 @@ import { Card } from '@/components/ui/card';
 import { getAllSecondaryPromos } from '@/lib/secondary-promo-data';
 
 export function SecondaryPromoGrid() {
-  const allSecondaryPromos = getAllSecondaryPromos();
+  const allSecondaryPromos = getAllSecondaryPromos().filter(p => p.enabled);
   const topPromos = allSecondaryPromos.filter((p) => p.aspectRatio === '2/1');
   const bottomPromo = allSecondaryPromos.find((p) => p.aspectRatio === '4/1');
 
+  if (allSecondaryPromos.length === 0) {
+    return null;
+  }
+
   return (
     <section className="space-y-4">
-      <div className="grid grid-cols-2 gap-4">
-        {topPromos.map((promo) => (
-          <Link href={promo.link} key={promo.id} className="block group">
-            <Card className="overflow-hidden">
-              <div className="relative aspect-[2/1] w-full">
-                <Image
-                  src={promo.imageUrl}
-                  alt={promo.alt}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  data-ai-hint={promo.dataAiHint}
-                />
-              </div>
-            </Card>
-          </Link>
-        ))}
-      </div>
+      {topPromos.length > 0 && (
+          <div className="grid grid-cols-2 gap-4">
+            {topPromos.map((promo) => (
+              <Link href={promo.link} key={promo.id} className="block group">
+                <Card className="overflow-hidden">
+                  <div className="relative aspect-[2/1] w-full">
+                    <Image
+                      src={promo.imageUrl}
+                      alt={promo.alt}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      data-ai-hint={promo.dataAiHint}
+                    />
+                  </div>
+                </Card>
+              </Link>
+            ))}
+          </div>
+      )}
       {bottomPromo && (
         <Link href={bottomPromo.link} className="block group">
           <Card className="overflow-hidden">

@@ -11,6 +11,7 @@ export async function addPromoBanner(bannerData: PromoBannerFormValues) {
   const newBanner: SecondaryPromoGridItem = {
     id: `sec-promo-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
     ...bannerData,
+    enabled: bannerData.enabled,
     imageUrl: bannerData.imageUrl || 'https://placehold.co/600x300.png',
     dataAiHint: bannerData.dataAiHint || bannerData.alt.toLowerCase().split(' ').slice(0, 2).join(' '),
   };
@@ -38,6 +39,7 @@ export async function updatePromoBanner(id: string, bannerData: PromoBannerFormV
     const updatedBanner: SecondaryPromoGridItem = {
         ...existingBanner,
         ...bannerData,
+        enabled: bannerData.enabled,
         imageUrl: bannerData.imageUrl || 'https://placehold.co/600x300.png',
         dataAiHint: bannerData.dataAiHint || bannerData.alt.toLowerCase().split(' ').slice(0, 2).join(' '),
     };

@@ -63,6 +63,7 @@ export interface HeroSlide {
   imageUrl: string;
   dataAiHint: string;
   link: string;
+  enabled: boolean;
 }
 
 export interface PromoBannerData {
@@ -73,6 +74,7 @@ export interface PromoBannerData {
   link: string;
   imageUrl: string;
   dataAiHint: string;
+  enabled: boolean;
 }
 
 export interface SecondaryPromoGridItem {
@@ -82,6 +84,7 @@ export interface SecondaryPromoGridItem {
   dataAiHint: string;
   link: string;
   aspectRatio: '2/1' | '4/1';
+  enabled: boolean;
 }
 
 export interface PromoCard {
@@ -91,6 +94,7 @@ export interface PromoCard {
   imageUrl: string;
   dataAiHint: string;
   href: string;
+  enabled: boolean;
 }
 
 export interface Address {
