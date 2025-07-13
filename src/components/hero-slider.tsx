@@ -7,16 +7,28 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getHeroSlides } from "@/lib/banners";
+import type { HeroSlide } from "@/lib/types";
+import { Skeleton } from "./ui/skeleton";
 
 export function HeroSlider() {
   const [currentSlide, setCurrentSlide] = React.useState(0);
-  const slides = getHeroSlides();
+  const [slides, setSlides] = React.useState<HeroSlide[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    // Fetch slides on the client side to ensure data is always fresh
+    const slidesData = getHeroSlides();
+    setSlides(slidesData);
+    setLoading(false);
+  }, []);
 
   const nextSlide = React.useCallback(() => {
+    if (slides.length <= 1) return;
     setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
   }, [slides.length]);
 
   const prevSlide = () => {
+    if (slides.length <= 1) return;
     setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
@@ -25,6 +37,14 @@ export function HeroSlider() {
     const slideInterval = setInterval(nextSlide, 5000);
     return () => clearInterval(slideInterval);
   }, [nextSlide, slides.length]);
+  
+  if (loading) {
+    return (
+        <section className="relative h-[300px] w-full overflow-hidden md:h-[400px] lg:h-[500px]">
+            <Skeleton className="h-full w-full" />
+        </section>
+    )
+  }
   
   if (!slides || slides.length === 0) {
     return (
