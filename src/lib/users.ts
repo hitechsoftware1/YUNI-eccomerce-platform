@@ -1,6 +1,6 @@
 
 import type { ManagedUser } from './types';
-import { db } from './db';
+import { db, persistDb } from './db';
 
 export function getUsers(): ManagedUser[] {
   return db.users;
@@ -14,5 +14,6 @@ export function addUser(user: ManagedUser): void {
   const existingUser = db.users.find(u => u.id === user.id);
   if (!existingUser) {
     db.users.push(user);
+    persistDb();
   }
 }

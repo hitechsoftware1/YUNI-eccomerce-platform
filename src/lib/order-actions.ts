@@ -2,7 +2,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { db } from './db';
+import { db, persistDb } from './db';
 import type { Order } from '@/lib/types';
 import { addAdminNotification } from './notification-actions';
 
@@ -17,6 +17,7 @@ export async function updateOrderStatus(
   }
 
   db.userOrders[orderIndex].status = status;
+  persistDb();
   
   await addAdminNotification({
     title: 'Order Status Updated',

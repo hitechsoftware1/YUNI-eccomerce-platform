@@ -2,7 +2,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { db } from './db';
+import { db, persistDb } from './db';
 import type { ManagedUser } from './types';
 import { addAdminNotification } from './notification-actions';
 
@@ -13,6 +13,7 @@ export async function updateUserRole(userId: string, role: ManagedUser['role']) 
   }
   const user = db.users[userIndex];
   user.role = role;
+  persistDb();
   
   await addAdminNotification({
     title: 'User Role Changed',
@@ -31,6 +32,7 @@ export async function updateUserStatus(userId: string, status: ManagedUser['stat
   }
   const user = db.users[userIndex];
   user.status = status;
+  persistDb();
 
   await addAdminNotification({
     title: 'User Status Updated',
@@ -55,6 +57,7 @@ export async function applyToBeSeller(userId: string) {
 
     user.status = 'Pending Approval';
     user.role = 'Seller'; // Set role to seller, but status keeps them restricted
+    persistDb();
 
     await addAdminNotification({
         title: 'New Seller Application',

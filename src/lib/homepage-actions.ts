@@ -2,7 +2,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { db } from './db';
+import { db, persistDb } from './db';
 import type { HomepageSection } from './types';
 import { addAdminNotification } from './notification-actions';
 import type { SectionType } from './types';
@@ -17,6 +17,7 @@ export async function updateHomepageLayout(sections: HomepageSection[]) {
     order: index + 1,
   }));
   db.homepageSections.push(...orderedSections);
+  persistDb();
 
   await addAdminNotification({
     title: 'Homepage Layout Updated',
@@ -47,6 +48,7 @@ export async function addHomepageSection(data: SectionFormValues) {
     };
 
     db.homepageSections.push(newSection);
+    persistDb();
 
     await addAdminNotification({
         title: 'Homepage Section Added',
@@ -74,6 +76,7 @@ export async function updateHomepageSection(id: string, data: SectionFormValues)
     };
 
     db.homepageSections[sectionIndex] = updatedSection;
+    persistDb();
 
     await addAdminNotification({
         title: 'Homepage Section Updated',
@@ -98,6 +101,7 @@ export async function deleteHomepageSection(id: string) {
     db.homepageSections.forEach((section, index) => {
         section.order = index + 1;
     });
+    persistDb();
 
     await addAdminNotification({
         title: 'Homepage Section Deleted',

@@ -1,5 +1,4 @@
 
-
 import type { 
     Product, 
     HeroSlide, 
@@ -46,7 +45,7 @@ const initialProducts: Product[] = [
   { id: 'lp3', name: 'Smart LED Light Strip', price: 152000, rating: 4.6, reviewCount: 1800, imageUrl: 'https://i.pinimg.com/564x/0f/50/a6/0f50a63116d412036780a1095f681985.jpg', dataAiHint: 'led lights', description: 'Transform your space with customizable lighting. This smart LED strip offers millions of colors and can be synced with music.', category: 'electronics', status: 'In Stock', sellerName: 'YUNI Store' },
   { id: 'lp4', name: 'Professional Chef\'s Knife', price: 456000, originalPrice: 570000, rating: 4.9, reviewCount: 1100, imageUrl: 'https://i.pinimg.com/564x/08/ee/74/08ee7424075b29841853683a420b996f.jpg', dataAiHint: 'chef knife', description: 'A high-carbon stainless steel chef\'s knife that is a must-have for any kitchen. Perfectly balanced for precision and control.', category: 'home-office', status: 'In Stock', sellerName: 'Sofia Davis' },
   { id: 'lp5', name: 'Silk Pillowcase Set', price: 209000, rating: 4.7, reviewCount: 950, imageUrl: 'https://i.pinimg.com/564x/a4/d1/2f/a4d12f6d2b388ae30a6183e8784bfd19.jpg', dataAiHint: 'silk pillowcase', description: 'Experience the luxury of sleeping on pure silk. These pillowcases are gentle on your skin and hair, reducing friction and bedhead.', category: 'beauty', status: 'In Stock', sellerName: 'YUNI Store' },
-  { id: 'lp6', name: 'Wireless Charging Stand', price: 190000, rating: 4.6, reviewCount: 2200, imageUrl: 'https://i.pinimg.com/564x/c9/4d/99/c94d99432f9d6c753b754e389456570c.jpg', dataAiHint: 'charging stand', description: 'Charge your phone and other compatible devices wirelessly. This sleek stand supports fast charging and looks great on any desk or nightstand.', category: 'electronics', status: 'In Stock', sellerName: 'YUNI Store' },
+  { id: 'lp6', name: 'Wireless Charging Stand', price: 190000, rating: 4.6, reviewCount: 2200, imageUrl: 'https://i.pinimg.com/564x/c9/4d/99/c94d99432f9d6c753b754e389456570c.jpg', dataAiHint: 'charging stand', description: 'Charge your phone and other compatible devices wirelessly. This sleek stand looks great on any desk or nightstand.', category: 'electronics', status: 'In Stock', sellerName: 'YUNI Store' },
   { id: 'lp7', name: 'Insulated Water Bottle', price: 95000, rating: 4.8, reviewCount: 6500, imageUrl: 'https://i.pinimg.com/564x/41/55/c2/4155c2c5c9603a110a1727768565259e.jpg', dataAiHint: 'water bottle', description: 'Keep your drinks cold for 24 hours or hot for 12. This stainless steel insulated water bottle is perfect for your active lifestyle.', category: 'home-office', status: 'In Stock', sellerName: 'Jane Smith' },
   { id: 'lp8', name: 'Hardcover Fiction Bestseller', price: 72000, rating: 4.9, reviewCount: 3200, imageUrl: 'https://i.pinimg.com/564x/0f/fe/83/0ffe83f4e3c548f08b39c638e07248e5.jpg', dataAiHint: 'book fiction', description: 'Get lost in the latest bestselling fiction novel that everyone is talking about. A captivating story from a critically acclaimed author.', category: 'books', status: 'In Stock', sellerName: 'YUNI Store' },
   { id: 'g1', name: 'Fresh Apples (1kg)', price: 15000, rating: 4.5, reviewCount: 150, imageUrl: 'https://i.pinimg.com/564x/c4/ce/d3/c4ced3f4a3311894d8d1e2f753c1533c.jpg', dataAiHint: 'apples fruit', description: 'Crisp and sweet red apples, perfect for a healthy snack.', category: 'groceries', status: 'In Stock', sellerName: 'Sofia Davis' },
@@ -155,13 +154,9 @@ const initialPromoBanners: PromoBannerData[] = [
   }
 ];
 
+const DB_STORAGE_KEY = 'yuni-app-db';
 
-// --- DATABASE SETUP ---
-
-// This setup ensures that in a development environment with hot-reloading,
-// our in-memory "database" isn't wiped clean on every file change.
-declare global {
-  var __db__: {
+interface DbType {
     products: Product[];
     heroSlides: HeroSlide[];
     promoCards: PromoCard[];
@@ -177,11 +172,9 @@ declare global {
     wishlistProductIds: string[];
     allNotifications: Notification[];
     curatedForYouItems: CuratedItem[];
-  }
 }
 
-if (!global.__db__) {
-  global.__db__ = {
+const initialDb: DbType = {
     products: initialProducts,
     heroSlides: initialHeroSlides,
     promoCards: initialPromoCards,
@@ -197,8 +190,43 @@ if (!global.__db__) {
     wishlistProductIds: ['1', 'fs6', 'lp2'],
     allNotifications: [],
     curatedForYouItems: initialCuratedForYouItems,
-  };
+};
+
+
+// --- DATABASE SETUP ---
+
+function loadDb(): DbType {
+  if (typeof window !== 'undefined') {
+    const savedDb = window.localStorage.getItem(DB_STORAGE_KEY);
+    if (savedDb) {
+      try {
+        const parsedDb = JSON.parse(savedDb);
+        // Basic check to see if loaded data is valid
+        if (parsedDb && typeof parsedDb === 'object' && 'products' in parsedDb) {
+            return parsedDb;
+        }
+      } catch (e) {
+        console.error("Failed to parse DB from localStorage", e);
+      }
+    }
+  }
+  return JSON.parse(JSON.stringify(initialDb)); // Return a fresh copy to avoid mutation
 }
 
-// Export the single instance of our "database"
-export const db = global.__db__;
+function saveDb(dbInstance: DbType) {
+  if (typeof window !== 'undefined') {
+    try {
+        window.localStorage.setItem(DB_STORAGE_KEY, JSON.stringify(dbInstance));
+    } catch(e) {
+        console.error("Failed to save DB to localStorage", e);
+    }
+  }
+}
+
+// Global instance of the DB
+export const db = loadDb();
+
+// Persist any changes made to the db object
+export function persistDb() {
+    saveDb(db);
+}

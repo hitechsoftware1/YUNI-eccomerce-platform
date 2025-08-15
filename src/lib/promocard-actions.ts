@@ -2,7 +2,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { db } from './db';
+import { db, persistDb } from './db';
 import type { PromoCard } from '@/lib/types';
 import type { PromoCardFormValues } from '@/app/admin/promocards/components/promocard-form';
 import { addAdminNotification } from './notification-actions';
@@ -16,6 +16,7 @@ export async function addPromoCard(cardData: PromoCardFormValues) {
     dataAiHint: cardData.dataAiHint || cardData.title.toLowerCase().split(' ').slice(0, 2).join(' '),
   };
   db.promoCards.unshift(newCard);
+  persistDb();
 
   await addAdminNotification({
     title: 'New Promo Card',
@@ -45,6 +46,7 @@ export async function updatePromoCard(id: string, cardData: PromoCardFormValues)
     };
 
     db.promoCards[cardIndex] = updatedCard;
+    persistDb();
 
     await addAdminNotification({
         title: 'Promo Card Updated',
@@ -64,6 +66,7 @@ export async function deletePromoCard(id: string): Promise<void> {
     
     const deletedCard = db.promoCards[cardIndex];
     db.promoCards.splice(cardIndex, 1);
+    persistDb();
 
     await addAdminNotification({
         title: 'Promo Card Deleted',

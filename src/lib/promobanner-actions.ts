@@ -2,7 +2,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { db } from './db';
+import { db, persistDb } from './db';
 import type { SecondaryPromoGridItem } from '@/lib/types';
 import type { PromoBannerFormValues } from '@/app/admin/promobanners/components/promobanner-form';
 import { addAdminNotification } from './notification-actions';
@@ -16,6 +16,7 @@ export async function addPromoBanner(bannerData: PromoBannerFormValues) {
     dataAiHint: bannerData.dataAiHint || bannerData.alt.toLowerCase().split(' ').slice(0, 2).join(' '),
   };
   db.secondaryPromos.push(newBanner);
+  persistDb();
   
   await addAdminNotification({
     title: 'New Promo Banner',
@@ -45,6 +46,7 @@ export async function updatePromoBanner(id: string, bannerData: PromoBannerFormV
     };
 
     db.secondaryPromos[bannerIndex] = updatedBanner;
+    persistDb();
     
     await addAdminNotification({
         title: 'Promo Banner Updated',
@@ -64,6 +66,7 @@ export async function deletePromoBanner(id: string): Promise<void> {
     
     const deletedBanner = db.secondaryPromos[bannerIndex];
     db.secondaryPromos.splice(bannerIndex, 1);
+    persistDb();
 
     await addAdminNotification({
         title: 'Promo Banner Deleted',

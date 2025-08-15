@@ -3,7 +3,7 @@
 
 import { revalidatePath } from 'next/cache';
 import type { Notification } from './types';
-import { db } from './db';
+import { db, persistDb } from './db';
 
 // This is a helper function used by other server actions, not an action itself.
 export async function addAdminNotification(notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) {
@@ -17,6 +17,7 @@ export async function addAdminNotification(notification: Omit<Notification, 'id'
     if (db.allNotifications.length > 30) {
         db.allNotifications = db.allNotifications.slice(0, 30);
     }
+    persistDb();
     // Revalidate the layout path to trigger a refetch of notifications on the client
     revalidatePath('/admin', 'layout');
 }
@@ -27,5 +28,6 @@ export async function getNotificationsAction(): Promise<Notification[]> {
 
 export async function markAllAsReadAction(): Promise<void> {
   db.allNotifications.forEach(n => { n.read = true; });
+  persistDb();
   revalidatePath('/admin', 'layout');
 }

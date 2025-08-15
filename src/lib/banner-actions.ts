@@ -2,7 +2,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { db } from './db';
+import { db, persistDb } from './db';
 import type { HeroSlide } from '@/lib/types';
 import type { BannerFormValues } from '@/app/admin/banners/components/banner-form';
 import { addAdminNotification } from './notification-actions';
@@ -16,6 +16,7 @@ export async function addHeroSlide(bannerData: BannerFormValues) {
     dataAiHint: bannerData.dataAiHint || bannerData.title.toLowerCase().split(' ').slice(0, 2).join(' '),
   };
   db.heroSlides.unshift(newSlide);
+  persistDb();
 
   await addAdminNotification({
     title: 'New Hero Banner',
@@ -45,6 +46,7 @@ export async function updateHeroSlide(id: string, bannerData: BannerFormValues):
     };
 
     db.heroSlides[slideIndex] = updatedSlide;
+    persistDb();
 
     await addAdminNotification({
       title: 'Hero Banner Updated',
@@ -64,6 +66,7 @@ export async function deleteHeroSlide(id: string): Promise<void> {
     
     const deletedSlide = db.heroSlides[slideIndex];
     db.heroSlides.splice(slideIndex, 1);
+    persistDb();
 
     await addAdminNotification({
       title: 'Hero Banner Deleted',

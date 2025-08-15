@@ -2,7 +2,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { db } from './db';
+import { db, persistDb } from './db';
 import type { Product } from '@/lib/types';
 import type { ProductFormValues } from '@/app/admin/products/components/product-form';
 import { addAdminNotification } from './notification-actions';
@@ -20,6 +20,7 @@ export async function addProduct(productData: ProductFormValues) {
     isNew: true,
   };
   db.products.unshift(newProduct);
+  persistDb();
   
   await addAdminNotification({
     title: 'New Product Added',
@@ -50,6 +51,7 @@ export async function updateProduct(id: string, productData: ProductFormValues):
     };
 
     db.products[productIndex] = updatedProduct;
+    persistDb();
     
     await addAdminNotification({
         title: 'Product Updated',
@@ -75,6 +77,7 @@ export async function deleteProduct(id: string): Promise<void> {
     const productToDelete = db.products[productIndex];
     
     db.products.splice(productIndex, 1);
+    persistDb();
 
     await addAdminNotification({
         title: 'Product Deleted',
