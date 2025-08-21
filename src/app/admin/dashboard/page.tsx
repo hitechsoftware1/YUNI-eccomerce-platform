@@ -27,24 +27,56 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import type { Order } from '@/lib/types';
 import { FlashSaleStatus } from '@/components/admin/flash-sale-status';
+import { getAllUserOrders } from '@/lib/user-orders';
+import { getUsers } from '@/lib/users';
+import { getAllProducts } from '@/lib/products';
 
-const recentSalesData: AdminSale[] = [
-  { name: 'Olivia Martin', email: 'olivia.martin@email.com', amount: '+UGX 1,999,990', fallback: 'OM' },
-  { name: 'Jackson Lee', email: 'jackson.lee@email.com', amount: '+UGX 390,000', fallback: 'JL' },
-  { name: 'Isabella Nguyen', email: 'isabella.nguyen@email.com', amount: '+UGX 299,000', fallback: 'IN' },
-  { name: 'William Kim', email: 'will@email.com', amount: '+UGX 990,000', fallback: 'WK' },
-  { name: 'Sofia Davis', email: 'sofia.davis@email.com', amount: '+UGX 390,000', fallback: 'SD' },
-];
-
-const recentOrders: Order[] = [
-    { id: 'ORD001', customer: { name: 'Olivia Martin', email: 'olivia.martin@email.com' }, date: '2023-11-23', status: 'Fulfilled', total: 250000 },
-    { id: 'ORD002', customer: { name: 'Jackson Lee', email: 'jackson.lee@email.com' }, date: '2023-11-23', status: 'Pending', total: 150000 },
-    { id: 'ORD003', customer: { name: 'Isabella Nguyen', email: 'isabella.nguyen@email.com' }, date: '2023-11-22', status: 'Cancelled', total: 350000 },
-    { id: 'ORD004', customer: { name: 'William Kim', email: 'will@email.com' }, date: '2023-11-21', status: 'Fulfilled', total: 550000 },
-    { id: 'ORD005', customer: { name: 'Sofia Davis', email: 'sofia.davis@email.com' }, date: '2023-11-20', status: 'Fulfilled', total: 75000 },
-];
 
 export default function DashboardPage() {
+    const [orders, setOrders] = React.useState<Order[]>([]);
+    const [totalRevenue, setTotalRevenue] = React.useState(0);
+    const [totalSales, setTotalSales] = React.useState(0);
+    const [totalCustomers, setTotalCustomers] = React.useState(0);
+    const [productsInStock, setProductsInStock] = React.useState(0);
+    const [recentSales, setRecentSales] = React.useState<AdminSale[]>([]);
+    const [recentOrders, setRecentOrders] = React.useState<Order[]>([]);
+
+
+    React.useEffect(() => {
+        // In a real app, you would fetch this data from an API.
+        // For this demo, we're using the mock data functions.
+        const allOrders = getAllUserOrders();
+        const allUsers = getUsers();
+        const allProducts = getAllProducts();
+        
+        setOrders(allOrders);
+
+        // Calculate stats
+        const fulfilledOrders = allOrders.filter(o => o.status === 'Fulfilled');
+        const revenue = fulfilledOrders.reduce((acc, order) => acc + order.total, 0);
+        setTotalRevenue(revenue);
+        setTotalSales(fulfilledOrders.length);
+        setTotalCustomers(allUsers.length);
+        setProductsInStock(allProducts.filter(p => p.status === 'In Stock').length);
+
+        // Prepare data for components
+        const recentSalesData = fulfilledOrders
+            .slice(0, 5)
+            .map(order => ({
+                name: order.customer.name,
+                email: order.customer.email,
+                amount: `+UGX ${order.total.toLocaleString()}`,
+                fallback: order.customer.name.split(' ').map(n => n[0]).join('').toUpperCase() || 'U',
+            }));
+        setRecentSales(recentSalesData);
+
+        const recentOrdersData = allOrders
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            .slice(0, 5);
+        setRecentOrders(recentOrdersData);
+
+    }, []);
+
   return (
     <div className="flex flex-col gap-6">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -56,9 +88,9 @@ export default function DashboardPage() {
                 <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">UGX 45,231,890</div>
+                <div className="text-2xl font-bold">UGX {totalRevenue.toLocaleString()}</div>
                 <p className="text-xs text-muted-foreground">
-                +20.1% from last month
+                From all fulfilled orders
                 </p>
             </CardContent>
             </Card>
@@ -70,21 +102,21 @@ export default function DashboardPage() {
                 <CreditCard className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">+12,234</div>
+                <div className="text-2xl font-bold">+{totalSales.toLocaleString()}</div>
                 <p className="text-xs text-muted-foreground">
-                +19% from last month
+                Total fulfilled orders
                 </p>
             </CardContent>
             </Card>
             <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">New Customers</CardTitle>
+                <CardTitle className="text-sm font-medium">Total Users</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">+573</div>
+                <div className="text-2xl font-bold">+{totalCustomers.toLocaleString()}</div>
                 <p className="text-xs text-muted-foreground">
-                +180.1% from last month
+                Total registered users
                 </p>
             </CardContent>
             </Card>
@@ -96,9 +128,9 @@ export default function DashboardPage() {
                 <Package className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold">+2350</div>
+                <div className="text-2xl font-bold">{productsInStock.toLocaleString()}</div>
                 <p className="text-xs text-muted-foreground">
-                50 new products added
+                Available products
                 </p>
             </CardContent>
             </Card>
@@ -117,11 +149,11 @@ export default function DashboardPage() {
                     <CardHeader>
                         <CardTitle>Recent Sales</CardTitle>
                         <CardDescription>
-                        You made 265 sales this month.
+                        Displaying the latest 5 sales.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <RecentSales sales={recentSalesData} />
+                        <RecentSales sales={recentSales} />
                     </CardContent>
                 </Card>
                 <FlashSaleStatus />
@@ -185,3 +217,5 @@ export default function DashboardPage() {
     </div>
   )
 }
+
+  
