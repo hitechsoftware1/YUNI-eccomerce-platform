@@ -1,12 +1,12 @@
 
+
 import type { UserReview } from './types';
 import { db, persistDb } from './db';
 
 // In a real app, this would be a filtered API call.
 export function getReviewsByEmail(email: string | null | undefined): UserReview[] {
     if (!email) return [];
-    // This is a mock, so we return all reviews for any logged-in user.
-    return db.userReviews;
+    return db.userReviews.filter(review => review.userEmail === email);
 }
 
 export function updateReview(reviewId: string, data: { title: string; comment: string; rating: number }): UserReview | undefined {

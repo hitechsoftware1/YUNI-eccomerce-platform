@@ -110,6 +110,9 @@ export interface Address {
 
 export interface UserReview {
   id: string;
+  userId: string;
+  userEmail: string;
+  userName: string;
   productId: string;
   productName: string;
   productImageUrl: string;

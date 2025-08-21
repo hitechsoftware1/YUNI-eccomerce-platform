@@ -1,4 +1,5 @@
 
+
 import type { 
     Product, 
     HeroSlide, 
@@ -118,8 +119,8 @@ const initialUsers: ManagedUser[] = [
 ];
 
 const initialUserReviews: UserReview[] = [
-  { id: 'rev1', productId: '1', productName: initialProducts.find(p => p.id === '1')?.name || '', productImageUrl: initialProducts.find(p => p.id === '1')?.imageUrl || '', rating: 5, title: 'Absolutely Amazing!', comment: 'The sound quality is out of this world. Noise cancellation works like a charm. Worth every penny!', date: '2023-12-05' },
-  { id: 'rev2', productId: '6', productName: initialProducts.find(p => p.id === '6')?.name || '', productImageUrl: initialProducts.find(p => p.id === '6')?.imageUrl || '', rating: 4, title: 'Great for daily runs', comment: 'Very comfortable and light. I use them for my morning runs and they have been great. Good value for money.', date: '2023-11-28' },
+  { id: 'rev1', userId: 'user-1', userEmail: 'olivia.martin@email.com', userName: 'Olivia Martin', productId: '1', productName: initialProducts.find(p => p.id === '1')?.name || '', productImageUrl: initialProducts.find(p => p.id === '1')?.imageUrl || '', rating: 5, title: 'Absolutely Amazing!', comment: 'The sound quality is out of this world. Noise cancellation works like a charm. Worth every penny!', date: '2023-12-05' },
+  { id: 'rev2', userId: 'user-4', userEmail: 'will@email.com', userName: 'William Kim', productId: '6', productName: initialProducts.find(p => p.id === '6')?.name || '', productImageUrl: initialProducts.find(p => p.id === '6')?.imageUrl || '', rating: 4, title: 'Great for daily runs', comment: 'Very comfortable and light. I use them for my morning runs and they have been great. Good value for money.', date: '2023-11-28' },
 ];
 
 const mockAddress1: Address = { id: 'addr-1', fullName: 'Olivia Martin', addressLine1: '123 Fictional St', city: 'Kampala', country: 'Uganda', postalCode: '10101', phoneNumber: '+256 700 123456' };
