@@ -45,6 +45,8 @@ export function EditFormWrapper({ product }: { product: Product }) {
     status: product.status,
     imageUrl: product.imageUrl,
     dataAiHint: product.dataAiHint,
+    rating: product.rating,
+    reviewCount: product.reviewCount || 0,
   };
 
   return <ProductForm onSave={handleSaveProduct} isSaving={isSaving} initialData={initialData} />;

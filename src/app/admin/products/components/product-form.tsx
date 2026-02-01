@@ -15,6 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { generateProductImage } from '@/ai/flows/generate-product-image-flow';
 import { Wand2 } from 'lucide-react';
 import Image from 'next/image';
+import { Slider } from '@/components/ui/slider';
 
 
 const productFormSchema = z.object({
@@ -25,6 +26,8 @@ const productFormSchema = z.object({
   status: z.enum(['In Stock', 'Out of Stock', 'Archived'], { required_error: 'Please select a status.' }),
   imageUrl: z.string().url({ message: 'Please enter a valid URL.' }).optional().or(z.literal('')),
   dataAiHint: z.string().max(40, { message: 'Hint cannot be longer than two words.' }).optional(),
+  rating: z.coerce.number().min(0).max(5),
+  reviewCount: z.coerce.number().int().min(0),
 });
 
 export type ProductFormValues = z.infer<typeof productFormSchema>;
@@ -46,6 +49,8 @@ export function ProductForm({ initialData, onSave, isSaving }: ProductFormProps)
       status: 'In Stock',
       imageUrl: '',
       dataAiHint: '',
+      rating: 0,
+      reviewCount: 0,
     },
   });
   const { toast } = useToast();
@@ -154,6 +159,45 @@ export function ProductForm({ initialData, onSave, isSaving }: ProductFormProps)
             )}
             />
         </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+             <FormField
+                control={form.control}
+                name="rating"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Rating ({field.value.toFixed(1)})</FormLabel>
+                    <FormControl>
+                        <Slider
+                            min={0}
+                            max={5}
+                            step={0.1}
+                            defaultValue={[field.value]}
+                            onValueChange={(value) => field.onChange(value[0])}
+                            disabled={allDisabled}
+                        />
+                    </FormControl>
+                    <FormDescription>Set the product's average rating (0 to 5).</FormDescription>
+                    <FormMessage />
+                    </FormItem>
+                )}
+            />
+            <FormField
+                control={form.control}
+                name="reviewCount"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Review Count</FormLabel>
+                    <FormControl>
+                        <Input type="number" placeholder="e.g., 125" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} disabled={allDisabled} />
+                    </FormControl>
+                    <FormDescription>Set the total number of reviews.</FormDescription>
+                    <FormMessage />
+                    </FormItem>
+                )}
+            />
+        </div>
+
         <FormField
             control={form.control}
             name="status"
