@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { revalidatePath } from 'next/cache';
@@ -31,16 +32,37 @@ export async function updateUserStatus(userId: string, status: ManagedUser['stat
     throw new Error('User not found');
   }
   const user = db.users[userIndex];
+  const oldStatus = user.status;
   user.status = status;
+
+  // If rejecting, also set role back to Buyer
+  if (status === 'Rejected') {
+      user.role = 'Buyer';
+  }
+
   persistDb();
+
+  let notificationDescription = `User ${user.name}'s status is now ${status}.`;
+
+  if (oldStatus === 'Pending Approval' && status === 'Active') {
+      notificationDescription = `Seller application for ${user.name} has been approved.`;
+  } else if (oldStatus === 'Pending Approval' && status === 'Rejected') {
+      notificationDescription = `Seller application for ${user.name} has been rejected.`;
+  } else if (status === 'Banned') {
+      notificationDescription = `User ${user.name} has been banned.`;
+  } else if (oldStatus === 'Banned' && status === 'Active') {
+      notificationDescription = `User ${user.name} has been unbanned.`;
+  }
+
 
   await addAdminNotification({
     title: 'User Status Updated',
-    description: `User ${user.name} is now ${status}.`,
+    description: notificationDescription,
     href: `/admin/users`
   });
 
   revalidatePath('/admin/users');
+  revalidatePath('/admin/sellers');
   return user;
 }
 

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import * as React from 'react';
@@ -35,9 +36,10 @@ import { useToast } from '@/hooks/use-toast';
 interface UsersTableProps {
   users: ManagedUser[];
   onBanClick: (user: ManagedUser) => void;
+  onRejectClick: (user: ManagedUser) => void;
 }
 
-export function UsersTable({ users, onBanClick }: UsersTableProps) {
+export function UsersTable({ users, onBanClick, onRejectClick }: UsersTableProps) {
     const router = useRouter();
     const { toast } = useToast();
 
@@ -105,7 +107,7 @@ export function UsersTable({ users, onBanClick }: UsersTableProps) {
                  </Badge>
             </TableCell>
             <TableCell>
-                <Badge variant={user.status === 'Banned' ? 'destructive' : 'outline'} className={cn('capitalize', 
+                <Badge variant={user.status === 'Banned' || user.status === 'Rejected' ? 'destructive' : 'outline'} className={cn('capitalize', 
                     user.status === 'Active' && 'border-green-500 text-green-600',
                     user.status === 'Pending Approval' && 'border-yellow-500 text-yellow-600'
                 )}>
@@ -143,7 +145,7 @@ export function UsersTable({ users, onBanClick }: UsersTableProps) {
                             <UserCheck className="mr-2 h-4 w-4" />
                             <span>Approve Seller</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => onBanClick(user)}>
+                        <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => onRejectClick(user)}>
                             <UserX className="mr-2 h-4 w-4" />
                             <span>Reject Seller</span>
                         </DropdownMenuItem>

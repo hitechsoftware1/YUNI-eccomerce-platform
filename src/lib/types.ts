@@ -153,7 +153,7 @@ export interface ManagedUser {
   name: string;
   email: string;
   role: 'Admin' | 'Seller' | 'Buyer';
-  status: 'Active' | 'Banned' | 'Pending Approval';
+  status: 'Active' | 'Banned' | 'Pending Approval' | 'Rejected';
   lastLogin: string;
 }
 

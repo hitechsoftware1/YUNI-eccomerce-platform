@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import * as React from 'react';
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { UsersTable } from "./users-table";
 import { BanUserDialog } from './ban-user-dialog';
+import { RejectUserDialog } from './reject-user-dialog';
 import { useToast } from '@/hooks/use-toast';
 import type { ManagedUser } from '@/lib/types';
 import { updateUserStatus } from '@/lib/user-actions';
@@ -24,6 +26,8 @@ export function UsersClient({ users: initialUsers }: UsersClientProps) {
   const [users, setUsers] = React.useState<ManagedUser[]>(initialUsers);
   const [userToBan, setUserToBan] = React.useState<ManagedUser | null>(null);
   const [isBanning, setIsBanning] = React.useState(false);
+  const [userToReject, setUserToReject] = React.useState<ManagedUser | null>(null);
+  const [isRejecting, setIsRejecting] = React.useState(false);
   const router = useRouter();
   const { toast } = useToast();
   
@@ -33,6 +37,10 @@ export function UsersClient({ users: initialUsers }: UsersClientProps) {
 
   const handleBanClick = (user: ManagedUser) => {
     setUserToBan(user);
+  };
+
+  const handleRejectClick = (user: ManagedUser) => {
+    setUserToReject(user);
   };
 
   const handleConfirmBan = async () => {
@@ -58,6 +66,29 @@ export function UsersClient({ users: initialUsers }: UsersClientProps) {
     }
   };
 
+  const handleConfirmReject = async () => {
+    if (!userToReject) return;
+
+    setIsRejecting(true);
+    try {
+      await updateUserStatus(userToReject.id, 'Rejected');
+      toast({
+        title: 'Application Rejected',
+        description: `Seller application for "${userToReject.name}" has been rejected.`,
+      });
+      setUserToReject(null);
+      router.refresh();
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to reject application. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsRejecting(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <Card>
@@ -68,7 +99,7 @@ export function UsersClient({ users: initialUsers }: UsersClientProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <UsersTable users={users} onBanClick={handleBanClick} />
+          <UsersTable users={users} onBanClick={handleBanClick} onRejectClick={handleRejectClick} />
         </CardContent>
       </Card>
       {userToBan && (
@@ -78,6 +109,15 @@ export function UsersClient({ users: initialUsers }: UsersClientProps) {
             onConfirm={handleConfirmBan}
             isBanning={isBanning}
             userName={userToBan.name}
+        />
+      )}
+      {userToReject && (
+        <RejectUserDialog
+            isOpen={!!userToReject}
+            onOpenChange={(isOpen) => !isOpen && setUserToReject(null)}
+            onConfirm={handleConfirmReject}
+            isRejecting={isRejecting}
+            userName={userToReject.name}
         />
       )}
     </div>
