@@ -17,10 +17,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { applyToBeSeller } from '@/lib/user-actions';
+import { applyToBeSeller, getUserByIdAction } from '@/lib/user-actions';
 import { useToast } from '@/hooks/use-toast';
-import { getUserById } from '@/lib/users';
 import type { ManagedUser } from '@/lib/types';
+import { isAdmin } from '@/lib/admins';
 
 
 const benefits = [
@@ -49,14 +49,24 @@ export default function BecomeASellerPage() {
     const { toast } = useToast();
     const [isSubmitting, setIsSubmitting] = React.useState(false);
     const [userData, setUserData] = React.useState<ManagedUser | null>(null);
+    const [isUserDataLoading, setIsUserDataLoading] = React.useState(true);
 
     React.useEffect(() => {
-        if (!authLoading && currentUser) {
-            // In a real app this would be an API call
-            const user = getUserById(currentUser.uid);
+        const fetchUserData = async () => {
+            if (!currentUser) {
+                setIsUserDataLoading(false);
+                return;
+            }
+            setIsUserDataLoading(true);
+            const user = await getUserByIdAction(currentUser.uid);
             if (user) {
                 setUserData(user);
             }
+            setIsUserDataLoading(false);
+        };
+
+        if (!authLoading) {
+            fetchUserData();
         }
     }, [currentUser, authLoading]);
 
@@ -86,7 +96,7 @@ export default function BecomeASellerPage() {
                 description: "Thank you! We will review your application and get back to you soon.",
             });
             // Re-fetch user data to update status
-             const user = getUserById(currentUser.uid);
+             const user = await getUserByIdAction(currentUser.uid);
              if (user) setUserData(user);
         } catch (error: any) {
             toast({
@@ -100,7 +110,7 @@ export default function BecomeASellerPage() {
     };
     
     const renderContent = () => {
-        if (authLoading || (currentUser && !userData)) {
+        if (authLoading || isUserDataLoading) {
             return (
                  <div className="flex justify-center items-center h-64">
                     <Loader2 className="h-8 w-8 animate-spin" />
@@ -118,8 +128,21 @@ export default function BecomeASellerPage() {
                 </div>
             )
         }
+
+        if (isAdmin(currentUser.email)) {
+            return (
+                 <div className="text-center p-8 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <Info className="h-16 w-16 text-blue-600 mx-auto mb-4" />
+                    <h2 className="text-2xl font-bold">Admin Account</h2>
+                    <p className="text-muted-foreground mt-2">As an administrator, you already have full seller privileges.</p>
+                     <Button asChild className="mt-6" onClick={() => router.push('/admin/dashboard')}>
+                        <Link href="/admin/dashboard">Go to Admin Dashboard</Link>
+                    </Button>
+                </div>
+            )
+        }
         
-        if (userData?.role === 'Seller') {
+        if (userData?.role === 'Seller' && userData?.status === 'Active') {
             return (
                  <div className="text-center p-8 bg-green-50 dark:bg-green-900/20 rounded-lg">
                     <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />

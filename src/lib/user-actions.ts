@@ -7,6 +7,22 @@ import { db, persistDb } from './db';
 import type { ManagedUser } from './types';
 import { addAdminNotification } from './notification-actions';
 
+export async function getUserByIdAction(userId: string) {
+    return db.users.find(user => user.id === userId);
+}
+
+export async function addUserAction(user: Omit<ManagedUser, 'lastLogin'>) {
+    const existingUser = db.users.find(u => u.id === user.id);
+    if (!existingUser) {
+        const newUser: ManagedUser = {
+            ...user,
+            lastLogin: new Date().toISOString(),
+        }
+        db.users.push(newUser);
+        persistDb();
+    }
+}
+
 export async function updateUserRole(userId: string, role: ManagedUser['role']) {
   const userIndex = db.users.findIndex((u) => u.id === userId);
   if (userIndex === -1) {

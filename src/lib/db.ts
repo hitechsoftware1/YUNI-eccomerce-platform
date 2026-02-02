@@ -107,11 +107,7 @@ const initialHomepageSections: HomepageSection[] = [
   { id: 'sec-12', type: 'SecondaryPromoGrid', title: 'Secondary Promo Banners', enabled: true, order: 13 },
 ];
 
-const initialUsers: ManagedUser[] = [
-  { id: 'user-4', name: 'William Kim', email: 'will@email.com', role: 'Admin', status: 'Active', lastLogin: '2024-05-20T11:45:00Z' },
-  { id: 'user-6', name: 'Hitech Software', email: 'hitechsoftware03@gmail.com', role: 'Admin', status: 'Active', lastLogin: '2024-05-20T12:00:00Z' },
-];
-
+const initialUsers: ManagedUser[] = [];
 
 const initialPromoBanners: PromoBannerData[] = [
   {
@@ -125,8 +121,6 @@ const initialPromoBanners: PromoBannerData[] = [
     enabled: true,
   }
 ];
-
-const DB_STORAGE_KEY = 'yuni-app-db';
 
 interface DbType {
     products: Product[];
@@ -167,38 +161,23 @@ const initialDb: DbType = {
 
 // --- DATABASE SETUP ---
 
-function loadDb(): DbType {
-  if (typeof window !== 'undefined') {
-    const savedDb = window.localStorage.getItem(DB_STORAGE_KEY);
-    if (savedDb) {
-      try {
-        const parsedDb = JSON.parse(savedDb);
-        // Basic check to see if loaded data is valid
-        if (parsedDb && typeof parsedDb === 'object' && 'products' in parsedDb) {
-            return parsedDb;
-        }
-      } catch (e) {
-        console.error("Failed to parse DB from localStorage", e);
-      }
-    }
-  }
-  return JSON.parse(JSON.stringify(initialDb)); // Return a fresh copy to avoid mutation
-}
+// Use a singleton pattern to ensure the same DB instance is used across the server.
+let dbInstance: DbType | null = null;
 
-function saveDb(dbInstance: DbType) {
-  if (typeof window !== 'undefined') {
-    try {
-        window.localStorage.setItem(DB_STORAGE_KEY, JSON.stringify(dbInstance));
-    } catch(e) {
-        console.error("Failed to save DB to localStorage", e);
+function initializeDb(): DbType {
+    if (!dbInstance) {
+        // Deep copy initialDb to prevent mutation of the original object during server lifetime
+        dbInstance = JSON.parse(JSON.stringify(initialDb));
     }
-  }
+    return dbInstance;
 }
 
 // Global instance of the DB
-export const db = loadDb();
+export const db = initializeDb();
 
-// Persist any changes made to the db object
+// The persistDb function is now a no-op as state is only in-memory on the server.
+// In a real app, this would write to a persistent database.
 export function persistDb() {
-    saveDb(db);
+  // This function is kept for compatibility, but it does nothing now.
+  // The 'db' object is the single source of truth in memory.
 }

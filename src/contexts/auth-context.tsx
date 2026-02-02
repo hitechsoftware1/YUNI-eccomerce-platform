@@ -19,7 +19,7 @@ import { z } from 'zod';
 import { addLoginActivity } from '@/lib/login-activity';
 import { clearCart } from '@/lib/user-cart';
 import { clearWishlist } from '@/lib/user-wishlist';
-import { getUserById, addUser } from '@/lib/users';
+import { addUserAction, getUserByIdAction } from '@/lib/user-actions';
 
 // Define and export schemas for reuse
 export const loginSchema = z.object({
@@ -59,18 +59,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
 
   React.useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
       if (user) {
-        // This is a mock: check if user exists in our DB, if not, add them.
-        if (!getUserById(user.uid)) {
-          addUser({
+        // Check if user exists in our DB, if not, add them via a server action.
+        const existingUser = await getUserByIdAction(user.uid);
+        if (!existingUser) {
+          await addUserAction({
             id: user.uid,
             name: user.displayName || 'New User',
             email: user.email || '',
             role: 'Buyer',
             status: 'Active',
-            lastLogin: new Date().toISOString(),
           });
         }
       }
@@ -107,13 +107,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           displayName: name,
         });
 
-        addUser({
+        await addUserAction({
           id: user.uid,
           name: name,
           email: email,
           role: 'Buyer',
           status: 'Active',
-          lastLogin: new Date().toISOString(),
         });
         
         await user.reload();
