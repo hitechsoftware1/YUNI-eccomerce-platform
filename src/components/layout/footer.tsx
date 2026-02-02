@@ -43,6 +43,11 @@ export function Footer() {
             <h3 className="font-headline font-semibold">About YUNI</h3>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
+                <Link href="/become-a-seller" className="text-muted-foreground hover:text-primary">
+                  Sell on YUNI
+                </Link>
+              </li>
+              <li>
                 <Link href="#" className="text-muted-foreground hover:text-primary">
                   About Us
                 </Link>
@@ -64,7 +69,7 @@ export function Footer() {
             <div className="mt-4 space-y-2 text-sm text-muted-foreground">
               <p>Kira, Kyaliwajala, Kampala City,256</p>
               <p>Email: support@yuni.com</p>
-              <p>Phone: +256740522738</p>
+              <p>Phone: +256742928508</p>
               <div className="flex space-x-4 mt-4">
                 <Link href="#">
                   <Twitter className="h-5 w-5 text-[#1DA1F2] transition-opacity hover:opacity-80" />
@@ -75,7 +80,7 @@ export function Footer() {
                 <Link href="#">
                   <Instagram className="h-5 w-5 text-[#E4405F] transition-opacity hover:opacity-80" />
                 </Link>
-                <Link href="https://wa.me/256740522738" target="_blank" rel="noopener noreferrer">
+                <Link href="https://wa.me/256742928508" target="_blank" rel="noopener noreferrer">
                   <WhatsappIcon className="h-5 w-5 text-[#25D366] transition-opacity hover:opacity-80" />
                 </Link>
               </div>
@@ -86,9 +91,9 @@ export function Footer() {
           <p>&copy; {new Date().getFullYear()} YUNI. All rights reserved.</p>
           <div className="mt-4">
             <p>Designed by hìtechsoftwarecompany</p>
-            <a href="https://wa.me/256708281146" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-primary transition-colors">
+            <a href="https://wa.me/256742928508" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-primary transition-colors">
               <WhatsappIcon className="h-4 w-4" />
-              <span>+256 708 281146</span>
+              <span>+256 742 928 508</span>
             </a>
           </div>
         </div>

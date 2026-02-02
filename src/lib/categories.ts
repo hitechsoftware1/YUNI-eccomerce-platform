@@ -1,18 +1,18 @@
 import type { Category } from "@/lib/types";
 
 export const categories: Category[] = [
-  { id: "fashion", name: "Fashion", imageUrl: 'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmYXNoaW9uJTIwY2xvdGhpbmd8ZW58MHx8fHwxNzUyMzE4NTgwfDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'fashion clothing' },
-  { id: "electronics", name: "Electronics", imageUrl: 'https://images.unsplash.com/photo-1717295248521-4c1f2b6bcd6e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxlbGVjdHJvbmljJTIwZ2FkZ2V0c3xlbnwwfHx8fDE3NTIzMTg1ODB8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'electronic gadgets' },
-  { id: "computing", name: "Computing", imageUrl: 'https://images.unsplash.com/photo-1620233389768-4eafd182841a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb21wdXRpbmclMjBsYXB0b3B8ZW58MHx8fHwxNzUyMzE4NTgwfDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'computing laptop' },
-  { id: "health", name: "Health", imageUrl: 'https://images.unsplash.com/photo-1610740654950-070baeb919ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxoZWFsdGglMjBwcm9kdWN0c3xlbnwwfHx8fDE3NTIzMTg1ODB8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'health products' },
-  { id: "home-office", name: "Home & Office", imageUrl: 'https://images.unsplash.com/photo-1594235048794-fae8583a5af5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxvZmZpY2UlMjBmdXJuaXR1cmV8ZW58MHx8fHwxNzUyMzE4NTgxfDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'office furniture' },
-  { id: "baby", name: "Baby Products", imageUrl: 'https://images.unsplash.com/photo-1559454403-b8fb88521f11?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxiYWJ5JTIwdG95c3xlbnwwfHx8fDE3NTIzMTg1ODB8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'baby toys' },
-  { id: "gaming", name: "Gaming", imageUrl: 'https://images.unsplash.com/photo-1603009516102-14d93178f395?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Z2FtaW5nJTIwY29udHJvbGxlcnxlbnwwfHx8fDE3NTIzMTg1ODB8MA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'gaming controller' },
-  { id: "tv-audio", name: "TV & Audio", imageUrl: 'https://images.unsplash.com/photo-1623503456255-dae1153a4509?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx0diUyMGF1ZGlvfGVufDB8fHx8MTc1MjMxODU4MHww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'tv audio' },
-  { id: "groceries", name: "Groceries", imageUrl: 'https://images.unsplash.com/photo-1740362868692-2956a4e306cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Z3JvY2VyeSUyMGl0ZW1zfGVufDB8fHx8MTc1MjMxODU4MHww&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'grocery items' },
-  { id: "beauty", name: "Beauty", imageUrl: 'https://images.unsplash.com/photo-1586359204685-1d007c9cf2e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxiZWF1dHklMjBjb3NtZXRpY3N8ZW58MHx8fHwxNzUyMzE4NTgwfDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'beauty cosmetics' },
-  { id: "books", name: "Books", imageUrl: 'https://images.unsplash.com/photo-1519791883288-dc8bd696e667?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxib29rcyUyMHJlYWRpbmd8ZW58MHx8fHwxNzUyMzE4NTgwfDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'books reading' },
-  { id: "beverages", name: "Beverages", imageUrl: 'https://images.unsplash.com/photo-1594082685307-31c2c5bb1f59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxiZXZlcmFnZXMlMjBkcmlua3N8ZW58MHx8fHwxNzUyMzE4NTgwfDA&ixlib=rb-4.1.0&q=80&w=1080', dataAiHint: 'beverages drinks' },
+  { id: "fashion", name: "Fashion", imageUrl: 'https://i.pinimg.com/1200x/20/a5/66/20a56673b1d6e0ac73501a96c89cf766.jpg', dataAiHint: 'fashion clothing' },
+  { id: "electronics", name: "Electronics", imageUrl: 'https://i.pinimg.com/1200x/cd/97/c0/cd97c05facff694b6b52a172515e9d3c.jpg', dataAiHint: 'electronic gadgets' },
+  { id: "computing", name: "Computing", imageUrl: 'https://i.pinimg.com/736x/69/35/2e/69352e36b46fcffe5a033b0881460872.jpg', dataAiHint: 'computing laptop' },
+  { id: "health", name: "Health", imageUrl: 'https://i.pinimg.com/736x/5a/4e/5a/5a4e5a06c675ec597ab93ccea120cd20.jpg', dataAiHint: 'health products' },
+  { id: "home-office", name: "Home & Office", imageUrl: 'https://i.pinimg.com/736x/b7/c9/93/b7c993acb593bb03c6707cd97990fbda.jpg', dataAiHint: 'office furniture' },
+  { id: "baby", name: "Baby Products", imageUrl: 'https://i.pinimg.com/736x/fb/61/68/fb6168da40584e1c1a1773082b341d51.jpg', dataAiHint: 'baby toys' },
+  { id: "gaming", name: "Gaming", imageUrl: 'https://i.pinimg.com/1200x/41/74/1b/41741b5c06224856d09fed7091343850.jpg', dataAiHint: 'gaming controller' },
+  { id: "tv-audio", name: "TV & Audio", imageUrl: 'https://i.pinimg.com/1200x/63/0c/be/630cbedccfb7c3a1f06f8c3975b447a8.jpg', dataAiHint: 'tv audio' },
+  { id: "groceries", name: "Groceries", imageUrl: 'https://i.pinimg.com/1200x/a5/f7/7a/a5f77a668f289de391f889e07a06d709.jpg', dataAiHint: 'grocery items' },
+  { id: "beauty", name: "Beauty", imageUrl: 'https://i.pinimg.com/736x/f5/f1/99/f5f19992bfbd61997ecb2a776fc8987f.jpg', dataAiHint: 'beauty cosmetics' },
+  { id: "books", name: "Books", imageUrl: 'https://i.pinimg.com/736x/14/2f/22/142f22927d992d489e4ac251ba4b9f62.jpg', dataAiHint: 'books reading' },
+  { id: "beverages", name: "Beverages", imageUrl: 'https://i.pinimg.com/736x/51/55/0d/51550d1ab3da691fa7cf550a02ebcc0d.jpg', dataAiHint: 'beverages drinks' },
 ];
 
 export function getCategoryBySlug(slug: string): Category | undefined {

@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -129,6 +128,11 @@ export function Header() {
           </div>
 
           <div className="hidden items-center gap-4 sm:flex">
+            <Button asChild variant="ghost" size="sm">
+              <Link href="/become-a-seller">
+                Become a Seller
+              </Link>
+            </Button>
             <AccountButton />
             <Button asChild variant="ghost" size="sm" className="flex items-center gap-2 relative">
               <Link href="/cart">

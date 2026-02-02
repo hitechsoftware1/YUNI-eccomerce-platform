@@ -63,9 +63,9 @@ const initialProducts: Product[] = [
 ];
 
 const initialHeroSlides: HeroSlide[] = [
-  { id: '1', imageUrl: "https://i.pinimg.com/564x/8e/31/a3/8e31a3a3399b244670a417bf2b12658f.jpg", dataAiHint: "sale fashion", title: "Mega Fashion Sale", subtitle: "Up to 70% off on all brands", link: "/category/fashion", enabled: true },
-  { id: '2', imageUrl: "https://i.pinimg.com/564x/f3/09/98/f309983f4368153eb3c93e4219156b69.jpg", dataAiHint: "new electronics", title: "Latest Gadgets Arrived", subtitle: "Discover cutting-edge technology", link: "/category/electronics", enabled: true },
-  { id: '3', imageUrl: "https://i.pinimg.com/564x/16/e2/25/16e22557521e1a556da8740c83235313.jpg", dataAiHint: "home decor", title: "Transform Your Home", subtitle: "Find the perfect decor for your space", link: "/category/home-office", enabled: true },
+  { id: '1', imageUrl: "https://i.pinimg.com/736x/f9/fd/e1/f9fde1578ace58a7da1484211c00402b.jpg", dataAiHint: "sale fashion", title: "Mega Fashion Sale", subtitle: "Up to 70% off on all brands", link: "/category/fashion", enabled: true },
+  { id: '2', imageUrl: "https://i.pinimg.com/736x/af/23/f1/af23f1574c542d5aa187c567aadf81e2.jpg", dataAiHint: "new electronics", title: "Latest Gadgets Arrived", subtitle: "Discover cutting-edge technology", link: "/category/electronics", enabled: true },
+  { id: '3', imageUrl: "https://i.pinimg.com/736x/44/b0/87/44b08770d814f24c6d41faafd08f8fed.jpg", dataAiHint: "home decor", title: "Transform Your Home", subtitle: "Find the perfect decor for your space", link: "/category/home-office", enabled: true },
 ];
 
 const initialPromoCards: PromoCard[] = [
@@ -86,9 +86,9 @@ const initialPromoCards: PromoCard[] = [
 ];
 
 const initialSecondaryPromos: SecondaryPromoGridItem[] = [
-  { id: 'promo1', alt: 'Lato Milk Promotion', imageUrl: 'https://i.pinimg.com/564x/e7/87/40/e78740d39e25d2c5e5264b971a7428ac.jpg', dataAiHint: 'milk promotion', link: '#', aspectRatio: '2/1', enabled: true },
-  { id: 'promo2', alt: 'Tang Promotion', imageUrl: 'https://i.pinimg.com/564x/a0/0b/49/a00b490f0580436d655f414523c13bb1.jpg', dataAiHint: 'juice promotion', link: '#', aspectRatio: '2/1', enabled: true },
-  { id: 'promo3', alt: 'Tropical Heat Snack Promotion', imageUrl: 'https://i.pinimg.com/564x/5b/c9/a1/5bc9a1c1d09292376999a03195f2e6e3.jpg', dataAiHint: 'snack promotion', link: '#', aspectRatio: '4/1', enabled: true },
+  { id: 'promo1', alt: 'Hitech Software Promo', imageUrl: 'https://i.pinimg.com/736x/44/b0/87/44b08770d814f24c6d41faafd08f8fed.jpg', dataAiHint: 'milk promotion', link: '#', aspectRatio: '2/1', enabled: true },
+  { id: 'promo2', alt: 'Cozyleen Furniture Promotion', imageUrl: 'https://i.pinimg.com/736x/ca/a9/4c/caa94c4337b5f2a29fddffa81b28b853.jpg', dataAiHint: 'juice promotion', link: '#', aspectRatio: '2/1', enabled: true },
+  { id: 'promo3', alt: 'ChopChop Snacks Promotion', imageUrl: 'https://i.pinimg.com/736x/ca/a9/4c/caa94c4337b5f2a29fddffa81b28b853.jpg', dataAiHint: 'snack promotion', link: '#', aspectRatio: '4/1', enabled: true },
 ];
 
 const initialHomepageSections: HomepageSection[] = [
