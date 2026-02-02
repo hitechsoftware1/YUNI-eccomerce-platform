@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { ShoppingBag, Twitter, Facebook, Instagram } from "lucide-react";
 import { WhatsappIcon } from "@/components/icons/whatsapp-icon";
@@ -23,17 +24,17 @@ export function Footer() {
             <h3 className="font-headline font-semibold">Shop</h3>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
-                <Link href="#" className="text-muted-foreground hover:text-primary">
+                <Link href="/search?q=new arrivals" className="text-muted-foreground hover:text-primary">
                   New Arrivals
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-muted-foreground hover:text-primary">
+                <Link href="/search?q=best sellers" className="text-muted-foreground hover:text-primary">
                   Best Sellers
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-muted-foreground hover:text-primary">
+                <Link href="/search?q=flash sales" className="text-muted-foreground hover:text-primary">
                   Flash Sales
                 </Link>
               </li>
@@ -48,17 +49,17 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-muted-foreground hover:text-primary">
+                <Link href="/about" className="text-muted-foreground hover:text-primary">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-muted-foreground hover:text-primary">
+                <Link href="/contact" className="text-muted-foreground hover:text-primary">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-muted-foreground hover:text-primary">
+                <Link href="/careers" className="text-muted-foreground hover:text-primary">
                   Careers
                 </Link>
               </li>
