@@ -19,7 +19,7 @@ import { z } from 'zod';
 import { addLoginActivity } from '@/lib/login-activity';
 import { clearCart } from '@/lib/user-cart';
 import { clearWishlist } from '@/lib/user-wishlist';
-import { addUserAction, getUserByIdAction } from '@/lib/user-actions';
+import { addUserAction, getUserByIdAction, updateUserRole } from '@/lib/user-actions';
 import { isAdmin } from '@/lib/admins';
 
 // Define and export schemas for reuse
@@ -61,12 +61,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setCurrentUser(user);
       if (user) {
-        // Check if user exists in our DB, if not, add them via a server action.
         const existingUser = await getUserByIdAction(user.uid);
+        const isUserAdminByEmail = isAdmin(user.email);
+
         if (!existingUser) {
-          const userRole = isAdmin(user.email) ? 'Admin' : 'Buyer';
+          // User does not exist, create them with the correct role.
+          const userRole = isUserAdminByEmail ? 'Admin' : 'Buyer';
           await addUserAction({
             id: user.uid,
             name: user.displayName || 'New User',
@@ -74,8 +75,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             role: userRole,
             status: 'Active',
           });
+        } else if (isUserAdminByEmail && existingUser.role !== 'Admin') {
+          // User exists but has the wrong role (e.g., 'Buyer'). Correct it.
+          await updateUserRole(user.uid, 'Admin');
         }
       }
+      setCurrentUser(user);
       setLoading(false);
     });
     return unsubscribe;
