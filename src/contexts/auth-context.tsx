@@ -20,6 +20,7 @@ import { addLoginActivity } from '@/lib/login-activity';
 import { clearCart } from '@/lib/user-cart';
 import { clearWishlist } from '@/lib/user-wishlist';
 import { addUserAction, getUserByIdAction } from '@/lib/user-actions';
+import { isAdmin } from '@/lib/admins';
 
 // Define and export schemas for reuse
 export const loginSchema = z.object({
@@ -65,11 +66,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Check if user exists in our DB, if not, add them via a server action.
         const existingUser = await getUserByIdAction(user.uid);
         if (!existingUser) {
+          const userRole = isAdmin(user.email) ? 'Admin' : 'Buyer';
           await addUserAction({
             id: user.uid,
             name: user.displayName || 'New User',
             email: user.email || '',
-            role: 'Buyer',
+            role: userRole,
             status: 'Active',
           });
         }
@@ -107,11 +109,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           displayName: name,
         });
 
+        const userRole = isAdmin(user.email) ? 'Admin' : 'Buyer';
         await addUserAction({
           id: user.uid,
           name: name,
           email: email,
-          role: 'Buyer',
+          role: userRole,
           status: 'Active',
         });
         
