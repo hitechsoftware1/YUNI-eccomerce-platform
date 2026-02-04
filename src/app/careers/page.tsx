@@ -40,7 +40,7 @@ export default function CareersPage() {
       <main className="pt-16 md:pt-20">
          <div className="relative h-64 md:h-80 w-full">
             <Image
-                src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2232&auto=format&fit=crop"
+                src="https://i.pinimg.com/1200x/49/c4/d9/49c4d980bc8420c29424ce55a11709f5.jpg"
                 alt="Work at YUNI"
                 fill
                 className="object-cover"

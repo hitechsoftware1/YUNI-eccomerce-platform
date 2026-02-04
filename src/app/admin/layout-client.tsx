@@ -56,13 +56,13 @@ import {
   DropdownMenuPortal,
   DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
-import { isAdmin } from '@/lib/admins';
 import { useToast } from '@/hooks/use-toast';
 import { markAllAsReadAction } from '@/lib/notification-actions';
-import type { Notification } from '@/lib/types';
+import type { Notification, ManagedUser } from '@/lib/types';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { getUserByIdAction } from '@/lib/user-actions';
 
 export function AdminLayoutClient({
   notifications: initialNotifications,
@@ -77,6 +77,7 @@ export function AdminLayoutClient({
   const { toast } = useToast();
   
   const [notifications, setNotifications] = React.useState(initialNotifications);
+  const [managedUser, setManagedUser] = React.useState<ManagedUser | null>(null);
 
   React.useEffect(() => {
     setNotifications(initialNotifications);
@@ -96,22 +97,30 @@ export function AdminLayoutClient({
   React.useEffect(() => {
     if (loading) return;
 
-    if (!currentUser) {
-      router.push('/');
-      return;
-    }
+    const checkUserRole = async () => {
+        if (!currentUser) {
+            router.push('/');
+            return;
+        }
 
-    if (!isAdmin(currentUser.email)) {
-      toast({
-        title: 'Access Denied',
-        description: 'You do not have permission to view this page.',
-        variant: 'destructive',
-      });
-      router.push('/');
+        const user = await getUserByIdAction(currentUser.uid);
+        if (!user || (user.role !== 'Admin' && user.role !== 'Seller')) {
+             toast({
+                title: 'Access Denied',
+                description: 'You do not have permission to view this page.',
+                variant: 'destructive',
+            });
+            router.push('/account');
+        } else {
+            setManagedUser(user);
+        }
     }
+    
+    checkUserRole();
+
   }, [currentUser, loading, router, toast]);
 
-  if (loading || !currentUser || !isAdmin(currentUser.email)) {
+  if (loading || !currentUser || !managedUser) {
     return (
       <div className="flex h-screen items-center justify-center bg-background">
         <p>Loading or redirecting...</p>
@@ -124,6 +133,8 @@ export function AdminLayoutClient({
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   }
 
+  const isUserAdmin = managedUser.role === 'Admin';
+
   return (
     <SidebarProvider>
       <Sidebar>
@@ -131,7 +142,7 @@ export function AdminLayoutClient({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Package2 className="h-6 w-6 text-primary" />
-              <h1 className="text-xl font-semibold text-primary">YUNI Admin</h1>
+              <h1 className="text-xl font-semibold text-primary">{isUserAdmin ? 'YUNI Admin' : 'YUNI Seller'}</h1>
             </div>
             <SidebarMenuButton asChild variant="ghost" size="icon" tooltip="View Site">
               <Link href="/" target="_blank" rel="noopener noreferrer">
@@ -154,43 +165,47 @@ export function AdminLayoutClient({
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarGroup>
-            <SidebarGroup>
-                <SidebarGroupLabel>Content</SidebarGroupLabel>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/banners')}>
-                        <Link href="/admin/banners">
-                        <ImageIcon />
-                        Hero Banners
-                        </Link>
-                    </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/promocards')}>
-                        <Link href="/admin/promocards">
-                        <AppWindow />
-                        Promo Cards
-                        </Link>
-                    </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/promobanners')}>
-                        <Link href="/admin/promobanners">
-                        <GalleryHorizontal />
-                        Promo Banners
-                        </Link>
-                    </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/homepage')}>
-                        <Link href="/admin/homepage">
-                        <LayoutList />
-                        Homepage
-                        </Link>
-                    </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarGroup>
+            
+            {isUserAdmin && (
+              <SidebarGroup>
+                  <SidebarGroupLabel>Content</SidebarGroupLabel>
+                  <SidebarMenu>
+                      <SidebarMenuItem>
+                      <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/banners')}>
+                          <Link href="/admin/banners">
+                          <ImageIcon />
+                          Hero Banners
+                          </Link>
+                      </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                      <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/promocards')}>
+                          <Link href="/admin/promocards">
+                          <AppWindow />
+                          Promo Cards
+                          </Link>
+                      </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                      <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/promobanners')}>
+                          <Link href="/admin/promobanners">
+                          <GalleryHorizontal />
+                          Promo Banners
+                          </Link>
+                      </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      <SidebarMenuItem>
+                      <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/homepage')}>
+                          <Link href="/admin/homepage">
+                          <LayoutList />
+                          Homepage
+                          </Link>
+                      </SidebarMenuButton>
+                      </SidebarMenuItem>
+                  </SidebarMenu>
+              </SidebarGroup>
+            )}
+
             <SidebarGroup>
                 <SidebarGroupLabel>Management</SidebarGroupLabel>
                 <SidebarMenu>
@@ -210,22 +225,26 @@ export function AdminLayoutClient({
                         </Link>
                     </SidebarMenuButton>
                     </SidebarMenuItem>
-                    <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/users')}>
-                        <Link href="/admin/users">
-                            <Users />
-                            Users
-                        </Link>
-                    </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/sellers')}>
-                        <Link href="/admin/sellers">
-                            <Store />
-                            Sellers
-                        </Link>
-                    </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    {isUserAdmin && (
+                      <>
+                        <SidebarMenuItem>
+                        <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/users')}>
+                            <Link href="/admin/users">
+                                <Users />
+                                Users
+                            </Link>
+                        </SidebarMenuButton>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
+                        <SidebarMenuButton asChild isActive={pathname.startsWith('/admin/sellers')}>
+                            <Link href="/admin/sellers">
+                                <Store />
+                                Sellers
+                            </Link>
+                        </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      </>
+                    )}
                 </SidebarMenu>
             </SidebarGroup>
         </SidebarContent>

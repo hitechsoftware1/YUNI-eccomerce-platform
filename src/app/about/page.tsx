@@ -11,7 +11,7 @@ export default function AboutUsPage() {
       <main className="pt-16 md:pt-20">
         <div className="relative h-64 md:h-80 w-full">
             <Image
-                src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2084&auto=format&fit=crop"
+                src="https://i.pinimg.com/736x/8c/ab/f2/8cabf237c3fad9e92784390eb832c745.jpg"
                 alt="Our Team"
                 fill
                 className="object-cover"

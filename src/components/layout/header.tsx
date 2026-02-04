@@ -26,6 +26,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { Badge } from "@/components/ui/badge";
 import { isAdmin } from "@/lib/admins";
 import { Separator } from "@/components/ui/separator";
+import { getUserByIdAction } from "@/lib/user-actions";
 
 export function Header() {
   const [isAuthModalOpen, setIsAuthModalOpen] = React.useState(false);
@@ -34,7 +35,21 @@ export function Header() {
   const { itemCount } = useCart();
   const { currentUser } = useAuth();
   const router = useRouter();
-  const isUserAdmin = isAdmin(currentUser?.email);
+  const [userRole, setUserRole] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (currentUser) {
+        getUserByIdAction(currentUser.uid).then(user => {
+            if (user) {
+                setUserRole(user.role);
+            }
+        });
+    } else {
+        setUserRole(null);
+    }
+  }, [currentUser]);
+
+  const isUserAdminOrSeller = userRole === 'Admin' || userRole === 'Seller';
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
@@ -210,11 +225,11 @@ export function Header() {
                           </Link>
                         </Button>
 
-                        {isUserAdmin && (
+                        {isUserAdminOrSeller && (
                            <Button asChild variant="ghost" className="justify-start">
                               <Link href="/admin/dashboard" onClick={close}>
                                   <LayoutDashboard className="mr-2 h-5 w-5" />
-                                  Admin Dashboard
+                                  Dashboard
                               </Link>
                           </Button>
                         )}

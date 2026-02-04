@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { LogOut, LayoutDashboard, ShoppingBag, EyeOff, Heart, UserCog, BookUser, Wand2, Pencil, Loader2, ChevronRight, Bell, AlertTriangle, ShieldCheck, Monitor, Smartphone, Palette, CreditCard, Undo2, PlusCircle, Trash2, Gift, Copy } from 'lucide-react';
 import { getOrdersByEmail } from '@/lib/user-orders';
-import type { Order, Product, Address, UserReview, LoginActivity, PaymentMethod, UserReturn } from '@/lib/types';
+import type { Order, Product, Address, UserReview, LoginActivity, PaymentMethod, UserReturn, ManagedUser } from '@/lib/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -39,6 +39,7 @@ import { DeleteReviewDialog } from '@/components/delete-review-dialog';
 import { getReturnsForUser } from '@/lib/user-returns';
 import { isAdmin } from '@/lib/admins';
 import { AppearanceForm } from '@/components/appearance-form';
+import { getUserByIdAction } from '@/lib/user-actions';
 
 
 export default function AccountPage() {
@@ -73,6 +74,7 @@ export default function AccountPage() {
   const [reviewIdToDelete, setReviewIdToDelete] = React.useState<string | null>(null);
 
   const [returns, setReturns] = React.useState<UserReturn[]>([]);
+  const [managedUser, setManagedUser] = React.useState<ManagedUser | null>(null);
 
 
   React.useEffect(() => {
@@ -80,6 +82,11 @@ export default function AccountPage() {
       router.push('/');
     }
     if (currentUser) {
+        const fetchUserData = async () => {
+            const user = await getUserByIdAction(currentUser.uid);
+            setManagedUser(user || null);
+        };
+        fetchUserData();
         // In a real app, these would be API calls.
         setOrders(getOrdersByEmail(currentUser.email));
         setRecentlyViewed(getRecentlyViewedItems());
@@ -277,7 +284,8 @@ export default function AccountPage() {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   }
 
-  const isUserAdmin = isAdmin(currentUser.email);
+  const isUserAdmin = managedUser?.role === 'Admin';
+  const isUserSeller = managedUser?.role === 'Seller';
 
   return (
     <div className="bg-background text-foreground">
@@ -329,11 +337,11 @@ export default function AccountPage() {
                             <LogOut className="mr-2 h-4 w-4" />
                             Logout
                         </Button>
-                        {isUserAdmin && (
+                        {(isUserAdmin || isUserSeller) && (
                              <Button asChild variant="outline">
                                 <Link href="/admin/dashboard">
                                 <LayoutDashboard className="mr-2 h-4 w-4" />
-                                Admin Dashboard
+                                {isUserAdmin ? 'Admin' : 'Seller'} Dashboard
                                 </Link>
                             </Button>
                         )}
