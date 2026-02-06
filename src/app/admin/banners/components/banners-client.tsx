@@ -23,16 +23,11 @@ interface BannersClientProps {
     slides: HeroSlide[];
 }
 
-export function BannersClient({ slides: initialSlides }: BannersClientProps) {
-  const [slides, setSlides] = React.useState<HeroSlide[]>(initialSlides);
+export function BannersClient({ slides }: BannersClientProps) {
   const [slideToDelete, setSlideToDelete] = React.useState<HeroSlide | null>(null);
   const [isDeleting, setIsDeleting] = React.useState(false);
   const router = useRouter();
   const { toast } = useToast();
-  
-  React.useEffect(() => {
-    setSlides(initialSlides);
-  }, [initialSlides]);
 
   const handleDeleteClick = (slide: HeroSlide) => {
     setSlideToDelete(slide);
@@ -43,29 +38,21 @@ export function BannersClient({ slides: initialSlides }: BannersClientProps) {
 
     setIsDeleting(true);
 
-    const originalSlides = [...slides];
-    const bannerToDelete = slideToDelete;
-
-    // Optimistically update the UI
-    setSlides(prevSlides => prevSlides.filter(s => s.id !== bannerToDelete.id));
-    setSlideToDelete(null);
-
     try {
-      // Call server action in the background
-      await deleteHeroSlide(bannerToDelete.id);
+      await deleteHeroSlide(slideToDelete.id);
 
       toast({
         title: 'Banner Deleted',
-        description: `Banner "${bannerToDelete.title}" has been successfully deleted.`,
+        description: `Banner "${slideToDelete.title}" has been successfully deleted.`,
       });
+      setSlideToDelete(null);
+      router.refresh(); // Refetch data
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'Failed to delete banner. Reverting changes.',
+        description: 'Failed to delete banner. Please try again.',
         variant: 'destructive',
       });
-      // Revert the UI on error
-      setSlides(originalSlides);
     } finally {
       setIsDeleting(false);
     }

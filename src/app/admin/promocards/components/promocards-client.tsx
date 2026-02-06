@@ -23,16 +23,11 @@ interface PromoCardsClientProps {
     cards: PromoCard[];
 }
 
-export function PromoCardsClient({ cards: initialCards }: PromoCardsClientProps) {
-  const [cards, setCards] = React.useState<PromoCard[]>(initialCards);
+export function PromoCardsClient({ cards }: PromoCardsClientProps) {
   const [cardToDelete, setCardToDelete] = React.useState<PromoCard | null>(null);
   const [isDeleting, setIsDeleting] = React.useState(false);
   const router = useRouter();
   const { toast } = useToast();
-  
-  React.useEffect(() => {
-    setCards(initialCards);
-  }, [initialCards]);
 
   const handleDeleteClick = (card: PromoCard) => {
     setCardToDelete(card);
@@ -43,27 +38,21 @@ export function PromoCardsClient({ cards: initialCards }: PromoCardsClientProps)
 
     setIsDeleting(true);
     
-    const originalCards = [...cards];
-    const cardToDeleteNow = cardToDelete;
-
-    // Optimistically update the UI
-    setCards(prevCards => prevCards.filter(c => c.id !== cardToDeleteNow.id));
-    setCardToDelete(null);
-
     try {
-      await deletePromoCard(cardToDeleteNow.id);
+      await deletePromoCard(cardToDelete.id);
 
       toast({
         title: 'Promo Card Deleted',
-        description: `Card "${cardToDeleteNow.title}" has been successfully deleted.`,
+        description: `Card "${cardToDelete.title}" has been successfully deleted.`,
       });
+      setCardToDelete(null);
+      router.refresh();
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'Failed to delete promo card. Reverting changes.',
+        description: 'Failed to delete promo card. Please try again.',
         variant: 'destructive',
       });
-      setCards(originalCards);
     } finally {
       setIsDeleting(false);
     }

@@ -23,16 +23,11 @@ interface PromoBannersClientProps {
     promos: SecondaryPromoGridItem[];
 }
 
-export function PromoBannersClient({ promos: initialPromos }: PromoBannersClientProps) {
-  const [promos, setPromos] = React.useState<SecondaryPromoGridItem[]>(initialPromos);
+export function PromoBannersClient({ promos }: PromoBannersClientProps) {
   const [promoToDelete, setPromoToDelete] = React.useState<SecondaryPromoGridItem | null>(null);
   const [isDeleting, setIsDeleting] = React.useState(false);
   const router = useRouter();
   const { toast } = useToast();
-  
-  React.useEffect(() => {
-    setPromos(initialPromos);
-  }, [initialPromos]);
 
   const handleDeleteClick = (promo: SecondaryPromoGridItem) => {
     setPromoToDelete(promo);
@@ -43,27 +38,21 @@ export function PromoBannersClient({ promos: initialPromos }: PromoBannersClient
 
     setIsDeleting(true);
     
-    const originalPromos = [...promos];
-    const promoToDeleteNow = promoToDelete;
-
-    // Optimistically update the UI
-    setPromos(prevPromos => prevPromos.filter(p => p.id !== promoToDeleteNow.id));
-    setPromoToDelete(null);
-
     try {
-      await deletePromoBanner(promoToDeleteNow.id);
+      await deletePromoBanner(promoToDelete.id);
 
       toast({
         title: 'Promo Banner Deleted',
-        description: `"${promoToDeleteNow.alt}" has been successfully deleted.`,
+        description: `"${promoToDelete.alt}" has been successfully deleted.`,
       });
+      setPromoToDelete(null);
+      router.refresh();
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'Failed to delete promo banner. Reverting changes.',
+        description: 'Failed to delete promo banner. Please try again.',
         variant: 'destructive',
       });
-      setPromos(originalPromos);
     } finally {
       setIsDeleting(false);
     }
