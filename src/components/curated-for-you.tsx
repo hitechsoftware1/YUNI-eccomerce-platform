@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { getCuratedForYouItems } from '@/lib/curated-for-you-data';
@@ -24,8 +25,12 @@ const CuratedCard = ({ item }: { item: CuratedItem }) => (
   </Link>
 );
 
-export function CuratedForYou() {
-  const items = getCuratedForYouItems();
+interface CuratedForYouProps {
+    items: CuratedItem[];
+}
+
+export function CuratedForYou({ items }: CuratedForYouProps) {
+  if (!items || items.length === 0) return null;
 
   return (
     <section>

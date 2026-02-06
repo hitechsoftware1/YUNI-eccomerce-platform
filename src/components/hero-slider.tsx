@@ -6,22 +6,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getHeroSlides } from "@/lib/banners";
 import type { HeroSlide } from "@/lib/types";
-import { Skeleton } from "./ui/skeleton";
 
-export function HeroSlider() {
+interface HeroSliderProps {
+    slides: HeroSlide[];
+}
+
+export function HeroSlider({ slides }: HeroSliderProps) {
   const [currentSlide, setCurrentSlide] = React.useState(0);
-  const [slides, setSlides] = React.useState<HeroSlide[]>([]);
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    // Fetch slides on the client side to ensure data is always fresh
-    // and filter for only enabled slides.
-    const slidesData = getHeroSlides().filter(s => s.enabled);
-    setSlides(slidesData);
-    setLoading(false);
-  }, []);
 
   const nextSlide = React.useCallback(() => {
     if (slides.length <= 1) return;
@@ -39,16 +31,8 @@ export function HeroSlider() {
     return () => clearInterval(slideInterval);
   }, [nextSlide, slides.length]);
   
-  if (loading) {
-    return (
-        <section className="relative h-[300px] w-full overflow-hidden md:h-[400px] lg:h-[500px]">
-            <Skeleton className="h-full w-full" />
-        </section>
-    )
-  }
-  
   if (!slides || slides.length === 0) {
-    return null; // Return null if there are no enabled slides
+    return null;
   }
 
   return (

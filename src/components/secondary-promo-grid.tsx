@@ -2,14 +2,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
-import { getAllSecondaryPromos } from '@/lib/secondary-promo-data';
+import type { SecondaryPromoGridItem } from '@/lib/types';
 
-export function SecondaryPromoGrid() {
-  const allSecondaryPromos = getAllSecondaryPromos().filter(p => p.enabled);
-  const topPromos = allSecondaryPromos.filter((p) => p.aspectRatio === '2/1');
-  const bottomPromo = allSecondaryPromos.find((p) => p.aspectRatio === '4/1');
+interface SecondaryPromoGridProps {
+    promos: SecondaryPromoGridItem[];
+}
 
-  if (allSecondaryPromos.length === 0) {
+export function SecondaryPromoGrid({ promos }: SecondaryPromoGridProps) {
+  const topPromos = promos.filter((p) => p.aspectRatio === '2/1');
+  const bottomPromo = promos.find((p) => p.aspectRatio === '4/1');
+
+  if (promos.length === 0) {
     return null;
   }
 

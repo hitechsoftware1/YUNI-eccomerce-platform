@@ -1,3 +1,4 @@
+
 import { Header } from '@/components/layout/header';
 import { HeroSlider } from '@/components/hero-slider';
 import { AnimatedBanner } from '@/components/animated-banner';
@@ -12,12 +13,17 @@ import { SecondaryPromoGrid } from '@/components/secondary-promo-grid';
 import { HelpButton } from '@/components/help-button';
 import { getHomepageSections } from '@/lib/homepage-sections';
 import { getAllProducts, getNewArrivals, getTopSellingProducts, getGroceryProducts, getBeverageProducts } from '@/lib/products';
-import type { Product, HomepageSection } from '@/lib/types';
+import { getHeroSlides } from '@/lib/banners';
+import { getAllPromoCards } from '@/lib/promo-cards';
+import { getPromoBanner } from '@/lib/promo-banner-data';
+import { getAllSecondaryPromos } from '@/lib/secondary-promo-data';
+import { getCuratedForYouItems } from '@/lib/curated-for-you-data';
+import type { Product, HomepageSection, HeroSlide, PromoCard, PromoBannerData, SecondaryPromoGridItem, CuratedItem, SectionType } from '@/lib/types';
 import { CuratedForYou } from '@/components/curated-for-you';
 
 export const dynamic = 'force-dynamic';
 
-const sectionComponentMap = {
+const sectionComponentMap: { [key in SectionType]?: React.ComponentType<any> } = {
   HeroSlider: HeroSlider,
   AnimatedBanner: AnimatedBanner,
   CategoryGrid: CategoryGrid,
@@ -52,6 +58,11 @@ function getProductsForSection(section: HomepageSection): Product[] {
 
 export default function Home() {
   const sections = getHomepageSections().filter(s => s.enabled);
+  const heroSlides = getHeroSlides().filter(s => s.enabled);
+  const promoCards = getAllPromoCards().filter(p => p.enabled);
+  const promoBannerData = getPromoBanner();
+  const secondaryPromos = getAllSecondaryPromos().filter(p => p.enabled);
+  const curatedItems = getCuratedForYouItems();
 
   const topLevelSections = sections.filter(s => s.type === 'HeroSlider' || s.type === 'AnimatedBanner');
   const containerSections = sections.filter(s => s.type !== 'HeroSlider' && s.type !== 'AnimatedBanner');
@@ -60,22 +71,49 @@ export default function Home() {
     const Component = sectionComponentMap[section.type];
     if (!Component) return null;
 
-    if (section.type === 'ProductSection') {
-      const products = getProductsForSection(section);
-      if (products.length === 0 && section.productSource === 'custom') return null;
-      return <ProductSection key={section.id} title={section.title!} products={products} />;
+    let props: any = { key: section.id };
+
+    switch (section.type) {
+        case 'HeroSlider':
+            if (heroSlides.length === 0) return null;
+            props.slides = heroSlides;
+            break;
+        case 'ProductSection':
+            const products = getProductsForSection(section);
+            if (products.length === 0 && section.productSource === 'custom') return null;
+            props.title = section.title!;
+            props.products = products;
+            break;
+        case 'CuratedForYou':
+            if (curatedItems.length === 0) return null;
+            props.items = curatedItems;
+            break;
+        case 'PromoBanner':
+            if (!promoBannerData) return null;
+            props.data = promoBannerData;
+            break;
+        case 'ExploreMore':
+            if (promoCards.length === 0) return null;
+            props.promos = promoCards;
+            break;
+        case 'SecondaryPromoGrid':
+            if (secondaryPromos.length === 0) return null;
+            props.promos = secondaryPromos;
+            break;
+        case 'CategoryGrid':
+            return (
+                <div id="categories" key={section.id} className="scroll-mt-20">
+                    <Component />
+                </div>
+            );
     }
     
-    // Add a wrapper with an ID for the CategoryGrid section for anchor linking
-    if (section.type === 'CategoryGrid') {
-      return (
-        <div id="categories" key={section.id} className="scroll-mt-20">
-          <Component />
-        </div>
-      );
+    // For components that don't need specific data props from this level
+    if (Object.keys(props).length === 1) {
+        return <Component key={section.id} />;
     }
 
-    return <Component key={section.id} />;
+    return <Component {...props} />;
   };
 
   return (

@@ -3,16 +3,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import { getPromoBanner } from '@/lib/promo-banner-data';
+import type { PromoBannerData } from '@/lib/types';
 
-export function PromoBanner() {
-  const promoBannerData = getPromoBanner();
-  
-  if (!promoBannerData) {
+interface PromoBannerProps {
+    data?: PromoBannerData;
+}
+
+export function PromoBanner({ data }: PromoBannerProps) {
+  if (!data) {
     return null;
   }
 
-  const { title, subtitle, buttonText, link, imageUrl, dataAiHint } = promoBannerData;
+  const { title, subtitle, buttonText, link, imageUrl, dataAiHint } = data;
 
   return (
     <div className="relative aspect-video w-full overflow-hidden rounded-lg md:aspect-[3/1] lg:aspect-[4/1]">

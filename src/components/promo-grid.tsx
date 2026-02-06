@@ -8,8 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Sparkles } from "lucide-react";
 import type { PromoCard } from "@/lib/types";
-import { getAllPromoCards } from "@/lib/promo-cards";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const PromoCardItem = ({ promo }: { promo: PromoCard }) => (
     <Link href={promo.href} key={promo.id}>
@@ -33,40 +31,24 @@ const PromoCardItem = ({ promo }: { promo: PromoCard }) => (
     </Link>
 );
 
-const PromoCardSkeleton = () => (
-    <Card className="h-full w-full">
-        <Skeleton className="aspect-square w-full" />
-        <div className="p-2">
-            <Skeleton className="h-5 w-3/4 mx-auto" />
-        </div>
-    </Card>
-);
+interface ExploreMoreProps {
+    promos: PromoCard[];
+}
 
-
-export function ExploreMore() {
-  const [promos, setPromos] = React.useState<PromoCard[]>([]);
-  const [filters, setFilters] = React.useState<string[]>([]);
+export function ExploreMore({ promos }: ExploreMoreProps) {
   const [activeFilter, setActiveFilter] = React.useState("all");
-  const [loading, setLoading] = React.useState(true);
 
-  React.useEffect(() => {
-      const allPromoCards = getAllPromoCards().filter(p => p.enabled);
-      setPromos(allPromoCards);
-      
-      const uniqueCategories = ["all", ...new Set(allPromoCards.map(p => p.category))];
-      setFilters(uniqueCategories);
-      
-      setLoading(false);
-  }, []);
+  if (!promos || promos.length === 0) {
+      return null;
+  }
+  
+  const filters = ["all", ...new Set(promos.map(p => p.category))];
 
   const filteredPromos =
     activeFilter === "all"
       ? promos
       : promos.filter((p) => p.category === activeFilter);
       
-    if (promos.length === 0 && !loading) {
-        return null;
-    }
 
   return (
     <section>
@@ -77,31 +59,23 @@ export function ExploreMore() {
       
       <div className="mb-6">
         <div className="flex flex-wrap gap-2">
-            {loading ? (
-                Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-9 w-20 rounded-full" />)
-            ) : (
-                filters.map((filter) => (
-                    <Button 
-                        key={filter}
-                        variant={activeFilter === filter ? "default" : "secondary"} 
-                        onClick={() => setActiveFilter(filter)}
-                        className="rounded-full capitalize"
-                    >
-                        {filter}
-                    </Button>
-                ))
-            )}
+            {filters.map((filter) => (
+                <Button 
+                    key={filter}
+                    variant={activeFilter === filter ? "default" : "secondary"} 
+                    onClick={() => setActiveFilter(filter)}
+                    className="rounded-full capitalize"
+                >
+                    {filter}
+                </Button>
+            ))}
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {loading ? (
-            Array.from({ length: 8 }).map((_, i) => <PromoCardSkeleton key={i} />)
-        ) : (
-           filteredPromos.map((promo) => (
+           {filteredPromos.map((promo) => (
               <PromoCardItem key={promo.id} promo={promo} />
-          ))
-        )}
+          ))}
       </div>
     </section>
   );
