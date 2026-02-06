@@ -1,4 +1,5 @@
 
+
 'use server';
 
 import { db } from './db';
@@ -56,6 +57,7 @@ export async function getSellerDashboardData(sellerName: string): Promise<{
     productCount: number;
     recentSales: AdminSale[];
     recentOrders: Order[];
+    allSellerOrders: Order[];
 }> {
     const sellerProducts = db.products.filter(p => p.sellerName === sellerName);
     const sellerProductIds = new Set(sellerProducts.map(p => p.id));
@@ -101,5 +103,5 @@ export async function getSellerDashboardData(sellerName: string): Promise<{
             };
         });
 
-    return { totalRevenue, totalSales, productCount, recentSales, recentOrders };
+    return { totalRevenue, totalSales, productCount, recentSales, recentOrders, allSellerOrders: sellerOrders };
 }

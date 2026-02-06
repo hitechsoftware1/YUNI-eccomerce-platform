@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -55,7 +56,24 @@ export function SellerDashboardView({ user }: SellerDashboardViewProps) {
         );
     }
     
-    const { totalRevenue, totalSales, productCount, recentSales, recentOrders } = data;
+    const { totalRevenue, totalSales, productCount, recentSales, recentOrders, allSellerOrders } = data;
+
+    const monthlySales = Array.from({ length: 12 }, (_, i) => ({
+      name: new Date(0, i).toLocaleString('default', { month: 'short' }),
+      total: 0,
+    }));
+
+    if (allSellerOrders) {
+      allSellerOrders.forEach(order => {
+          if (order.status === 'Fulfilled') {
+              const revenueFromThisOrder = (order.items || [])
+                  .filter(item => item.sellerName === user.name)
+                  .reduce((acc, item) => acc + (item.price * item.quantity), 0);
+              const month = new Date(order.date).getMonth();
+              monthlySales[month].total += revenueFromThisOrder;
+          }
+      });
+    }
 
     return (
         <div className="flex flex-col gap-6">
@@ -111,7 +129,7 @@ export function SellerDashboardView({ user }: SellerDashboardViewProps) {
                         <CardTitle>Your Sales Overview</CardTitle>
                     </CardHeader>
                     <CardContent className="pl-2">
-                        <OverviewChart />
+                        <OverviewChart data={monthlySales} />
                     </CardContent>
                 </Card>
                  <Card>

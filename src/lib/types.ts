@@ -1,5 +1,6 @@
 
 
+
 import type { LucideIcon } from 'lucide-react';
 
 export interface Product {
@@ -207,4 +208,13 @@ export interface CuratedItem {
   imageUrl: string;
   dataAiHint: string;
   link: string;
+}
+
+export interface SellerDashboardData {
+    totalRevenue: number;
+    totalSales: number;
+    productCount: number;
+    recentSales: AdminSale[];
+    recentOrders: Order[];
+    allSellerOrders: Order[];
 }

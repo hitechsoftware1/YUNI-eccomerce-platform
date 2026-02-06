@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -39,6 +40,7 @@ export function AdminDashboardView() {
     const [productsInStock, setProductsInStock] = React.useState(0);
     const [recentSales, setRecentSales] = React.useState<AdminSale[]>([]);
     const [recentOrders, setRecentOrders] = React.useState<Order[]>([]);
+    const [salesData, setSalesData] = React.useState<Array<{ name: string; total: number }>>([]);
 
 
     React.useEffect(() => {
@@ -73,6 +75,19 @@ export function AdminDashboardView() {
             .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
             .slice(0, 5);
         setRecentOrders(recentOrdersData);
+
+        // Prepare data for sales overview chart
+        const monthlySales = Array.from({ length: 12 }, (_, i) => ({
+            name: new Date(0, i).toLocaleString('default', { month: 'short' }),
+            total: 0,
+        }));
+
+        fulfilledOrders.forEach(order => {
+            const month = new Date(order.date).getMonth();
+            monthlySales[month].total += order.total;
+        });
+
+        setSalesData(monthlySales);
 
     }, []);
 
@@ -140,7 +155,7 @@ export function AdminDashboardView() {
                     <CardTitle>Sales Overview</CardTitle>
                 </CardHeader>
                 <CardContent className="pl-2">
-                    <OverviewChart />
+                    <OverviewChart data={salesData} />
                 </CardContent>
             </Card>
             <div className="col-span-1 space-y-4">
