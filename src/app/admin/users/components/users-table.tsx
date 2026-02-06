@@ -3,7 +3,6 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
 import {
   Table,
   TableBody,
@@ -30,53 +29,27 @@ import { Button } from '@/components/ui/button';
 import { MoreHorizontal, UserX, UserCheck, Shield, ShoppingBag, User as UserIcon } from 'lucide-react';
 import type { ManagedUser } from '@/lib/types';
 import { cn } from "@/lib/utils";
-import { updateUserRole, updateUserStatus } from '@/lib/user-actions';
-import { useToast } from '@/hooks/use-toast';
 
 interface UsersTableProps {
   users: ManagedUser[];
   onBanClick: (user: ManagedUser) => void;
   onRejectClick: (user: ManagedUser) => void;
+  onRoleChange: (userId: string, role: ManagedUser['role']) => void;
+  onStatusChange: (user: ManagedUser, newStatus: ManagedUser['status']) => void;
 }
 
-export function UsersTable({ users, onBanClick, onRejectClick }: UsersTableProps) {
-    const router = useRouter();
-    const { toast } = useToast();
-
-    const handleRoleChange = async (userId: string, role: ManagedUser['role']) => {
-        try {
-            await updateUserRole(userId, role);
-            toast({ title: 'Role Updated', description: `User role has been changed to ${role}.` });
-            router.refresh();
-        } catch (error) {
-            toast({ title: 'Error', description: 'Failed to update user role.', variant: 'destructive' });
-        }
-    }
-
-    const handleStatusToggle = async (user: ManagedUser) => {
+export function UsersTable({ users, onBanClick, onRejectClick, onRoleChange, onStatusChange }: UsersTableProps) {
+    const handleStatusToggle = (user: ManagedUser) => {
         const newStatus = user.status === 'Active' ? 'Banned' : 'Active';
         if (newStatus === 'Banned') {
             onBanClick(user);
-            return;
-        }
-
-        try {
-            await updateUserStatus(user.id, newStatus);
-            toast({ title: 'Status Updated', description: `User is now ${newStatus}.` });
-            router.refresh();
-        } catch (error) {
-            toast({ title: 'Error', description: 'Failed to update user status.', variant: 'destructive' });
+        } else {
+            onStatusChange(user, newStatus);
         }
     }
 
-    const handleApproveSeller = async (user: ManagedUser) => {
-        try {
-            await updateUserStatus(user.id, 'Active');
-            toast({ title: 'Seller Approved', description: `User ${user.name} is now an active seller.` });
-            router.refresh();
-        } catch (error) {
-            toast({ title: 'Error', description: 'Failed to approve seller.', variant: 'destructive' });
-        }
+    const handleApproveSeller = (user: ManagedUser) => {
+        onStatusChange(user, 'Active');
     };
   
   return (
@@ -131,7 +104,7 @@ export function UsersTable({ users, onBanClick, onRejectClick }: UsersTableProps
                   <DropdownMenuSub>
                     <DropdownMenuSubTrigger>Change Role</DropdownMenuSubTrigger>
                     <DropdownMenuSubContent>
-                        <DropdownMenuRadioGroup value={user.role} onValueChange={(value) => handleRoleChange(user.id, value as ManagedUser['role'])}>
+                        <DropdownMenuRadioGroup value={user.role} onValueChange={(value) => onRoleChange(user.id, value as ManagedUser['role'])}>
                             <DropdownMenuRadioItem value="Admin">Admin</DropdownMenuRadioItem>
                             <DropdownMenuRadioItem value="Seller">Seller</DropdownMenuRadioItem>
                             <DropdownMenuRadioItem value="Buyer">Buyer</DropdownMenuRadioItem>

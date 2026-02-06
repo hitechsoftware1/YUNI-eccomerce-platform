@@ -3,7 +3,6 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -16,7 +15,7 @@ import { BanUserDialog } from './ban-user-dialog';
 import { RejectUserDialog } from './reject-user-dialog';
 import { useToast } from '@/hooks/use-toast';
 import type { ManagedUser } from '@/lib/types';
-import { updateUserStatus } from '@/lib/user-actions';
+import { updateUserRole, updateUserStatus } from '@/lib/user-actions';
 
 interface UsersClientProps {
     users: ManagedUser[];
@@ -28,7 +27,6 @@ export function UsersClient({ users: initialUsers }: UsersClientProps) {
   const [isBanning, setIsBanning] = React.useState(false);
   const [userToReject, setUserToReject] = React.useState<ManagedUser | null>(null);
   const [isRejecting, setIsRejecting] = React.useState(false);
-  const router = useRouter();
   const { toast } = useToast();
   
   React.useEffect(() => {
@@ -42,51 +40,66 @@ export function UsersClient({ users: initialUsers }: UsersClientProps) {
   const handleRejectClick = (user: ManagedUser) => {
     setUserToReject(user);
   };
+  
+  // Optimistic update handler for status changes
+  const handleStatusUpdate = async (userToUpdate: ManagedUser, newStatus: ManagedUser['status']) => {
+    const originalUsers = [...users];
+    
+    // Optimistically update UI
+    const updatedUsers = users.map(u =>
+      u.id === userToUpdate.id 
+        ? { ...u, status: newStatus, ...(newStatus === 'Rejected' && { role: 'Buyer' as const }) } 
+        : u
+    );
+    setUsers(updatedUsers);
+
+    // Call server action
+    try {
+      await updateUserStatus(userToUpdate.id, newStatus);
+      
+      let description = `User ${userToUpdate.name}'s status is now ${newStatus}.`;
+      if (newStatus === 'Active' && userToUpdate.status === 'Pending Approval') {
+          description = `Seller application for ${userToUpdate.name} has been approved.`;
+      }
+      toast({ title: 'Status Updated', description });
+
+    } catch (error) {
+      // Revert on error
+      setUsers(originalUsers); 
+      toast({ title: 'Error', description: 'Failed to update user status.', variant: 'destructive' });
+    }
+  };
+
+  // Optimistic update handler for role changes
+  const handleRoleUpdate = async (userId: string, newRole: ManagedUser['role']) => {
+      const originalUsers = [...users];
+      const updatedUsers = users.map(u => u.id === userId ? { ...u, role: newRole } : u);
+      setUsers(updatedUsers);
+
+      try {
+          await updateUserRole(userId, newRole);
+          toast({ title: 'Role Updated', description: `User role has been changed to ${newRole}.` });
+      } catch (error) {
+          setUsers(originalUsers);
+          toast({ title: 'Error', description: 'Failed to update user role.', variant: 'destructive' });
+      }
+  };
+
 
   const handleConfirmBan = async () => {
     if (!userToBan) return;
-
     setIsBanning(true);
-    try {
-      await updateUserStatus(userToBan.id, 'Banned');
-      toast({
-        title: 'User Banned',
-        description: `User "${userToBan.name}" has been successfully banned.`,
-      });
-      setUserToBan(null);
-      router.refresh();
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to ban user. Please try again.',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsBanning(false);
-    }
+    await handleStatusUpdate(userToBan, 'Banned');
+    setIsBanning(false);
+    setUserToBan(null);
   };
 
   const handleConfirmReject = async () => {
     if (!userToReject) return;
-
     setIsRejecting(true);
-    try {
-      await updateUserStatus(userToReject.id, 'Rejected');
-      toast({
-        title: 'Application Rejected',
-        description: `Seller application for "${userToReject.name}" has been rejected.`,
-      });
-      setUserToReject(null);
-      router.refresh();
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to reject application. Please try again.',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsRejecting(false);
-    }
+    await handleStatusUpdate(userToReject, 'Rejected');
+    setIsRejecting(false);
+    setUserToReject(null);
   };
 
   return (
@@ -99,7 +112,13 @@ export function UsersClient({ users: initialUsers }: UsersClientProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <UsersTable users={users} onBanClick={handleBanClick} onRejectClick={handleRejectClick} />
+          <UsersTable 
+            users={users} 
+            onBanClick={handleBanClick} 
+            onRejectClick={handleRejectClick}
+            onRoleChange={handleRoleUpdate}
+            onStatusChange={handleStatusUpdate}
+          />
         </CardContent>
       </Card>
       {userToBan && (
