@@ -42,21 +42,28 @@ export function PromoBannersClient({ promos: initialPromos }: PromoBannersClient
     if (!promoToDelete) return;
 
     setIsDeleting(true);
+    
+    const originalPromos = [...promos];
+    const promoToDeleteNow = promoToDelete;
+
+    // Optimistically update the UI
+    setPromos(prevPromos => prevPromos.filter(p => p.id !== promoToDeleteNow.id));
+    setPromoToDelete(null);
+
     try {
-      await deletePromoBanner(promoToDelete.id);
+      await deletePromoBanner(promoToDeleteNow.id);
 
       toast({
         title: 'Promo Banner Deleted',
-        description: `"${promoToDelete.alt}" has been successfully deleted.`,
+        description: `"${promoToDeleteNow.alt}" has been successfully deleted.`,
       });
-      setPromoToDelete(null);
-      router.refresh();
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'Failed to delete promo banner. Please try again.',
+        description: 'Failed to delete promo banner. Reverting changes.',
         variant: 'destructive',
       });
+      setPromos(originalPromos);
     } finally {
       setIsDeleting(false);
     }

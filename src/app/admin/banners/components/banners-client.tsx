@@ -42,21 +42,30 @@ export function BannersClient({ slides: initialSlides }: BannersClientProps) {
     if (!slideToDelete) return;
 
     setIsDeleting(true);
+
+    const originalSlides = [...slides];
+    const bannerToDelete = slideToDelete;
+
+    // Optimistically update the UI
+    setSlides(prevSlides => prevSlides.filter(s => s.id !== bannerToDelete.id));
+    setSlideToDelete(null);
+
     try {
-      await deleteHeroSlide(slideToDelete.id);
+      // Call server action in the background
+      await deleteHeroSlide(bannerToDelete.id);
 
       toast({
         title: 'Banner Deleted',
-        description: `Banner "${slideToDelete.title}" has been successfully deleted.`,
+        description: `Banner "${bannerToDelete.title}" has been successfully deleted.`,
       });
-      setSlideToDelete(null);
-      router.refresh(); // Fetches new props from the server
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'Failed to delete banner. Please try again.',
+        description: 'Failed to delete banner. Reverting changes.',
         variant: 'destructive',
       });
+      // Revert the UI on error
+      setSlides(originalSlides);
     } finally {
       setIsDeleting(false);
     }

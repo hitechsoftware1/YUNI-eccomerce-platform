@@ -65,20 +65,27 @@ export function HomepageClient({ initialSections }: { initialSections: HomepageS
   const handleConfirmDelete = async () => {
     if (!sectionToDelete) return;
     setIsDeleting(true);
+    
+    const originalSections = [...sections];
+    const sectionToDeleteNow = sectionToDelete;
+
+    // Optimistically update UI
+    setSections(prevSections => prevSections.filter(s => s.id !== sectionToDeleteNow.id));
+    setSectionToDelete(null);
+
     try {
-      await deleteHomepageSection(sectionToDelete.id);
+      await deleteHomepageSection(sectionToDeleteNow.id);
       toast({
         title: 'Section Deleted',
-        description: `Section "${sectionToDelete.title}" has been deleted.`,
+        description: `Section "${sectionToDeleteNow.title}" has been deleted.`,
       });
-      setSectionToDelete(null);
-      router.refresh(); // This will fetch the new list of sections
     } catch (error) {
         toast({
             title: 'Error',
-            description: 'Failed to delete section.',
+            description: 'Failed to delete section. Reverting changes.',
             variant: 'destructive',
         });
+        setSections(originalSections);
     } finally {
         setIsDeleting(false);
     }

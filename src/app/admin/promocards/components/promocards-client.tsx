@@ -42,21 +42,28 @@ export function PromoCardsClient({ cards: initialCards }: PromoCardsClientProps)
     if (!cardToDelete) return;
 
     setIsDeleting(true);
+    
+    const originalCards = [...cards];
+    const cardToDeleteNow = cardToDelete;
+
+    // Optimistically update the UI
+    setCards(prevCards => prevCards.filter(c => c.id !== cardToDeleteNow.id));
+    setCardToDelete(null);
+
     try {
-      await deletePromoCard(cardToDelete.id);
+      await deletePromoCard(cardToDeleteNow.id);
 
       toast({
         title: 'Promo Card Deleted',
-        description: `Card "${cardToDelete.title}" has been successfully deleted.`,
+        description: `Card "${cardToDeleteNow.title}" has been successfully deleted.`,
       });
-      setCardToDelete(null);
-      router.refresh();
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'Failed to delete promo card. Please try again.',
+        description: 'Failed to delete promo card. Reverting changes.',
         variant: 'destructive',
       });
+      setCards(originalCards);
     } finally {
       setIsDeleting(false);
     }
