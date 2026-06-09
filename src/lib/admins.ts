@@ -1,3 +1,14 @@
+
+// In a real application, this would be a database check against a user's roles or permissions.
 export const adminEmails: string[] = [
-    'hitechsoftware03@gmail.com'  // Use the email you login with
+    '',
+    '',
+    'hitechsoftware03@gmail.com'
 ];
+
+export const isAdmin = (email: string | null | undefined): boolean => {
+    if (!email) {
+        return false;
+    }
+    return adminEmails.includes(email);
+};
